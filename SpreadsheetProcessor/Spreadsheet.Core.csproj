@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B487F4D8-E42E-4DDD-A33B-CCF03AAE9480}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{F3F7714D-497F-4F82-BF5F-96AA21B0266F}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SpreadsheetSimulator</RootNamespace>
-    <AssemblyName>SpreadsheetSimulator</AssemblyName>
+    <RootNamespace>SpreadsheetProcessor</RootNamespace>
+    <AssemblyName>SpreadsheetProcessor</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -43,22 +40,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Cells\BinaryExpression.cs" />
+    <Compile Include="Cells\CellAdress.cs" />
+    <Compile Include="Cells\CellRefereceExpression.cs" />
+    <Compile Include="Cells\CellValueType.cs" />
+    <Compile Include="Cells\ConstantExpression.cs" />
+    <Compile Include="Cells\ExpressionValue.cs" />
+    <Compile Include="Cells\IExpression.cs" />
+    <Compile Include="ExpressionParser\ExpressionParser.cs" />
+    <Compile Include="ExpressionParser\ExpressionTokenizer.cs" />
+    <Compile Include="ExpressionParser\ParserSettings.cs" />
+    <Compile Include="Spreadsheet.cs" />
+    <Compile Include="SpreadsheetSource.cs" />
+    <Compile Include="Cells\Cell.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SpreedsheetProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="input.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SpreadsheetProcessor\SpreadsheetProcessor.csproj">
-      <Project>{f3f7714d-497f-4f82-bf5f-96aa21b0266f}</Project>
-      <Name>SpreadsheetProcessor</Name>
-    </ProjectReference>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
