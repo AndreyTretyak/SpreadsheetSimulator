@@ -29,8 +29,11 @@ namespace SpreadsheetProcessor.Cells
             var rightResult = Right.Evaluate(processor, callStack);
             if (rightResult.Type == CellValueType.Error)
                 return rightResult;
+            
 
-            //TODO need type validation
+            if (leftResult.Type != CellValueType.Integer || rightResult.Type != CellValueType.Integer)
+                return new ExpressionValue(CellValueType.Error, Resources.WrongTypeError);
+
             int result;
             switch (Operator)
             {

@@ -97,6 +97,24 @@ namespace SpreadsheetProcessor {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cell column can`t be negative.
+        /// </summary>
+        public static string NegativeCellColumn {
+            get {
+                return ResourceManager.GetString("NegativeCellColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cell row can`t be negative.
+        /// </summary>
+        public static string NegetiveCellRow {
+            get {
+                return ResourceManager.GetString("NegetiveCellRow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nothing.
         /// </summary>
         public static string Nothing {
@@ -111,6 +129,15 @@ namespace SpreadsheetProcessor {
         public static string OperatorExpected {
             get {
                 return ResourceManager.GetString("OperatorExpected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to parse cell address &apos;{0}&apos;.
+        /// </summary>
+        public static string UnableToParseCellAddress {
+            get {
+                return ResourceManager.GetString("UnableToParseCellAddress", resourceCulture);
             }
         }
         
@@ -133,11 +160,38 @@ namespace SpreadsheetProcessor {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cell column is more then table size.
+        /// </summary>
+        public static string WrongCellColumn {
+            get {
+                return ResourceManager.GetString("WrongCellColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cell row is more then table size.
+        /// </summary>
+        public static string WrongCellRow {
+            get {
+                return ResourceManager.GetString("WrongCellRow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Expression should start from &quot;{0}&quot; character.
         /// </summary>
         public static string WrongExpressionStart {
             get {
                 return ResourceManager.GetString("WrongExpressionStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrong data type in expression .
+        /// </summary>
+        public static string WrongTypeError {
+            get {
+                return ResourceManager.GetString("WrongTypeError", resourceCulture);
             }
         }
         

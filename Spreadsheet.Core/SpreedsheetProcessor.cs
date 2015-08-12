@@ -5,12 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Schema;
 using SpreadsheetProcessor.Cells;
+using SpreadsheetProcessor.ExpressionParsers;
 
 namespace SpreadsheetProcessor
 {
     public class SpreedsheetProcessor
     {
         private readonly Spreadsheet _spreadsheet;
+
+        public CellAddress MaxAddress => _spreadsheet.MaxAddress;
 
         public SpreedsheetProcessor(Spreadsheet spreadsheet)
         {
@@ -24,8 +27,14 @@ namespace SpreadsheetProcessor
 
         internal ExpressionValue GetCellValue(CellAddress cellAddress, string callStack)
         {
-            var value = _spreadsheet.GetCell(cellAddress);
-            return value.Evaluate(this, callStack);
+            try
+            {
+                return _spreadsheet.GetCell(cellAddress).Evaluate(this, callStack);
+            }
+            catch (ExpressionEvaluationException ex)
+            {
+                return new ExpressionValue(CellValueType.Error, ex.Message);
+            }
         }
     }
 }

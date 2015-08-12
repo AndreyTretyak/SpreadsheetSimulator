@@ -48,6 +48,7 @@
     <Compile Include="Cells\ExpressionValue.cs" />
     <Compile Include="Cells\IExpression.cs" />
     <Compile Include="ExpressionParsers\ExpressionParser.cs" />
+    <Compile Include="ExpressionParsers\ExpressionParsingException.cs" />
     <Compile Include="ExpressionParsers\ExpressionTokenizer.cs" />
     <Compile Include="ExpressionParsers\ParserSettings.cs" />
     <Compile Include="ExpressionParsers\Token.cs" />
@@ -61,6 +62,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SpreedsheatWriter.cs" />
     <Compile Include="SpreedsheetProcessor.cs" />
   </ItemGroup>
   <ItemGroup>

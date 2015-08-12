@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using SpreadsheetProcessor.ExpressionParsers;
 
 namespace SpreadsheetProcessor
 {
@@ -25,7 +26,9 @@ namespace SpreadsheetProcessor
 
         public string GetCellContent(CellAddress cellAddress)
         {
-            cellAddress.Validate(MaxAddress);
+            var validationResult = cellAddress.Validate(MaxAddress);
+            if (!string.IsNullOrWhiteSpace(validationResult))
+                throw new SpreadsheatReadingException(validationResult);
             return _content[cellAddress.Row][cellAddress.Column];
         }
     }
