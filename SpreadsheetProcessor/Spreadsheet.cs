@@ -1,22 +1,23 @@
 using SpreadsheetProcessor.Cells;
+using SpreadsheetProcessor.ExpressionParsers;
 
 namespace SpreadsheetProcessor
 {
     public class Spreadsheet
     {
-        
-        private SpreadsheetSource Source { get; }
+        private readonly ExpressionParser _parser;
+
+        private readonly SpreadsheetSource _source;
 
         public Spreadsheet(SpreadsheetSource source)
         {
-            Source = source;
+            _source = source;
+            _parser = new ExpressionParser();
         }
 
         public Cell GetCell(CellAddress cellAddress)
         {
-            var value = Source.GetCellContent(cellAddress);
-
-            return null;
+            return new Cell(cellAddress, _parser.Parse(_source.GetCellContent(cellAddress)));
         }
     }
 }

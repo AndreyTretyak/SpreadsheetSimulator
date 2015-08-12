@@ -47,11 +47,11 @@
     <Compile Include="Cells\ConstantExpression.cs" />
     <Compile Include="Cells\ExpressionValue.cs" />
     <Compile Include="Cells\IExpression.cs" />
-    <Compile Include="ExpressionParser\ExpressionParser.cs" />
-    <Compile Include="ExpressionParser\ExpressionTokenizer.cs" />
-    <Compile Include="ExpressionParser\ParserSettings.cs" />
-    <Compile Include="ExpressionParser\Token.cs" />
-    <Compile Include="ExpressionParser\TokenType.cs" />
+    <Compile Include="ExpressionParsers\ExpressionParser.cs" />
+    <Compile Include="ExpressionParsers\ExpressionTokenizer.cs" />
+    <Compile Include="ExpressionParsers\ParserSettings.cs" />
+    <Compile Include="ExpressionParsers\Token.cs" />
+    <Compile Include="ExpressionParsers\TokenType.cs" />
     <Compile Include="Spreadsheet.cs" />
     <Compile Include="SpreadsheetSource.cs" />
     <Compile Include="Cells\Cell.cs" />

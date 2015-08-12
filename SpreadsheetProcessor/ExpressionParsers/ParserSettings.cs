@@ -1,4 +1,4 @@
-namespace SpreadsheetProcessor
+namespace SpreadsheetProcessors
 {
     public static class ParserSettings
     {

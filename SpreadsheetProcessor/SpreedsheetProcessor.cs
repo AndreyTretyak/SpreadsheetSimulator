@@ -10,11 +10,11 @@ namespace SpreadsheetProcessor
 {
     public class SpreedsheetProcessor
     {
-        private Spreadsheet Spreadsheet { get;  }
+        private readonly Spreadsheet _spreadsheet;
 
         public SpreedsheetProcessor(Spreadsheet spreadsheet)
         {
-            Spreadsheet = spreadsheet;
+            _spreadsheet = spreadsheet;
         }
 
         public ExpressionValue GetCellValue(CellAddress cellAddress)
@@ -24,7 +24,7 @@ namespace SpreadsheetProcessor
 
         internal ExpressionValue GetCellValue(CellAddress cellAddress, string callStack)
         {
-            var value = Spreadsheet.GetCell(cellAddress);
+            var value = _spreadsheet.GetCell(cellAddress);
             return value.Evaluate(this, callStack);
         }
     }
