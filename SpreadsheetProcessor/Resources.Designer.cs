@@ -79,7 +79,16 @@ namespace SpreadsheetProcessor {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to define content type of cell  {0}.
+        ///   Looks up a localized string similar to Integer or CellNumber expected.
+        /// </summary>
+        public static string IdentifierExpected {
+            get {
+                return ResourceManager.GetString("IdentifierExpected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to define content type of cell &quot;{0}&quot;..
         /// </summary>
         public static string InvalidCellContent {
             get {
@@ -97,11 +106,38 @@ namespace SpreadsheetProcessor {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Operator expected.
+        /// </summary>
+        public static string OperatorExpected {
+            get {
+                return ResourceManager.GetString("OperatorExpected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cell can contain only number, string or expression.
+        /// </summary>
+        public static string UnknownContentType {
+            get {
+                return ResourceManager.GetString("UnknownContentType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unknown operator type {0}.
         /// </summary>
         public static string UnknownOperator {
             get {
                 return ResourceManager.GetString("UnknownOperator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expression should start from &quot;{0}&quot; character.
+        /// </summary>
+        public static string WrongExpressionStart {
+            get {
+                return ResourceManager.GetString("WrongExpressionStart", resourceCulture);
             }
         }
         

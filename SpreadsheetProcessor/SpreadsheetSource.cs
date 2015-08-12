@@ -6,7 +6,7 @@ namespace SpreadsheetProcessor
 {
     public class SpreadsheetSource
     {
-        public CellAdress MaxAdress { get; }
+        public CellAddress MaxAddress { get; }
 
         private string[][] Content { get; }
 
@@ -16,17 +16,17 @@ namespace SpreadsheetProcessor
             {
                 //TODO: need validation
                 var size = reader.ReadLine().Split('\t').ToArray();
-                MaxAdress = new CellAdress(int.Parse(size[0]), int.Parse(size[1]));
+                MaxAddress = new CellAddress(int.Parse(size[0]), int.Parse(size[1]));
                 Content = reader.ReadToEnd().Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)
                     .Select(e => e.Split(new [] {'\t'}, StringSplitOptions.RemoveEmptyEntries).ToArray())
                     .ToArray();
             }
         }
 
-        public string GetCellContent(CellAdress cellAdress)
+        public string GetCellContent(CellAddress cellAddress)
         {
-            cellAdress.Validate(MaxAdress);
-            return Content[cellAdress.Row][cellAdress.Column];
+            cellAddress.Validate(MaxAddress);
+            return Content[cellAddress.Row][cellAddress.Column];
         }
     }
 }

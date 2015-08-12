@@ -17,14 +17,14 @@ namespace SpreadsheetProcessor
             Spreadsheet = spreadsheet;
         }
 
-        public ExpressionValue GetCellValue(CellAdress cellAdress)
+        public ExpressionValue GetCellValue(CellAddress cellAddress)
         {
-            return GetCellValue(cellAdress, null);
+            return GetCellValue(cellAddress, null);
         }
 
-        internal ExpressionValue GetCellValue(CellAdress cellAdress, string callStack)
+        internal ExpressionValue GetCellValue(CellAddress cellAddress, string callStack)
         {
-            var value = Spreadsheet.GetCell(cellAdress);
+            var value = Spreadsheet.GetCell(cellAddress);
             return value.Evaluate(this, callStack);
         }
     }
