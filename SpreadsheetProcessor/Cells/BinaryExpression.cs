@@ -1,3 +1,5 @@
+using SpreadsheetProcessors;
+
 namespace SpreadsheetProcessor.Cells
 {
     public class BinaryExpression : IExpression
@@ -52,5 +54,7 @@ namespace SpreadsheetProcessor.Cells
             }
             return new ExpressionValue(CellValueType.Integer, result);
         }
+
+        public override string ToString() => Right == null ? Left.ToString() : Left.ToString() + Operator + Right;
     }
 }

@@ -3,10 +3,11 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using SpreadsheetProcessor.Cells;
+using SpreadsheetProcessors;
 
-namespace SpreadsheetProcessor.ExpressionParser
+namespace SpreadsheetProcessor.ExpressionParsers
 {
-    public class ExpressionParser
+    internal class ExpressionParser
     {
         private ExpressionTokenizer Tokenizer { get; } = new ExpressionTokenizer();
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SpreadsheetProcessor.Cells;
-using SpreadsheetProcessor.ExpressionParser;
+using SpreadsheetProcessor.ExpressionParsers;
 
 namespace Spreadsheet.Tests
 {
@@ -13,6 +13,7 @@ namespace Spreadsheet.Tests
     public class ExpressionParserTests
     {
         private ExpressionParser _parser;
+
         [SetUp]
         public void SetUp()
         {

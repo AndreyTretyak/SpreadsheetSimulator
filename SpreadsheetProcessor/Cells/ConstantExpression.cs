@@ -10,5 +10,7 @@ namespace SpreadsheetProcessor.Cells
         }
 
         public ExpressionValue Evaluate(SpreedsheetProcessor processor, string callStack) => Value;
+
+        public override string ToString() => Value.StringRepresentation;
     }
 }

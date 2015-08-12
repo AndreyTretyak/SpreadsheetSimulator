@@ -13,5 +13,7 @@ namespace SpreadsheetProcessor.Cells
         {
             return processor.GetCellValue(Address, callStack);
         }
+
+        public override string ToString() => Address.StringValue;
     }
 }

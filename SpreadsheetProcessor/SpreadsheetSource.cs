@@ -8,7 +8,7 @@ namespace SpreadsheetProcessor
     {
         public CellAddress MaxAddress { get; }
 
-        private string[][] Content { get; }
+        private readonly string[][] _content;
 
         public SpreadsheetSource(Stream stream)
         {
@@ -17,7 +17,7 @@ namespace SpreadsheetProcessor
                 //TODO: need validation
                 var size = reader.ReadLine().Split('\t').ToArray();
                 MaxAddress = new CellAddress(int.Parse(size[0]), int.Parse(size[1]));
-                Content = reader.ReadToEnd().Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)
+                _content = reader.ReadToEnd().Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)
                     .Select(e => e.Split(new [] {'\t'}, StringSplitOptions.RemoveEmptyEntries).ToArray())
                     .ToArray();
             }
@@ -26,7 +26,7 @@ namespace SpreadsheetProcessor
         public string GetCellContent(CellAddress cellAddress)
         {
             cellAddress.Validate(MaxAddress);
-            return Content[cellAddress.Row][cellAddress.Column];
+            return _content[cellAddress.Row][cellAddress.Column];
         }
     }
 }

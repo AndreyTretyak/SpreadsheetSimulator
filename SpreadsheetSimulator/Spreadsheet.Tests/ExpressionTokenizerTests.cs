@@ -4,23 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using SpreadsheetProcessor.ExpressionParser;
+using SpreadsheetProcessor.ExpressionParsers;
 
 namespace Spreadsheet.Tests
 {
     [TestFixture]
     public class ExpressionTokenizerTests
     {
-        private ExpressionTokenizer Tokenizer;
+        private ExpressionTokenizer _tokenizer;
+
         [SetUp]
         public void SetUp()
         {
-            Tokenizer = new ExpressionTokenizer();
+            _tokenizer = new ExpressionTokenizer();
         }
 
         private void AssertResult(string test, IEnumerable<Token> expectedResult)
         {
-            CollectionAssert.AreEqual(expectedResult, Tokenizer.GetTokens(test));
+            CollectionAssert.AreEqual(expectedResult, _tokenizer.GetTokens(test));
         }
 
         [Test]
