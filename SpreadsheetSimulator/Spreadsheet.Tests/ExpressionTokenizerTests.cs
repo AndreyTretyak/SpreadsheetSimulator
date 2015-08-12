@@ -11,8 +11,7 @@ namespace Spreadsheet.Tests
     [TestFixture]
     public class ExpressionTokenizerTests
     {
-        private ExpressionTokenizer Tokenizer { get; set; }
-
+        private ExpressionTokenizer Tokenizer;
         [SetUp]
         public void SetUp()
         {

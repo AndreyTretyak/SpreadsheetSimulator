@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cells\BinaryExpression.cs" />
-    <Compile Include="Cells\CellAdress.cs" />
+    <Compile Include="Cells\CellAddress.cs" />
     <Compile Include="Cells\CellRefereceExpression.cs" />
     <Compile Include="Cells\CellValueType.cs" />
     <Compile Include="Cells\ConstantExpression.cs" />
@@ -50,6 +50,8 @@
     <Compile Include="ExpressionParser\ExpressionParser.cs" />
     <Compile Include="ExpressionParser\ExpressionTokenizer.cs" />
     <Compile Include="ExpressionParser\ParserSettings.cs" />
+    <Compile Include="ExpressionParser\Token.cs" />
+    <Compile Include="ExpressionParser\TokenType.cs" />
     <Compile Include="Spreadsheet.cs" />
     <Compile Include="SpreadsheetSource.cs" />
     <Compile Include="Cells\Cell.cs" />

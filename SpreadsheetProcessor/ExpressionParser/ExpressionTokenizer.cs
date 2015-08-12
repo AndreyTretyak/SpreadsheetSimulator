@@ -7,34 +7,6 @@ using System.Threading.Tasks;
 
 namespace SpreadsheetProcessor.ExpressionParser
 {
-    internal enum TokenType
-    {
-        ExpressionStart,
-        StringStart,
-        CellReference,
-        Integer,
-        String,
-        Operator,
-        Unknown
-    }
-
-    internal struct Token
-    {
-        private TokenType Type { get; }
-        private string Value { get; }
-
-        public Token(TokenType type, string value)
-        {
-            Type = type;
-            Value = value;
-        }
-
-        public override string ToString()
-        {
-            return Type + "|" + Value;
-        }
-    }
-    
     internal class ExpressionTokenizer
     {
         private static readonly Dictionary<char, TokenType> TokenIdentifiers = new Dictionary<char, TokenType>
@@ -46,42 +18,42 @@ namespace SpreadsheetProcessor.ExpressionParser
             {ParserSettings.ExpressionStart, TokenType.ExpressionStart}
         };
 
-        private string Expression { get; set; }
+        private string _expression;
 
-        private int Index { get; set;  }
+        private int _index;
 
         private char Peek()
         {
-            return Index < Expression.Length
-                   ? Expression[Index]
+            return _index < _expression.Length
+                   ? _expression[_index]
                    : ParserSettings.ExpressionEndChar;
         }
 
         private char Next()
         {
-            return Index < Expression.Length 
-                   ? Expression[Index++] 
+            return _index < _expression.Length 
+                   ? _expression[_index++] 
                    : ParserSettings.ExpressionEndChar;
         }
 
         private string RemainExpression()
         {
-            var result = Expression.Substring(Index);
-            Index = Expression.Length;
+            var result = _expression.Substring(_index);
+            _index = _expression.Length;
             return result;
         }
 
         private string CharsTill(Func<char, bool> selector)
         {
-            var result = new string(Expression.Skip(Index).TakeWhile(selector).ToArray());
-            Index += result.Length;
+            var result = new string(_expression.Skip(_index).TakeWhile(selector).ToArray());
+            _index += result.Length;
             return result;
         }
 
         public IEnumerable<Token> GetTokens(string expression)
         {
-            Expression = expression;
-            Index = 0;
+            _expression = expression;
+            _index = 0;
             Token? token;
             do
             {

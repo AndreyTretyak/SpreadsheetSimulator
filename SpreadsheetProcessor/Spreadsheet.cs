@@ -12,9 +12,9 @@ namespace SpreadsheetProcessor
             Source = source;
         }
 
-        public Cell GetCell(CellAdress cellAdress)
+        public Cell GetCell(CellAddress cellAddress)
         {
-            var value = Source.GetCellContent(cellAdress);
+            var value = Source.GetCellContent(cellAddress);
 
             return null;
         }
