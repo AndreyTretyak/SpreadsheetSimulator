@@ -55,7 +55,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SpreadsheetProcessor\Spreadsheet.Core.csproj">
+    <ProjectReference Include="..\Spreadsheet.Core\Spreadsheet.Core.csproj">
       <Project>{f3f7714d-497f-4f82-bf5f-96aa21b0266f}</Project>
       <Name>Spreadsheet.Core</Name>
     </ProjectReference>

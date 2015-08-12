@@ -16,7 +16,11 @@ namespace SpreadsheetSimulator
             var spreadsheet = new Spreadsheet(source);
             var processor = new SpreedsheetProcessor(spreadsheet);
 
-            var result = processor.GetCellValue(new CellAddress("A1"));
+            var t = processor.GetCellValue(new CellAddress("A2"));
+
+            var writer = new SpreedsheatWriter(processor);
+            writer.Save(Console.OpenStandardOutput());
+            Console.ReadKey();
         }
     }
 }

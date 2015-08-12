@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using SpreadsheetProcessor.ExpressionParsers;
 
 namespace SpreadsheetProcessor
 {
@@ -18,20 +19,22 @@ namespace SpreadsheetProcessor
 
         public CellAddress(int row, int column)
         {
-            if (row < 0)
-                throw new IndexOutOfRangeException("Cell row can`t be negative");
-            if (column < 0)
-                throw new IndexOutOfRangeException("Cell column can`t be negative");
             Row = row;
             Column = column;
         }
 
-        public void Validate(CellAddress maxPosible)
+        public string Validate(CellAddress maxPosible)
         {
+            string error = null;
+            if (Row < 0)
+                error += Resources.NegetiveCellRow;
+            if (Column < 0)
+                error += Resources.NegativeCellColumn;
             if (maxPosible.Row <= Row)
-                throw new IndexOutOfRangeException("Cell row is more then table size");
+                error += Resources.WrongCellRow;
             if (maxPosible.Column <= Column)
-                throw new IndexOutOfRangeException("Cell column is more then table size");
+                error += Resources.WrongCellColumn;
+            return error;
         }
 
         private const int LettersUsedForRowNumber = 26;
@@ -66,7 +69,7 @@ namespace SpreadsheetProcessor
             int result;
             if (int.TryParse(new string(reference.SkipWhile(char.IsLetter).ToArray()), out result))
                 return result - 1;
-            throw new InvalidDataException($"Unable to parse cell address '{reference}'");
+            throw new ExpressionParsingException($"Unable to parse cell address '{reference}'");
         }
     }
 }

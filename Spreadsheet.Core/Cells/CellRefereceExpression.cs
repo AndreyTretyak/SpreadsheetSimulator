@@ -11,7 +11,10 @@ namespace SpreadsheetProcessor.Cells
 
         public ExpressionValue Evaluate(SpreedsheetProcessor processor, string callStack)
         {
-            return processor.GetCellValue(Address, callStack);
+            var validationResult = Address.Validate(processor.MaxAddress);
+            return string.IsNullOrWhiteSpace(validationResult) 
+                   ? processor.GetCellValue(Address, callStack)
+                   : new ExpressionValue(CellValueType.Error, validationResult);
         }
 
         public override string ToString() => Address.StringValue;

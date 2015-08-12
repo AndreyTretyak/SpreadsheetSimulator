@@ -9,6 +9,8 @@ namespace SpreadsheetProcessor
 
         private readonly SpreadsheetSource _source;
 
+        public CellAddress MaxAddress => _source.MaxAddress;
+
         public Spreadsheet(SpreadsheetSource source)
         {
             _source = source;
@@ -17,7 +19,17 @@ namespace SpreadsheetProcessor
 
         public Cell GetCell(CellAddress cellAddress)
         {
-            return new Cell(cellAddress, _parser.Parse(_source.GetCellContent(cellAddress)));
+            IExpression value; 
+            try
+            {
+                value = _parser.Parse(_source.GetCellContent(cellAddress));
+                
+            }
+            catch (ExpressionParsingException ex)
+            {
+                value = new ConstantExpression(new ExpressionValue(CellValueType.Error, ex.Message));
+            }
+            return new Cell(cellAddress, value);
         }
     }
 }
