@@ -12,12 +12,15 @@ namespace SpreadsheetSimulator
     {
         static void Main(string[] args)
         {
-            var source = new SpreadsheetSource(File.Open("input.txt", FileMode.Open));
-            var spreadsheet = new Spreadsheet(source);
+            var stream = File.Open("input.txt", FileMode.Open);
+
+            //var source = new SpreadsheetSource(stream);
+            //var spreadsheet = new Spreadsheet(source);
+
+            var spreadsheet = new SpreadsheetReader().GetSpreadsheet(stream);
+
+
             var processor = new SpreedsheetProcessor(spreadsheet);
-
-            var t = processor.GetCellValue(new CellAddress("A2"));
-
             var writer = new SpreedsheatWriter(processor);
             writer.Save(Console.OpenStandardOutput());
             Console.ReadKey();

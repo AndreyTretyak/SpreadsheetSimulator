@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -16,7 +17,9 @@ namespace SpreadsheetProcessor.ExpressionParsers
             {ParserSettings.SubtractionOperator, TokenType.Operator},
             {ParserSettings.MultiplicationOperator, TokenType.Operator},
             {ParserSettings.DivisionOperator, TokenType.Operator},
-            {ParserSettings.ExpressionStart, TokenType.ExpressionStart}
+            {ParserSettings.ExpressionStart, TokenType.ExpressionStart},
+            {ParserSettings.LeftParanthesis, TokenType.LeftParanthesis},
+            {ParserSettings.RightParanthesis, TokenType.RightParanthesis}
         };
 
         private string _expression;

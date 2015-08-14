@@ -36,5 +36,7 @@ namespace SpreadsheetProcessor.Cells
 
             return Expression.Evaluate(processor, callStack);
         }
+
+        public override string ToString() => $"{Address}|{Expression}";
     }
 }

@@ -7,6 +7,8 @@ namespace SpreadsheetProcessor.ExpressionParsers
         Integer,
         String,
         Operator,
+        LeftParanthesis,
+        RightParanthesis,
         Unknown
     }
 }

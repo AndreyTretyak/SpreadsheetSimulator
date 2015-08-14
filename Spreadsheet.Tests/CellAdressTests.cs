@@ -34,5 +34,16 @@ namespace Spreadsheet.Tests
             Assert.AreEqual(row, address.Row, "Wrong row value");
             Assert.AreEqual(column, address.Column, "Wrong column value");
         }
+
+        [Test]
+        [TestCase(5, 1, "B2")]
+        [TestCase(1, 5, "B2")]
+        [TestCase(5, 5, "B2")]
+        [TestCase(-1, 1, "B2")]
+        [TestCase(1, -1, "B2")]
+        public void TestErrors(int row, int column, string maxAddress)
+        {
+            Assert.NotNull(new CellAddress(row, column).Validate(new CellAddress(maxAddress)));
+        }
     }
 }
