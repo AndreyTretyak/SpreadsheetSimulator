@@ -11,7 +11,7 @@ namespace SpreadsheetProcessor.ExpressionParsers
 {
     internal class ExpressionTokenizer
     {
-        private static readonly Dictionary<char, TokenType> TokenIdentifiers = new Dictionary<char, TokenType>
+        private static readonly Dictionary<string, TokenType> TokenIdentifiers = new Dictionary<string, TokenType>
         {
             {ParserSettings.AdditionOperator, TokenType.Operator},
             {ParserSettings.SubtractionOperator, TokenType.Operator},
@@ -30,14 +30,14 @@ namespace SpreadsheetProcessor.ExpressionParsers
         {
             return _index < _expression.Length
                    ? _expression[_index]
-                   : ParserSettings.ExpressionEndChar;
+                   : ParserSettings.StreamEndChar;
         }
 
         private char Next()
         {
             return _index < _expression.Length 
                    ? _expression[_index++] 
-                   : ParserSettings.ExpressionEndChar;
+                   : ParserSettings.StreamEndChar;
         }
 
         private string RemainExpression()
@@ -72,14 +72,17 @@ namespace SpreadsheetProcessor.ExpressionParsers
             while (char.IsWhiteSpace(Peek())) Next();
 
             var peek = Peek();
+
             if (char.IsDigit(peek)) return ReadNumber();
             if (char.IsLetter(peek)) return ReadCellReference();
-            if (peek == ParserSettings.StringStart) return ReadString();
-            if (peek == ParserSettings.ExpressionEndChar) return null;
-            if (TokenIdentifiers.ContainsKey(peek))
+            if (peek == ParserSettings.StreamEndChar) return null;
+
+            var key = peek.ToString();
+            if (key == ParserSettings.StringStart) return ReadString();
+            if (TokenIdentifiers.ContainsKey(key))
             {
                 Next();
-                return new Token(TokenIdentifiers[peek], peek.ToString());
+                return new Token(TokenIdentifiers[key], peek.ToString());
             }
             return new Token(TokenType.Unknown, RemainExpression());
         }
@@ -92,6 +95,125 @@ namespace SpreadsheetProcessor.ExpressionParsers
         private Token ReadString()
         {
             Next();
+            return new Token(TokenType.String, RemainExpression());
+        }
+
+        private Token ReadCellReference()
+        {
+            return new Token(TokenType.CellReference, CharsTill(char.IsLetterOrDigit));
+        }
+    }
+
+    internal class ExpressionTokenizerStream
+    {
+        private static readonly Dictionary<string, TokenType> TokenIdentifiers = new Dictionary<string, TokenType>
+        {
+            {ParserSettings.AdditionOperator, TokenType.Operator},
+            {ParserSettings.SubtractionOperator, TokenType.Operator},
+            {ParserSettings.MultiplicationOperator, TokenType.Operator},
+            {ParserSettings.DivisionOperator, TokenType.Operator},
+            {ParserSettings.ExpressionStart, TokenType.ExpressionStart},
+            {ParserSettings.LeftParanthesis, TokenType.LeftParanthesis},
+            {ParserSettings.RightParanthesis, TokenType.RightParanthesis}
+        };
+
+        private readonly StreamReader _stream;
+
+        private Token? _currentToken = null;
+
+        public ExpressionTokenizerStream(Stream stream) : this(new StreamReader(stream))
+        {
+        }
+
+        public ExpressionTokenizerStream(StreamReader stream)
+        {
+            _stream = stream;
+        }
+
+        public Token Peek()
+        {
+            if (!_currentToken.HasValue)
+                _currentToken = NextToken();
+            return _currentToken.Value;
+        }
+
+        public Token Next()
+        {
+            if (!_currentToken.HasValue)
+                _currentToken = NextToken();
+            var value = _currentToken.Value;
+            _currentToken = NextToken();
+            return value;
+        }
+
+        private char PeekChar()
+        {
+            var result = _stream.Peek();
+            if (result == -1)
+                return ParserSettings.StreamEndChar;
+            return (char) result;
+        }
+
+        private char ReadChar()
+        {
+            var result = _stream.Read();
+            if (result == -1)
+                return ParserSettings.StreamEndChar;
+            return (char)result;
+        }
+        
+        private string RemainExpression()
+        {
+            return CharsTill(c => c != ParserSettings.StreamEndChar);
+        }
+
+        private string CharsTill(Func<char, bool> selector)
+        {
+            var result = string.Empty;
+            while (selector(PeekChar())) result += ReadChar();
+            return result;
+        }
+
+        private Token NextToken()
+        {
+            var peek = PeekChar();
+
+            if (char.IsWhiteSpace(peek))
+            {
+                ReadChar();
+                while (char.IsWhiteSpace(PeekChar())) ReadChar();
+                return new Token(TokenType.EndOfExpression);
+            }
+
+            if (peek == ParserSettings.StreamEndChar)
+                return new Token(TokenType.EndOfStream);
+
+            if (char.IsDigit(peek))
+                return ReadNumber();
+
+            if (char.IsLetter(peek)) 
+                return ReadCellReference();
+
+            var key = peek.ToString();
+
+            if (key == ParserSettings.StringStart)
+                return ReadString();
+
+            if (!TokenIdentifiers.ContainsKey(key))
+                return new Token(TokenType.Unknown, RemainExpression());
+
+            ReadChar();
+            return new Token(TokenIdentifiers[key], key);
+        }
+
+        private Token ReadNumber()
+        {
+            return new Token(TokenType.Integer, CharsTill(char.IsDigit));
+        }
+
+        private Token ReadString()
+        {
+            ReadChar();
             return new Token(TokenType.String, RemainExpression());
         }
 

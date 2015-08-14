@@ -6,6 +6,8 @@ namespace SpreadsheetProcessor.ExpressionParsers
 
         public string Value { get; }
 
+        public Token(TokenType type) : this(type, null) { }
+
         public Token(TokenType type, string value)
         {
             Type = type;

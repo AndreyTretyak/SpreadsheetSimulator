@@ -70,6 +70,15 @@ namespace SpreadsheetProcessor {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to End of expression.
+        /// </summary>
+        public static string EndOfExpression {
+            get {
+                return ResourceManager.GetString("EndOfExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error in reading number {0}.
         /// </summary>
         public static string FailedToParseNumber {
@@ -183,6 +192,15 @@ namespace SpreadsheetProcessor {
         public static string WrongExpressionStart {
             get {
                 return ResourceManager.GetString("WrongExpressionStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrong token type &apos;{0}&apos; expected.
+        /// </summary>
+        public static string WrongTokenType {
+            get {
+                return ResourceManager.GetString("WrongTokenType", resourceCulture);
             }
         }
         

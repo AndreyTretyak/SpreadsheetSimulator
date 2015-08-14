@@ -9,6 +9,8 @@ namespace SpreadsheetProcessor.ExpressionParsers
         Operator,
         LeftParanthesis,
         RightParanthesis,
-        Unknown
+        EndOfExpression,
+        Unknown,
+        EndOfStream
     }
 }

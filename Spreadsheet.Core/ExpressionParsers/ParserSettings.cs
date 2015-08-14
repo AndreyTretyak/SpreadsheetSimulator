@@ -2,26 +2,24 @@ namespace SpreadsheetProcessors
 {
     public static class ParserSettings
     {
-        public const char StringStart = '\'';
+        public const string StringStart = "\'";
 
-        public const char ExpressionStart = '=';
+        public const string ExpressionStart = "=";
 
-        public const char AdditionOperator = '+';
+        public const string AdditionOperator = "+";
 
-        public const char SubtractionOperator = '-';
+        public const string SubtractionOperator = "-";
 
-        public const char MultiplicationOperator = '*';
+        public const string MultiplicationOperator = "*";
 
-        public const char DivisionOperator = '/';
+        public const string DivisionOperator = "/";
 
-        public const char LeftParanthesis = '(';
+        public const string LeftParanthesis = "(";
 
-        public const char RightParanthesis = ')';
-
-        public static char[] Operators => new [] {AdditionOperator, SubtractionOperator, MultiplicationOperator, DivisionOperator};
+        public const string RightParanthesis = ")";
 
         public const string CallStackSeparator = "|";
 
-        public static char ExpressionEndChar = '\0';
+        public static char StreamEndChar = '\0';
     }
 }

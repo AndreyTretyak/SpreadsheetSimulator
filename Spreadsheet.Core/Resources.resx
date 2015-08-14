@@ -120,6 +120,9 @@
   <data name="CircularReferenceDetected" xml:space="preserve">
     <value>Circular reference detected for cell {0}</value>
   </data>
+  <data name="EndOfExpression" xml:space="preserve">
+    <value>End of expression</value>
+  </data>
   <data name="FailedToParseNumber" xml:space="preserve">
     <value>Error in reading number {0}</value>
   </data>
@@ -158,6 +161,9 @@
   </data>
   <data name="WrongExpressionStart" xml:space="preserve">
     <value>Expression should start from "{0}" character</value>
+  </data>
+  <data name="WrongTokenType" xml:space="preserve">
+    <value>Wrong token type '{0}' expected</value>
   </data>
   <data name="WrongTypeError" xml:space="preserve">
     <value>Wrong data type in expression </value>
