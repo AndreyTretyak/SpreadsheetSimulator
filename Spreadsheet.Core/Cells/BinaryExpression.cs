@@ -6,15 +6,20 @@ namespace SpreadsheetProcessor.Cells
     {
         public IExpression Left { get; }
 
-        public IExpression Right { get; }
+        public IExpression Right { get; set; }
 
-        public char Operator { get; }
+        public string Operation { get; set; }
 
-        public BinaryExpression(IExpression left, char @operator, IExpression right)
+        public BinaryExpression(IExpression left)
+        {
+            Left = left;
+        }
+
+        public BinaryExpression(IExpression left, string operation, IExpression right)
         {
             Left = left;
             Right = right;
-            Operator = @operator;
+            Operation = operation;
         }
 
         public ExpressionValue Evaluate(SpreedsheetProcessor processor, string callStack)
@@ -35,7 +40,7 @@ namespace SpreadsheetProcessor.Cells
                 return new ExpressionValue(CellValueType.Error, Resources.WrongTypeError);
 
             int result;
-            switch (Operator)
+            switch (Operation)
             {
                 case ParserSettings.AdditionOperator:
                     result = (int)leftResult.Value + (int)rightResult.Value;
@@ -53,11 +58,11 @@ namespace SpreadsheetProcessor.Cells
                     result = (int)leftResult.Value / rightValue;
                     break;
                 default:
-                    return new ExpressionValue(CellValueType.Error, string.Format(Resources.UnknownOperator, Operator));
+                    return new ExpressionValue(CellValueType.Error, string.Format(Resources.UnknownOperator, Operation));
             }
             return new ExpressionValue(CellValueType.Integer, result);
         }
 
-        public override string ToString() => Right == null ? Left.ToString() : Left.ToString() + Operator + Right;
+        public override string ToString() => Right == null ? Left.ToString() : Left.ToString() + Operation + Right;
     }
 }

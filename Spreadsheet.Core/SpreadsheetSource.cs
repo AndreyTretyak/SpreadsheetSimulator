@@ -51,20 +51,13 @@ namespace SpreadsheetProcessor
             using (var reader = new StreamReader(stream))
             {
                 //TODO: need validation
-                var size = reader.ReadLine().Split(new []{'\t', ' '}, StringSplitOptions.RemoveEmptyEntries).ToArray();
+                var size = reader.ReadLine().Split(new []{'\t', ' ', '\n', '\r'}, StringSplitOptions.RemoveEmptyEntries).ToArray();
                 var maxAddress = new CellAddress(int.Parse(size[0]), int.Parse(size[1]));
 
-                var enumerable = Enumerable.Empty<Cell>();
-                var row = 0;
-                while (!reader.EndOfStream)
-                {
-                    var column = 0;
-                    var local = row; //needed to be sure that we will have correct value at execution moment
-                    enumerable = enumerable.Concat(reader.ReadLine().Split(new[] {'\t'}, StringSplitOptions.RemoveEmptyEntries)
-                                            .Select(e => new Cell(new CellAddress(local, column++),  _parser.Parse(e))));
-                    row++;
-                }
-                return new SpreadsheetMemoryCache(maxAddress, enumerable);
+                var expresions = new ExpressionParserNew(reader.BaseStream).GetExpressions().ToArray();
+                var cells = expresions.Select((e, i) => new Cell(new CellAddress(i / maxAddress.Column, i % maxAddress.Column), e)).ToArray();
+
+                return new SpreadsheetArray(maxAddress, cells);
             }
         }
     }

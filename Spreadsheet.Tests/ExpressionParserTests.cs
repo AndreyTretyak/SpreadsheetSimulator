@@ -85,11 +85,11 @@ namespace Spreadsheet.Tests
         {
             var expression = ParseExpresion<BinaryExpression>("=197-98/3");
             Assert.AreEqual(197, Cast<ConstantExpression>(expression.Left).Value.Value);
-            Assert.AreEqual('-', expression.Operator);
+            Assert.AreEqual('-', expression.Operation);
 
             var right = Cast<BinaryExpression>(expression.Right);
             Assert.AreEqual(98, Cast<ConstantExpression>(right.Left).Value.Value);
-            Assert.AreEqual('/', right.Operator);
+            Assert.AreEqual('/', right.Operation);
             Assert.AreEqual(3, Cast<ConstantExpression>(right.Right).Value.Value);
         }
     }

@@ -9,6 +9,11 @@ namespace SpreadsheetProcessor.Cells
             Value = value;
         }
 
+        public ConstantExpression(CellValueType type, object value)
+        {
+            Value = new ExpressionValue(type, value);
+        }
+
         public ExpressionValue Evaluate(SpreedsheetProcessor processor, string callStack) => Value;
 
         public override string ToString() => Value.StringRepresentation;
