@@ -92,18 +92,18 @@ namespace SpreadsheetProcessor.ExpressionParsers
         }
     }
 
-    internal class ExpressionParserNew
+    internal class ExpressionParserNew : IDisposable
     {
-        private readonly ExpressionTokenizerStream _tokenizer;
+        private readonly ExpressionStreamTokenizer _tokenizer;
 
         public ExpressionParserNew(StreamReader stream)
         {
-            _tokenizer = new ExpressionTokenizerStream(stream);
+            _tokenizer = new ExpressionStreamTokenizer(stream);
         }
 
         public ExpressionParserNew(Stream stream)
         {
-            _tokenizer = new ExpressionTokenizerStream(stream);
+            _tokenizer = new ExpressionStreamTokenizer(stream);
         }
 
         public IEnumerable<IExpression> GetExpressions()
@@ -111,7 +111,7 @@ namespace SpreadsheetProcessor.ExpressionParsers
             while (!Peek(TokenType.EndOfStream))
             {
                 var result = ReadCellContent();
-                if (Peek(TokenType.EndOfExpression))
+                if (Peek(TokenType.EndOfExpression) || Peek(TokenType.EndOfStream))
                 {
                     Next();
                     yield return result;
@@ -160,7 +160,7 @@ namespace SpreadsheetProcessor.ExpressionParsers
             }
         }
 
-        public IExpression ReadNothing()
+        private IExpression ReadNothing()
         {
             _tokenizer.Next();
             return new ConstantExpression(new ExpressionValue(CellValueType.Nothing, null));
@@ -189,6 +189,7 @@ namespace SpreadsheetProcessor.ExpressionParsers
         
         private IExpression ReadExpression()
         {
+            Next();
             return ReadSum();
         }
 
@@ -227,8 +228,8 @@ namespace SpreadsheetProcessor.ExpressionParsers
             if (Peek(TokenType.LeftParanthesis))
             {
                 Next();
-                var expresion = ReadExpression();
-                if (Peek(TokenType.RightParanthesis))
+                var expresion = ReadSum();
+                if (!Peek(TokenType.RightParanthesis))
                     return InvalidContent(string.Format(Resources.WrongTokenType, ParserSettings.RightParanthesis));
                 Next();
                 return expresion;
@@ -265,6 +266,11 @@ namespace SpreadsheetProcessor.ExpressionParsers
         {
             return new ConstantExpression(new ExpressionValue(CellValueType.Error,
                 string.Format(Resources.InvalidCellContent, _tokenizer.Next().Value) + " " + additionMessage));
+        }
+
+        public void Dispose()
+        {
+            _tokenizer?.Dispose();
         }
     }
 }
