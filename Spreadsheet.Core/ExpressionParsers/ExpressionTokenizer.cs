@@ -104,7 +104,7 @@ namespace SpreadsheetProcessor.ExpressionParsers
         }
     }
 
-    internal class ExpressionTokenizerStream
+    internal class ExpressionStreamTokenizer : IDisposable
     {
         private static readonly Dictionary<string, TokenType> TokenIdentifiers = new Dictionary<string, TokenType>
         {
@@ -121,11 +121,11 @@ namespace SpreadsheetProcessor.ExpressionParsers
 
         private Token? _currentToken = null;
 
-        public ExpressionTokenizerStream(Stream stream) : this(new StreamReader(stream))
+        public ExpressionStreamTokenizer(Stream stream) : this(new StreamReader(stream))
         {
         }
 
-        public ExpressionTokenizerStream(StreamReader stream)
+        public ExpressionStreamTokenizer(StreamReader stream)
         {
             _stream = stream;
         }
@@ -164,7 +164,7 @@ namespace SpreadsheetProcessor.ExpressionParsers
         
         private string RemainExpression()
         {
-            return CharsTill(c => c != ParserSettings.StreamEndChar);
+            return CharsTill(c => !char.IsWhiteSpace(c));
         }
 
         private string CharsTill(Func<char, bool> selector)
@@ -220,6 +220,11 @@ namespace SpreadsheetProcessor.ExpressionParsers
         private Token ReadCellReference()
         {
             return new Token(TokenType.CellReference, CharsTill(char.IsLetterOrDigit));
+        }
+
+        public void Dispose()
+        {
+            _stream?.Dispose();
         }
     }
 }
