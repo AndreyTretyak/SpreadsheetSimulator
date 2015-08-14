@@ -71,5 +71,7 @@ namespace SpreadsheetProcessor
                 return result - 1;
             throw new ExpressionParsingException($"Unable to parse cell address '{reference}'");
         }
+
+        public override string ToString() => StringValue;
     }
 }

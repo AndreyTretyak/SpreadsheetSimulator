@@ -14,6 +14,10 @@ namespace SpreadsheetProcessors
 
         public const char DivisionOperator = '/';
 
+        public const char LeftParanthesis = '(';
+
+        public const char RightParanthesis = ')';
+
         public static char[] Operators => new [] {AdditionOperator, SubtractionOperator, MultiplicationOperator, DivisionOperator};
 
         public const string CallStackSeparator = "|";

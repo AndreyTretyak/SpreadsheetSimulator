@@ -11,11 +11,11 @@ namespace SpreadsheetProcessor
 {
     public class SpreedsheetProcessor
     {
-        private readonly Spreadsheet _spreadsheet;
+        private readonly ISpreadsheet _spreadsheet;
 
         public CellAddress MaxAddress => _spreadsheet.MaxAddress;
 
-        public SpreedsheetProcessor(Spreadsheet spreadsheet)
+        public SpreedsheetProcessor(ISpreadsheet spreadsheet)
         {
             _spreadsheet = spreadsheet;
         }
