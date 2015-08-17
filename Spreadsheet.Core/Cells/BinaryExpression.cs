@@ -22,7 +22,7 @@ namespace SpreadsheetProcessor.Cells
             Operation = operation;
         }
 
-        public ExpressionValue Evaluate(SpreedsheetProcessor processor, string callStack)
+        public ExpressionValue Evaluate(ISpreadsheet processor, string callStack)
         {
             if (Right == null)
                 return Left.Evaluate(processor, callStack);
@@ -63,6 +63,6 @@ namespace SpreadsheetProcessor.Cells
             return new ExpressionValue(CellValueType.Integer, result);
         }
 
-        public override string ToString() => Right == null ? Left.ToString() : Left.ToString() + Operation + Right;
+        public override string ToString() => Right == null ? Left.ToString() : (ParserSettings.LeftParanthesis + Left + Operation + Right + ParserSettings.RightParanthesis);
     }
 }

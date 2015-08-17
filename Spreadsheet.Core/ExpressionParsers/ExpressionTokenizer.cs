@@ -164,7 +164,7 @@ namespace SpreadsheetProcessor.ExpressionParsers
         
         private string RemainExpression()
         {
-            return CharsTill(c => !char.IsWhiteSpace(c));
+            return CharsTill(c => !char.IsWhiteSpace(c) && c != ParserSettings.StreamEndChar);
         }
 
         private string CharsTill(Func<char, bool> selector)
@@ -224,7 +224,7 @@ namespace SpreadsheetProcessor.ExpressionParsers
 
         public void Dispose()
         {
-            _stream?.Dispose();
+            //_stream?.Dispose();
         }
     }
 }

@@ -35,12 +35,19 @@ namespace Spreadsheet.Tests
             }
         }
 
-        private IEnumerable<IExpression> GetExpression(string text)
+        private IEnumerable<IExpression> GetExpressions(string text)
         {
-            using (var parser = new ExpressionParserNew(GenerateStreamFromString(text)))
+            using (var parser = new ExpressionStreamParser(GenerateStreamFromString(text)))
             {
-                var result = parser.GetExpressions().ToArray();
-                return result;
+                var list = new List<IExpression>();
+                IExpression expression;
+                do
+                {
+                    expression = parser.NextExpression();
+                    if (expression != null)
+                        list.Add(expression);
+                } while (expression != null);
+                return list;
             }
         }
 
@@ -70,7 +77,7 @@ namespace Spreadsheet.Tests
         [Test]
         public void ParserTest()
         {
-            var result = GetExpression("'test\t19\n\r=T31\t=14+VK34/7\t\n\r\t\r\n\t\n'p1\n=12*(2-5)/3-0+3").ToArray();
+            var result = GetExpressions("'test\t19\n\r=T31\t=14+VK34/7\t\n\r\t\r\n\t\n'p1\n=12*(2-5)/3-0+3").ToArray();
         }
     }
 }

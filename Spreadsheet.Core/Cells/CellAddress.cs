@@ -7,20 +7,22 @@ namespace SpreadsheetProcessor
 {
     public struct CellAddress
     {
+        private const char StartLetter = 'A';
+
+        private const int LettersUsedForRowNumber = 26;
+
         public int Row { get; }
 
         public int Column { get; }
-
-        public string StringValue => $"{GeColumnLetter()}{Row + 1}";
-
-        public CellAddress(string reference) : this(GetRowNumber(reference),GetColumnNumber(reference))
-        {
-        }
 
         public CellAddress(int row, int column)
         {
             Row = row;
             Column = column;
+        }
+
+        public CellAddress(string reference) : this(GetRowNumber(reference),GetColumnNumber(reference))
+        {
         }
 
         public string Validate(CellAddress maxPosible)
@@ -37,9 +39,13 @@ namespace SpreadsheetProcessor
             return error;
         }
 
-        private const int LettersUsedForRowNumber = 26;
-
-        private const char StartLetter = 'A';
+        private static int GetRowNumber(string reference)
+        {
+            int result;
+            if (int.TryParse(new string(reference.SkipWhile(char.IsLetter).ToArray()), out result))
+                return result - 1;
+            throw new ExpressionParsingException($"Unable to parse cell address '{reference}'");
+        }
 
         private static int GetColumnNumber(string reference)
         {
@@ -64,14 +70,27 @@ namespace SpreadsheetProcessor
             return result;
         }
 
-        private static int GetRowNumber(string reference)
-        {
-            int result;
-            if (int.TryParse(new string(reference.SkipWhile(char.IsLetter).ToArray()), out result))
-                return result - 1;
-            throw new ExpressionParsingException($"Unable to parse cell address '{reference}'");
-        }
+        public string StringValue => $"{GeColumnLetter()}{Row + 1}";
 
         public override string ToString() => StringValue;
+
+        public bool Equals(CellAddress other)
+        {
+            return Row == other.Row && Column == other.Column;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            return obj is CellAddress && Equals((CellAddress)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            //unchecked
+            {
+                return (Row * 397) ^ Column;
+            }
+        }
     }
 }

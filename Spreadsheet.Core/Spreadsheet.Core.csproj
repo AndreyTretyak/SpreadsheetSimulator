@@ -48,9 +48,11 @@
     <Compile Include="Cells\ConstantExpression.cs" />
     <Compile Include="Cells\ExpressionValue.cs" />
     <Compile Include="Cells\IExpression.cs" />
+    <Compile Include="ParallelProcessingStrategy.cs" />
     <Compile Include="ExpressionParsers\ExpressionParser.cs" />
     <Compile Include="ExpressionParsers\ExpressionParsingException.cs" />
     <Compile Include="ExpressionParsers\ExpressionTokenizer.cs" />
+    <Compile Include="ExpressionParsers\OperatorManager.cs" />
     <Compile Include="ExpressionParsers\ParserSettings.cs" />
     <Compile Include="ExpressionParsers\Token.cs" />
     <Compile Include="ExpressionParsers\TokenType.cs" />

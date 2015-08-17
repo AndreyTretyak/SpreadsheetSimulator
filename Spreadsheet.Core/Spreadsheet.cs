@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
@@ -13,6 +14,8 @@ namespace SpreadsheetProcessor
         CellAddress MaxAddress { get; }
 
         Cell GetCell(CellAddress cellAddress);
+
+        IEnumerable<Cell> GetCells();
     }
 
     public class Spreadsheet : ISpreadsheet
@@ -43,21 +46,26 @@ namespace SpreadsheetProcessor
             }
             return new Cell(cellAddress, value);
         }
+
+        public IEnumerable<Cell> GetCells()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     public class SpreadsheetArray : ISpreadsheet
     {
         public CellAddress MaxAddress { get; }
 
-        private readonly IExpression[,] _content;
+        private readonly Cell[,] _content;
 
         public SpreadsheetArray(CellAddress maxAddress, IEnumerable<Cell> content)
         {
             MaxAddress = maxAddress;
-            _content = new IExpression[maxAddress.Row + 1, maxAddress.Column + 1];
+            _content = new Cell[maxAddress.Row, maxAddress.Column];
             foreach (var cell in content)
             {
-                _content[cell.Address.Row, cell.Address.Column] = cell.Expression;
+                _content[cell.Address.Row, cell.Address.Column] = cell;
             }
         }
 
@@ -66,10 +74,23 @@ namespace SpreadsheetProcessor
             var validationResult = cellAddress.Validate(MaxAddress);
             if (!string.IsNullOrWhiteSpace(validationResult))
                 throw new SpreadsheatReadingException(validationResult);
-            return new Cell(cellAddress, _content[cellAddress.Row,cellAddress.Column]);
+            return _content[cellAddress.Row,cellAddress.Column];
+        }
+
+        public IEnumerable<Cell> GetCells()
+        {
+            //TODO: done for testing should be changed
+            for (var row = 0; row < MaxAddress.Row; row++)
+            {
+                for (var column = 0; column < MaxAddress.Column; column++)
+                {
+                    yield return _content[row, column];
+                }
+            }
         }
     }
 
+    /*
     public class SpreadsheetMemoryCache : ISpreadsheet
     {
         public CellAddress MaxAddress { get; }
@@ -83,7 +104,7 @@ namespace SpreadsheetProcessor
             var policy = new CacheItemPolicy();          
             foreach (var cell in content)
             {
-                _cache.Add(cell.Address.StringValue, cell.Expression, policy);
+                _cache.Add(cell.Address.StringValue, cell, policy);
             }
         }
 
@@ -92,7 +113,8 @@ namespace SpreadsheetProcessor
             var validationResult = cellAddress.Validate(MaxAddress);
             if (!string.IsNullOrWhiteSpace(validationResult))
                 throw new SpreadsheatReadingException(validationResult);
-            return new Cell(cellAddress, (IExpression)_cache.Get(cellAddress.StringValue));
+            return (Cell)_cache.Get(cellAddress.StringValue);
         }
     }
+    */
 }

@@ -14,7 +14,7 @@ namespace SpreadsheetProcessor.Cells
             Value = new ExpressionValue(type, value);
         }
 
-        public ExpressionValue Evaluate(SpreedsheetProcessor processor, string callStack) => Value;
+        public ExpressionValue Evaluate(ISpreadsheet processor, string callStack) => Value;
 
         public override string ToString() => Value.StringRepresentation;
     }
