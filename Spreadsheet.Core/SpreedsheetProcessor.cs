@@ -29,12 +29,20 @@ namespace SpreadsheetProcessor
         {
             try
             {
-                return _spreadsheet.GetCell(cellAddress).Evaluate(this, callStack);
+                return _spreadsheet.GetCell(cellAddress).Evaluate(_spreadsheet, callStack);
             }
             catch (ExpressionEvaluationException ex)
             {
                 return new ExpressionValue(CellValueType.Error, ex.Message);
             }
+        }
+    }
+
+    public class SpreedsheetProcessorNew
+    {
+        public void Process(ISpreadsheet spreadsheet)
+        {
+
         }
     }
 }

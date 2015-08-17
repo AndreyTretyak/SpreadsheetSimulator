@@ -9,11 +9,11 @@ namespace SpreadsheetProcessor.Cells
             Address = address;
         }
 
-        public ExpressionValue Evaluate(SpreedsheetProcessor processor, string callStack)
+        public ExpressionValue Evaluate(ISpreadsheet processor, string callStack)
         {
             var validationResult = Address.Validate(processor.MaxAddress);
             return string.IsNullOrWhiteSpace(validationResult) 
-                   ? processor.GetCellValue(Address, callStack)
+                   ? processor.GetCell(Address).Evaluate(processor, callStack)
                    : new ExpressionValue(CellValueType.Error, validationResult);
         }
 

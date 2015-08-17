@@ -13,7 +13,9 @@ namespace SpreadsheetProcessor.Cells
     {
         public CellAddress Address { get; }
 
-        public IExpression Expression { get; }
+        private IExpression Expression { get; }
+
+        private ExpressionValue _calculatedValue;
 
         public Cell(CellAddress address, IExpression expression)
         {
@@ -21,7 +23,14 @@ namespace SpreadsheetProcessor.Cells
             Expression = expression;
         }
 
-        public ExpressionValue Evaluate(SpreedsheetProcessor processor, string callStack = null)
+        public ExpressionValue Evaluate(ISpreadsheet processor, string callStack = null, bool reevaluate = false)
+        {
+            if (!reevaluate && _calculatedValue != null)
+                return _calculatedValue;
+            return _calculatedValue = InternalEvaluate(processor, callStack);
+        }
+
+        private ExpressionValue InternalEvaluate(ISpreadsheet processor, string callStack = null)
         {
             if (Expression == null)
                 return new ExpressionValue(CellValueType.Nothing, null);
@@ -29,14 +38,15 @@ namespace SpreadsheetProcessor.Cells
             if (callStack == null)
                 callStack = string.Empty;
 
-            if (callStack.Contains(Address.StringValue))
+            var key = Address.StringValue + ParserSettings.CallStackSeparator;
+            if (callStack.Contains(key))
                 return new ExpressionValue(CellValueType.Error, string.Format(Resources.CircularReferenceDetected, Address.StringValue));
-            
-            callStack += Address.StringValue + ParserSettings.CallStackSeparator;
+
+            callStack += key;
 
             return Expression.Evaluate(processor, callStack);
         }
 
-        public override string ToString() => $"{Address}|{Expression}";
+        public override string ToString() => $"{Address}|{Expression}|{_calculatedValue}";
     }
 }

@@ -92,35 +92,51 @@ namespace SpreadsheetProcessor.ExpressionParsers
         }
     }
 
-    internal class ExpressionParserNew : IDisposable
+    interface IExpressionSourse : IDisposable
+    {
+        IExpression NextExpression();
+    }
+
+    internal class ExpressionStreamParser : IExpressionSourse
     {
         private readonly ExpressionStreamTokenizer _tokenizer;
 
-        public ExpressionParserNew(StreamReader stream)
+        public ExpressionStreamParser(StreamReader stream)
         {
             _tokenizer = new ExpressionStreamTokenizer(stream);
         }
 
-        public ExpressionParserNew(Stream stream)
+        public ExpressionStreamParser(Stream stream)
         {
             _tokenizer = new ExpressionStreamTokenizer(stream);
         }
 
-        public IEnumerable<IExpression> GetExpressions()
+        public IExpression NextExpression()
         {
-            while (!Peek(TokenType.EndOfStream))
+            if (Peek(TokenType.EndOfStream))
+                return null;
+
+            var result = ReadCellContent();
+            if (Peek(TokenType.EndOfExpression) || Peek(TokenType.EndOfStream))
             {
-                var result = ReadCellContent();
-                if (Peek(TokenType.EndOfExpression) || Peek(TokenType.EndOfStream))
-                {
                     Next();
-                    yield return result;
-                }
-                else
-                {
-                    yield return InvalidContent(string.Format(Resources.WrongTokenType, Resources.EndOfExpression));
-                }
+                    return result;
             }
+
+            return InvalidContent(string.Format(Resources.WrongTokenType, Resources.EndOfExpression));
+            //while (!Peek(TokenType.EndOfStream))
+            //{
+            //    var result = ReadCellContent();
+            //    if (Peek(TokenType.EndOfExpression) || Peek(TokenType.EndOfStream))
+            //    {
+            //        Next();
+            //        yield return result;
+            //    }
+            //    else
+            //    {
+            //        yield return InvalidContent(string.Format(Resources.WrongTokenType, Resources.EndOfExpression));
+            //    }
+            //}
         }
 
         private Token Peek()

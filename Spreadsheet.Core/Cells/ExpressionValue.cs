@@ -12,6 +12,20 @@ namespace SpreadsheetProcessor.Cells
             Value = value;
         }
 
+        //public ExpressionValue() : this(CellValueType.Nothing, null)
+        //{
+        //}
+
+        //public ExpressionValue(int value) : this(CellValueType.Integer, value)
+        //{
+        //}
+
+        //public ExpressionValue(bool isError, string value) : this(isError ? CellValueType.Error : CellValueType.String, value)
+        //{
+        //}
+        
         public string StringRepresentation => Value?.ToString() ?? Resources.Nothing;
+
+        public override string ToString() => StringRepresentation;
     }
 }

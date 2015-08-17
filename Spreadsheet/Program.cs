@@ -18,11 +18,16 @@ namespace SpreadsheetSimulator
             //var spreadsheet = new Spreadsheet(source);
 
             var spreadsheet = new SpreadsheetReader().GetSpreadsheet(stream);
-
-
+            using (var write = new SpreedsheatResultWriter(Console.OpenStandardOutput()))
+            {
+                write.WriteSpreedsheat(spreadsheet, new ParallelProcessingStrategy());
+            }
+            
+            /*
             var processor = new SpreedsheetProcessor(spreadsheet);
             var writer = new SpreedsheatWriter(processor);
             writer.Save(Console.OpenStandardOutput());
+            */
             Console.ReadKey();
         }
     }
