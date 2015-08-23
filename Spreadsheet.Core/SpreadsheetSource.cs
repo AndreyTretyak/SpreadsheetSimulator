@@ -9,6 +9,7 @@ using SpreadsheetProcessor.ExpressionParsers;
 
 namespace SpreadsheetProcessor
 {
+    [Obsolete]
     public class SpreadsheetSource
     {
         public CellAddress MaxAddress { get; }
@@ -30,9 +31,7 @@ namespace SpreadsheetProcessor
 
         public string GetCellContent(CellAddress cellAddress)
         {
-            var validationResult = cellAddress.Validate(MaxAddress);
-            if (!string.IsNullOrWhiteSpace(validationResult))
-                throw new SpreadsheatReadingException(validationResult);
+            cellAddress.Validate(MaxAddress);
             return _content[cellAddress.Row][cellAddress.Column];
         }
     }

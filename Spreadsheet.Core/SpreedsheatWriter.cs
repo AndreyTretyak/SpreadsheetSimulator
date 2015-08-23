@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace SpreadsheetProcessor
 {
+    [Obsolete]
     public class SpreedsheatWriter
     {
         private readonly SpreedsheetProcessor _processor;
@@ -24,7 +25,7 @@ namespace SpreadsheetProcessor
                 {
                     for (var col = 0; col < _processor.MaxAddress.Column; col++)
                     {
-                        stream.Write(_processor.GetCellValue(new CellAddress(row, col)).StringRepresentation + "\t");
+                        stream.Write(_processor.GetCellValue(new CellAddress(row, col)) + "\t");
                     }
                     stream.WriteLine();
                 }
@@ -47,7 +48,7 @@ namespace SpreadsheetProcessor
             var index = 1;
             foreach (var value in strategy.Process(spreadsheat))
             {
-                _stream.Write(value.StringRepresentation + "\t");
+                _stream.Write(value + "\t");
                 if (index++ % spreadsheat.MaxAddress.Column == 0)
                     _stream.WriteLine();
             }      

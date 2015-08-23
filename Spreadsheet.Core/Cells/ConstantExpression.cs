@@ -2,20 +2,15 @@ namespace SpreadsheetProcessor.Cells
 {
     public class ConstantExpression : IExpression
     {
-        public ExpressionValue Value { get; }
+        public object Value { get; }
 
-        public ConstantExpression(ExpressionValue value)
+        public ConstantExpression(object value)
         {
             Value = value;
         }
 
-        public ConstantExpression(CellValueType type, object value)
-        {
-            Value = new ExpressionValue(type, value);
-        }
+        public object Evaluate(ISpreadsheet processor, string callStack) => Value;
 
-        public ExpressionValue Evaluate(ISpreadsheet processor, string callStack) => Value;
-
-        public override string ToString() => Value.StringRepresentation;
+        public override string ToString() => Value?.ToString() ?? Resources.Nothing;
     }
 }

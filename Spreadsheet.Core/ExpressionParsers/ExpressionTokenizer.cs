@@ -9,6 +9,7 @@ using SpreadsheetProcessors;
 
 namespace SpreadsheetProcessor.ExpressionParsers
 {
+    [Obsolete]
     internal class ExpressionTokenizer
     {
         private static readonly Dictionary<string, TokenType> TokenIdentifiers = new Dictionary<string, TokenType>
@@ -169,9 +170,9 @@ namespace SpreadsheetProcessor.ExpressionParsers
 
         private string CharsTill(Func<char, bool> selector)
         {
-            var result = string.Empty;
-            while (selector(PeekChar())) result += ReadChar();
-            return result;
+            var result = new StringBuilder();
+            while (selector(PeekChar())) result.Append(ReadChar());
+            return result.ToString();
         }
 
         private Token NextToken()

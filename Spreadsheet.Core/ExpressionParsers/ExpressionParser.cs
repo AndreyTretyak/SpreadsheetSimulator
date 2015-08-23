@@ -8,6 +8,7 @@ using SpreadsheetProcessors;
 
 namespace SpreadsheetProcessor.ExpressionParsers
 {
+    [Obsolete]
     internal class ExpressionParser
     {
         private ExpressionTokenizer Tokenizer { get; } = new ExpressionTokenizer();
@@ -18,7 +19,7 @@ namespace SpreadsheetProcessor.ExpressionParsers
             switch (tokens.Length)
             {
                 case 0:
-                    return new ConstantExpression(new ExpressionValue(CellValueType.Nothing, null));
+                    return new ConstantExpression(null);
                 case 1:
                     var token = tokens[0];
                     switch (token.Type)
@@ -47,19 +48,18 @@ namespace SpreadsheetProcessor.ExpressionParsers
         {
             int result;
             return int.TryParse(token.Value, out result) 
-                ? new ConstantExpression(new ExpressionValue(CellValueType.Integer,  result)) 
+                ? new ConstantExpression(result) 
                 : new ConstantExpression(new ExpressionValue(CellValueType.Error, string.Format(Resources.FailedToParseNumber, token.Value)));
         }
 
         private IExpression ParseString(Token token)
         {
-            return new ConstantExpression(new ExpressionValue(CellValueType.String, token.Value));
+            return new ConstantExpression(token.Value);
         }
 
         private IExpression ParseCellReference(Token token)
         {
-            var referece = new CellAddress(token.Value);
-            return new CellRefereceExpression(referece);
+            return new CellRefereceExpression(new CellAddress(token.Value));
         }
 
         private IExpression ParseExpression(IReadOnlyList<Token> tokens, int index = 1)
@@ -123,7 +123,7 @@ namespace SpreadsheetProcessor.ExpressionParsers
                     return result;
             }
 
-            return InvalidContent(string.Format(Resources.WrongTokenType, Resources.EndOfExpression));
+            throw InvalidContent(string.Format(Resources.WrongTokenType, Resources.EndOfExpression));
             //while (!Peek(TokenType.EndOfStream))
             //{
             //    var result = ReadCellContent();
@@ -172,14 +172,14 @@ namespace SpreadsheetProcessor.ExpressionParsers
                 case TokenType.ExpressionStart:
                     return ReadExpression();
                 default:
-                    return InvalidContent(Resources.UnknownContentType);
+                    throw InvalidContent(Resources.UnknownContentType);
             }
         }
 
         private IExpression ReadNothing()
         {
             _tokenizer.Next();
-            return new ConstantExpression(new ExpressionValue(CellValueType.Nothing, null));
+            return new ConstantExpression(null);
         }
 
         private IExpression ReadInteger()
@@ -194,13 +194,12 @@ namespace SpreadsheetProcessor.ExpressionParsers
 
         private IExpression ReadString()
         {
-            return new ConstantExpression(new ExpressionValue(CellValueType.String, _tokenizer.Next().Value));
+            return new ConstantExpression(_tokenizer.Next().Value);
         }
 
         private IExpression ReadCellReference()
         {
-            var referece = new CellAddress(_tokenizer.Next().Value);
-            return new CellRefereceExpression(referece);
+            return new CellRefereceExpression(new CellAddress(_tokenizer.Next().Value));
         }
         
         private IExpression ReadExpression()
@@ -246,7 +245,7 @@ namespace SpreadsheetProcessor.ExpressionParsers
                 Next();
                 var expresion = ReadSum();
                 if (!Peek(TokenType.RightParanthesis))
-                    return InvalidContent(string.Format(Resources.WrongTokenType, ParserSettings.RightParanthesis));
+                    throw InvalidContent(string.Format(Resources.WrongTokenType, ParserSettings.RightParanthesis));
                 Next();
                 return expresion;
             }
@@ -262,7 +261,7 @@ namespace SpreadsheetProcessor.ExpressionParsers
             if (Peek(ParserSettings.SubtractionOperator))
             {
                 Next();
-                return new BinaryExpression(new ConstantExpression(CellValueType.Integer, -1), 
+                return new BinaryExpression(new ConstantExpression(-1), 
                                             ParserSettings.MultiplicationOperator, 
                                             ReadIdentifier());
             }
@@ -274,14 +273,13 @@ namespace SpreadsheetProcessor.ExpressionParsers
                 case TokenType.CellReference:
                     return ReadCellReference();
                 default:
-                    return InvalidContent(Resources.UnknownContentType);
+                    throw InvalidContent(Resources.UnknownContentType);
             }
         }
 
-        private IExpression InvalidContent(string additionMessage)
+        private ExpressionParsingException InvalidContent(string additionMessage)
         {
-            return new ConstantExpression(new ExpressionValue(CellValueType.Error,
-                string.Format(Resources.InvalidCellContent, _tokenizer.Next().Value) + " " + additionMessage));
+            return new ExpressionParsingException($"{string.Format(Resources.InvalidCellContent, _tokenizer.Next().Value)} {additionMessage}");
         }
 
         public void Dispose()

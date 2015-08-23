@@ -35,43 +35,38 @@ namespace Spreadsheet.Tests
         [Test]
         public void TestNothing()
         {
-            Assert.AreEqual(CellValueType.Nothing, ParseExpresion<ConstantExpression>(string.Empty).Value.Type);
+            Assert.IsNull(ParseExpresion<ConstantExpression>(string.Empty).Value);
         }
 
         [Test]
         public void TestInteger()
         {
-            Assert.AreEqual(123, ParseExpresion<ConstantExpression>("123").Value.Value);
+            Assert.AreEqual(123, ParseExpresion<ConstantExpression>("123").Value);
         }
 
         [Test]
+        [ExpectedException]
         public void TestHugeInteger()
         {
-            Assert.AreEqual(CellValueType.Error, ParseExpresion<ConstantExpression>("987654321123456789").Value.Type);
+            //TODO: change after validation improvement
+            ParseExpresion<ConstantExpression>("987654321123456789");
         }
 
         [Test]
-        public void TestString1()
+        [TestCase("test1 string")]
+        [TestCase("'+test2")]
+        [TestCase("12+test3")]
+        public void TestStringValue(string expect)
         {
-            Assert.AreEqual("test1 string", ParseExpresion<ConstantExpression>("'test1 string").Value.Value);
+            Assert.AreEqual(expect, ParseExpresion<ConstantExpression>($"'{expect}").Value);
         }
-
+        
         [Test]
-        public void TestString2()
+        [TestCase("A13")]
+        [TestCase("BVC197")]
+        public void TestExpressionReference(string expect)
         {
-            Assert.AreEqual("+test2", ParseExpresion<ConstantExpression>("'+test2").Value.Value);
-        }
-
-        [Test]
-        public void TestString3()
-        {
-            Assert.AreEqual("12+test3", ParseExpresion<ConstantExpression>("'12+test3").Value.Value);
-        }
-
-        [Test]
-        public void TestExpressionReference1()
-        {
-            Assert.AreEqual("A13", ParseExpresion<CellRefereceExpression>("=A13").Address.StringValue);
+            Assert.AreEqual(expect, ParseExpresion<CellRefereceExpression>($"={expect}").Address.StringValue);
         }
 
         [Test]
@@ -84,13 +79,13 @@ namespace Spreadsheet.Tests
         public void TestBinaryExpression1()
         {
             var expression = ParseExpresion<BinaryExpression>("=197-98/3");
-            Assert.AreEqual(197, Cast<ConstantExpression>(expression.Left).Value.Value);
-            Assert.AreEqual('-', expression.Operation);
+            Assert.AreEqual(197, Cast<ConstantExpression>(expression.Left).Value);
+            Assert.AreEqual("-", expression.Operation);
 
             var right = Cast<BinaryExpression>(expression.Right);
-            Assert.AreEqual(98, Cast<ConstantExpression>(right.Left).Value.Value);
-            Assert.AreEqual('/', right.Operation);
-            Assert.AreEqual(3, Cast<ConstantExpression>(right.Right).Value.Value);
+            Assert.AreEqual(98, Cast<ConstantExpression>(right.Left).Value);
+            Assert.AreEqual("/", right.Operation);
+            Assert.AreEqual(3, Cast<ConstantExpression>(right.Right).Value);
         }
     }
 }
