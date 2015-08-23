@@ -10,12 +10,12 @@ namespace SpreadsheetProcessor
 {
     public interface IProcessingStrategy
     {
-        IEnumerable<ExpressionValue> Process(ISpreadsheet spreadsheet);
+        IEnumerable<object> Process(ISpreadsheet spreadsheet);
     }
 
     public class ParallelProcessingStrategy : IProcessingStrategy
     {
-        public IEnumerable<ExpressionValue> Process(ISpreadsheet spreadsheet)
+        public IEnumerable<object> Process(ISpreadsheet spreadsheet)
         {
            return spreadsheet.GetCells()
                              .AsParallel()
@@ -28,7 +28,7 @@ namespace SpreadsheetProcessor
 
     public class SimpleProcessingStrategy : IProcessingStrategy
     {
-        public IEnumerable<ExpressionValue> Process(ISpreadsheet spreadsheet)
+        public IEnumerable<object> Process(ISpreadsheet spreadsheet)
         {
             return spreadsheet.GetCells()
                               .Select(c => c.Evaluate(spreadsheet));

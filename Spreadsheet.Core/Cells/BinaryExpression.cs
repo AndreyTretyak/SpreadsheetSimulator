@@ -1,3 +1,5 @@
+using System.Data;
+using SpreadsheetProcessor.ExpressionParsers;
 using SpreadsheetProcessors;
 
 namespace SpreadsheetProcessor.Cells
@@ -22,40 +24,39 @@ namespace SpreadsheetProcessor.Cells
             Operation = operation;
         }
 
-        public ExpressionValue Evaluate(ISpreadsheet processor, string callStack)
+        public object Evaluate(ISpreadsheet processor, string callStack)
         {
             if (Right == null)
                 return Left.Evaluate(processor, callStack);
 
-            var leftResult = Left.Evaluate(processor, callStack);
-            if (leftResult.Type == CellValueType.Error)
-                return leftResult;
+            var leftResult = Left.Evaluate(processor, callStack) as int?;
+            //if (leftResult.Type == CellValueType.Error)
+            //    return leftResult;
 
-            var rightResult = Right.Evaluate(processor, callStack);
-            if (rightResult.Type == CellValueType.Error)
-                return rightResult;
+            var rightResult = Right.Evaluate(processor, callStack) as int?;
+            //if (rightResult.Type == CellValueType.Error)
+            //    return rightResult;
             
 
-            if (leftResult.Type != CellValueType.Integer || rightResult.Type != CellValueType.Integer)
-                return new ExpressionValue(CellValueType.Error, Resources.WrongTypeError);
+            if (leftResult.HasValue || rightResult.HasValue)
+                throw new ExpressionEvaluationException(Resources.WrongTypeError);
 
-            int result;
+            int? result;
             switch (Operation)
             {
                 case ParserSettings.AdditionOperator:
-                    result = (int)leftResult.Value + (int)rightResult.Value;
+                    result = leftResult.Value + rightResult.Value;
                     break;
                 case ParserSettings.SubtractionOperator:
-                    result = (int)leftResult.Value - (int)rightResult.Value;
+                    result = leftResult.Value - rightResult.Value;
                     break;
                 case ParserSettings.MultiplicationOperator:
-                    result = (int)leftResult.Value * (int)rightResult.Value;
+                    result = leftResult.Value * rightResult.Value;
                     break;
                 case ParserSettings.DivisionOperator:
-                    var rightValue = (int) rightResult.Value;
-                    if (rightValue == 0)
+                    if (rightResult.Value == 0)
                         return new ExpressionValue(CellValueType.Error, Resources.ZeroDivision);
-                    result = (int)leftResult.Value / rightValue;
+                    result = (int)leftResult.Value / rightResult.Value;
                     break;
                 default:
                     return new ExpressionValue(CellValueType.Error, string.Format(Resources.UnknownOperator, Operation));

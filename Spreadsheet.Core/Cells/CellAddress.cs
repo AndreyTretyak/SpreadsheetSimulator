@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using SpreadsheetProcessor.ExpressionParsers;
 
 namespace SpreadsheetProcessor
@@ -25,7 +26,7 @@ namespace SpreadsheetProcessor
         {
         }
 
-        public string Validate(CellAddress maxPosible)
+        public void Validate(CellAddress maxPosible)
         {
             string error = null;
             if (Row < 0)
@@ -36,7 +37,9 @@ namespace SpreadsheetProcessor
                 error += Resources.WrongCellRow;
             if (maxPosible.Column <= Column)
                 error += Resources.WrongCellColumn;
-            return error;
+
+            if (!string.IsNullOrEmpty(error))
+                throw new InvalidCellAdressException(error);
         }
 
         private static int GetRowNumber(string reference)
@@ -56,21 +59,21 @@ namespace SpreadsheetProcessor
                             .Sum() - 1;
         }
 
-        private string GeColumnLetter()
+        private string GetColumnLetter()
         {
             //transformation of zero based row index to char index
             var index = Column + 1;
-            var result = string.Empty;
+            var result = new StringBuilder();
             while (index / LettersUsedForRowNumber > 1)
             {
-                result = ((char)(StartLetter + index % LettersUsedForRowNumber - 1)) + result;
+                result.Append((char) (StartLetter + index%LettersUsedForRowNumber - 1));
                 index = index / LettersUsedForRowNumber;
             }
-            result = ((char)(StartLetter + index - 1)) + result;
-            return result;
+            result.Append((char)(StartLetter + index - 1));
+            return new string(result.ToString().Reverse().ToArray());
         }
 
-        public string StringValue => $"{GeColumnLetter()}{Row + 1}";
+        public string StringValue => $"{GetColumnLetter()}{Row + 1}";
 
         public override string ToString() => StringValue;
 
@@ -87,7 +90,7 @@ namespace SpreadsheetProcessor
 
         public override int GetHashCode()
         {
-            //unchecked
+            unchecked
             {
                 return (Row * 397) ^ Column;
             }

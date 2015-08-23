@@ -1,3 +1,5 @@
+using System;
+
 namespace SpreadsheetProcessor.Cells
 {
     public class CellRefereceExpression : IExpression
@@ -9,12 +11,10 @@ namespace SpreadsheetProcessor.Cells
             Address = address;
         }
 
-        public ExpressionValue Evaluate(ISpreadsheet processor, string callStack)
+        public object Evaluate(ISpreadsheet processor, string callStack)
         {
-            var validationResult = Address.Validate(processor.MaxAddress);
-            return string.IsNullOrWhiteSpace(validationResult) 
-                   ? processor.GetCell(Address).Evaluate(processor, callStack)
-                   : new ExpressionValue(CellValueType.Error, validationResult);
+            Address.Validate(processor.MaxAddress);
+            return processor.GetCell(Address).Evaluate(processor, callStack);
         }
 
         public override string ToString() => Address.StringValue;

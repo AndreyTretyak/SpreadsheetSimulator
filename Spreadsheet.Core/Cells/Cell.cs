@@ -14,26 +14,18 @@ namespace SpreadsheetProcessor.Cells
         public CellAddress Address { get; }
 
         private IExpression Expression { get; }
-
-        private ExpressionValue _calculatedValue;
-
+        
         public Cell(CellAddress address, IExpression expression)
         {
             Address = address;
             Expression = expression;
         }
+        
 
-        public ExpressionValue Evaluate(ISpreadsheet processor, string callStack = null, bool reevaluate = false)
-        {
-            if (!reevaluate && _calculatedValue != null)
-                return _calculatedValue;
-            return _calculatedValue = InternalEvaluate(processor, callStack);
-        }
-
-        private ExpressionValue InternalEvaluate(ISpreadsheet processor, string callStack = null)
+        public object Evaluate(ISpreadsheet processor, string callStack = null)
         {
             if (Expression == null)
-                return new ExpressionValue(CellValueType.Nothing, null);
+                return null;
 
             if (callStack == null)
                 callStack = string.Empty;
@@ -47,6 +39,6 @@ namespace SpreadsheetProcessor.Cells
             return Expression.Evaluate(processor, callStack);
         }
 
-        public override string ToString() => $"{Address}|{Expression}|{_calculatedValue}";
+        public override string ToString() => $"{Address}|{Expression}";
     }
 }

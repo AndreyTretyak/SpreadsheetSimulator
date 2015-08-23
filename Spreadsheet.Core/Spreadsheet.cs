@@ -18,6 +18,7 @@ namespace SpreadsheetProcessor
         IEnumerable<Cell> GetCells();
     }
 
+    [Obsolete]
     public class Spreadsheet : ISpreadsheet
     {
         private readonly ExpressionParser _parser;
@@ -71,22 +72,13 @@ namespace SpreadsheetProcessor
 
         public Cell GetCell(CellAddress cellAddress)
         {
-            var validationResult = cellAddress.Validate(MaxAddress);
-            if (!string.IsNullOrWhiteSpace(validationResult))
-                throw new SpreadsheatReadingException(validationResult);
+            cellAddress.Validate(MaxAddress);
             return _content[cellAddress.Row,cellAddress.Column];
         }
 
         public IEnumerable<Cell> GetCells()
         {
-            //TODO: done for testing should be changed
-            for (var row = 0; row < MaxAddress.Row; row++)
-            {
-                for (var column = 0; column < MaxAddress.Column; column++)
-                {
-                    yield return _content[row, column];
-                }
-            }
+            return _content.Cast<Cell>();
         }
     }
 

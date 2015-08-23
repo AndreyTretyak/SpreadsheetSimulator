@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SpreadsheetProcessor;
+using SpreadsheetProcessor.ExpressionParsers;
 
 namespace Spreadsheet.Tests
 {
@@ -41,9 +42,10 @@ namespace Spreadsheet.Tests
         [TestCase(5, 5, "B2")]
         [TestCase(-1, 1, "B2")]
         [TestCase(1, -1, "B2")]
+        [ExpectedException(typeof(InvalidCellAdressException))]
         public void TestErrors(int row, int column, string maxAddress)
         {
-            Assert.NotNull(new CellAddress(row, column).Validate(new CellAddress(maxAddress)));
+            new CellAddress(row, column).Validate(new CellAddress(maxAddress));
         }
     }
 }

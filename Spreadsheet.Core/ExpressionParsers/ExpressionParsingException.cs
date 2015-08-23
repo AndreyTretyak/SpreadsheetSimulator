@@ -26,4 +26,11 @@ namespace SpreadsheetProcessor.ExpressionParsers
         {
         }
     }
+
+    internal class InvalidCellAdressException : InvalidOperationException
+    {
+        public InvalidCellAdressException(string message) : base(message)
+        {
+        }
+    }
 }

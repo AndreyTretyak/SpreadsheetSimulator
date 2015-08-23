@@ -20,12 +20,12 @@ namespace SpreadsheetProcessor
             _spreadsheet = spreadsheet;
         }
 
-        public ExpressionValue GetCellValue(CellAddress cellAddress)
+        public object GetCellValue(CellAddress cellAddress)
         {
             return GetCellValue(cellAddress, null);
         }
 
-        internal ExpressionValue GetCellValue(CellAddress cellAddress, string callStack)
+        internal object GetCellValue(CellAddress cellAddress, string callStack)
         {
             try
             {
