@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.XPath;
+using SpreadsheetProcessor.ExpressionParsers;
 using SpreadsheetProcessors;
 
 namespace SpreadsheetProcessor.Cells
@@ -32,7 +33,7 @@ namespace SpreadsheetProcessor.Cells
 
             var key = Address.StringValue + ParserSettings.CallStackSeparator;
             if (callStack.Contains(key))
-                return new ExpressionValue(CellValueType.Error, string.Format(Resources.CircularReferenceDetected, Address.StringValue));
+                throw new ExpressionEvaluationException(string.Format(Resources.CircularReferenceDetected, Address.StringValue));
 
             callStack += key;
 

@@ -33,7 +33,8 @@ namespace SpreadsheetProcessor
             }
             catch (ExpressionEvaluationException ex)
             {
-                return new ExpressionValue(CellValueType.Error, ex.Message);
+                //TODO: error should be saved as cell value
+                return ex;
             }
         }
     }

@@ -9,63 +9,76 @@ namespace SpreadsheetProcessor.ExpressionParsers
 {
     internal class OperatorManager
     {
-        public List<BinaryOperator> BinaryOperators { get; }
+        public List<IBinaryOperator> BinaryOperators { get; }
 
-        public List<PrefixOperator> PrefixOperators { get; }
+        public List<IPrefixOperator> PrefixOperators { get; }
 
         public OperatorManager()
         {
-            PrefixOperators = new List<PrefixOperator>
+            PrefixOperators = new List<IPrefixOperator>
             {
-                new PrefixOperator(CellValueType.Integer, "+", v => v),
-                new PrefixOperator(CellValueType.Integer, "-", v => -(int)v)
+                new PrefixOperator<int>("+", v => v),
+                new PrefixOperator<int>("-", v => -v)
             };
-            BinaryOperators = new List<BinaryOperator>
+            BinaryOperators = new List<IBinaryOperator>
             {
-                new BinaryOperator(1,CellValueType.Integer, "+", CellValueType.Integer, (f,s) => (int)f + (int)s),
-                new BinaryOperator(1,CellValueType.Integer, "-", CellValueType.Integer, (f,s) => (int)f - (int)s),
-                new BinaryOperator(2,CellValueType.Integer, "*", CellValueType.Integer, (f,s) => (int)f * (int)s),
-                new BinaryOperator(2,CellValueType.Integer, "/", CellValueType.Integer, (f,s) => (int)f / (int)s),
-                new BinaryOperator(2,CellValueType.Integer, "^", CellValueType.Integer, (f,s) => (int)Math.Pow((int)f,(int)s))
+                new BinaryOperator<int,int>(1, "+", (l,r) => l + r),
+                new BinaryOperator<int,int>(1, "-", (l,r) => l - r),
+                new BinaryOperator<int,int>(2, "*", (l,r) => l * r),
+                new BinaryOperator<int,int>(2, "/", (l,r) => l / r),
+                new BinaryOperator<int,int>(3, "^", (l,r) => (int)Math.Pow(l,r))
             };
         }
     }
 
-    internal class BinaryOperator
+    public interface IBinaryOperator
     {
+        object Evaluate(object left, object right);
+    }
+
+    internal class BinaryOperator<TLeft,TRight> : IBinaryOperator    {
         public int Priority { get; }
 
         public string Operator { get; }
 
-        public CellValueType LeftType { get; }
+        public Func<TLeft, TRight, object> Operation { get; }
 
-        public CellValueType RightType { get; }
-
-        public Func<object, object, object> Operation { get; }
-
-        public BinaryOperator(int priority, CellValueType left, string @operator, CellValueType right, Func<object, object, object> operation)
+        public BinaryOperator(int priority, string @operator, Func<TLeft, TRight, object> operation)
         {
             Priority = priority;
-            LeftType = left;
             Operator = @operator;
-            RightType = right;
             Operation = operation;
+        }
+
+        public object Evaluate(object left, object right)
+        {
+            var leftValue = (TLeft) left;
+            var rightValue = (TRight) right;
+            return Operation(leftValue, rightValue);
         }
     }
 
-    internal class PrefixOperator
+    public interface IPrefixOperator
     {
-        public CellValueType ValueType { get; }
+        object Evaluate(object value);
+    }
 
+    internal class PrefixOperator<T> : IPrefixOperator
+    {
         public string Operator { get; }
 
-        public Func<object, object> Operation { get; }
+        public Func<T, object> Operation { get; }
 
-        public PrefixOperator(CellValueType type, string @operator, Func<object, object> operation)
+        public PrefixOperator(string @operator, Func<T, object> operation)
         {
-            ValueType = type;
             Operator = @operator;
             Operation = operation;
+        }
+
+        public object Evaluate(object value)
+        {
+            var castedValue = (T) value;
+            return Operation(castedValue);
         }
     }
 

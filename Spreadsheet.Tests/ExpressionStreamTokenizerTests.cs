@@ -25,29 +25,13 @@ namespace Spreadsheet.Tests
         
         private IEnumerable<Token> GetTokens(string text)
         {
-            using (var tokenizer = new ExpressionStreamTokenizer(GenerateStreamFromString(text)))
+            using (var tokenizer = new SpreadsheetStreamTokenizer(GenerateStreamFromString(text)))
             {
                 Token token;
                 do
                 {
                     yield return token = tokenizer.Next();
                 } while (token.Type != TokenType.EndOfStream);
-            }
-        }
-
-        private IEnumerable<IExpression> GetExpressions(string text)
-        {
-            using (var parser = new ExpressionStreamParser(GenerateStreamFromString(text)))
-            {
-                var list = new List<IExpression>();
-                IExpression expression;
-                do
-                {
-                    expression = parser.NextExpression();
-                    if (expression != null)
-                        list.Add(expression);
-                } while (expression != null);
-                return list;
             }
         }
 
@@ -74,10 +58,10 @@ namespace Spreadsheet.Tests
             GetTokens("'test\t19\n\r=T31\t=14+VK34/7"));
         }
 
-        [Test]
-        public void ParserTest()
-        {
-            var result = GetExpressions("'test\t19\n\r=T31\t=14+VK34/7\t\n\r\t\r\n\t\n'p1\n=12*(2-5)/3-0+3").ToArray();
-        }
+        //[Test]
+        //public void ParserTest()
+        //{
+        //    var result = GetExpressions("'test\t19\n\r=T31\t=14+VK34/7\t\n\r\t\r\n\t\n'p1\n=12*(2-5)/3-0+3").ToArray();
+        //}
     }
 }

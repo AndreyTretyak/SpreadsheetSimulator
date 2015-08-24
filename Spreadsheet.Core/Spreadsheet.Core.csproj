@@ -44,9 +44,7 @@
     <Compile Include="Cells\BinaryExpression.cs" />
     <Compile Include="Cells\CellAddress.cs" />
     <Compile Include="Cells\CellRefereceExpression.cs" />
-    <Compile Include="Cells\CellValueType.cs" />
     <Compile Include="Cells\ConstantExpression.cs" />
-    <Compile Include="Cells\ExpressionValue.cs" />
     <Compile Include="Cells\IExpression.cs" />
     <Compile Include="ParallelProcessingStrategy.cs" />
     <Compile Include="ExpressionParsers\ExpressionParser.cs" />

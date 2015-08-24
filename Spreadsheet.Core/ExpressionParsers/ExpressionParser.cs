@@ -8,107 +8,18 @@ using SpreadsheetProcessors;
 
 namespace SpreadsheetProcessor.ExpressionParsers
 {
-    [Obsolete]
-    internal class ExpressionParser
-    {
-        private ExpressionTokenizer Tokenizer { get; } = new ExpressionTokenizer();
-        
-        public IExpression Parse(string expresion)
-        {
-            var tokens = Tokenizer.GetTokens(expresion).ToArray();
-            switch (tokens.Length)
-            {
-                case 0:
-                    return new ConstantExpression(null);
-                case 1:
-                    var token = tokens[0];
-                    switch (token.Type)
-                    {
-                        case TokenType.Integer:
-                            return ParseNumber(token);
-                        case TokenType.String:
-                            return ParseString(token);
-                        default:
-                            return InvalidContent(expresion, Resources.UnknownContentType);
-                    }
-                default:
-                    return tokens[0].Type == TokenType.ExpressionStart 
-                           ? ParseExpression(tokens)
-                           : InvalidContent(expresion, string.Format(Resources.WrongExpressionStart, ParserSettings.ExpressionStart));
-            }
-        }
-
-        private IExpression InvalidContent(string cellText, string additionMessage)
-        {
-            return new ConstantExpression(new ExpressionValue(CellValueType.Error, 
-                string.Format(Resources.InvalidCellContent, cellText) + " " + additionMessage));
-        }
-
-        private IExpression ParseNumber(Token token)
-        {
-            int result;
-            return int.TryParse(token.Value, out result) 
-                ? new ConstantExpression(result) 
-                : new ConstantExpression(new ExpressionValue(CellValueType.Error, string.Format(Resources.FailedToParseNumber, token.Value)));
-        }
-
-        private IExpression ParseString(Token token)
-        {
-            return new ConstantExpression(token.Value);
-        }
-
-        private IExpression ParseCellReference(Token token)
-        {
-            return new CellRefereceExpression(new CellAddress(token.Value));
-        }
-
-        private IExpression ParseExpression(IReadOnlyList<Token> tokens, int index = 1)
-        {
-            IExpression left;
-            switch (tokens[index].Type)
-            {
-                case TokenType.Integer:
-                    left = ParseNumber(tokens[index]);
-                    break;
-                case TokenType.CellReference:
-                    left = ParseCellReference(tokens[index]);
-                    break;
-                default:
-                    return InvalidContent(tokens[index].Value, Resources.IdentifierExpected);
-            }
-            if (index + 1 >= tokens.Count)
-                return left;
-
-            index++;
-            if (tokens[index].Type != TokenType.Operator)
-                return InvalidContent(tokens[index].Value, Resources.OperatorExpected);
-
-            var operation = tokens[index].Value;
-
-            if (index + 1 >= tokens.Count)
-                return InvalidContent(tokens[index].Value, Resources.IdentifierExpected);
-
-            return new BinaryExpression(left, operation, ParseExpression(tokens, index + 1));
-        }
-    }
-
-    interface IExpressionSourse : IDisposable
+    interface ISpreadsheetSourse : IDisposable
     {
         IExpression NextExpression();
     }
 
-    internal class ExpressionStreamParser : IExpressionSourse
+    internal class SpreadsheetStreamParser : ISpreadsheetSourse
     {
-        private readonly ExpressionStreamTokenizer _tokenizer;
+        private readonly ISpreadsheetTokenizer _tokenizer;
 
-        public ExpressionStreamParser(StreamReader stream)
+        public SpreadsheetStreamParser(ISpreadsheetTokenizer tokenizer)
         {
-            _tokenizer = new ExpressionStreamTokenizer(stream);
-        }
-
-        public ExpressionStreamParser(Stream stream)
-        {
-            _tokenizer = new ExpressionStreamTokenizer(stream);
+            _tokenizer = tokenizer;
         }
 
         public IExpression NextExpression()
@@ -186,10 +97,10 @@ namespace SpreadsheetProcessor.ExpressionParsers
         {
             int result;
             var text = _tokenizer.Next().Value;
-            var value = int.TryParse(text, out result)
-                ? new ExpressionValue(CellValueType.Integer, result)
-                : new ExpressionValue(CellValueType.Error, string.Format(Resources.FailedToParseNumber, text));
-            return new ConstantExpression(value);
+            if (int.TryParse(text, out result))
+                return new ConstantExpression(result);
+            throw new ExpressionParsingException(string.Format(Resources.FailedToParseNumber, text));
+            
         }
 
         private IExpression ReadString()
