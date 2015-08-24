@@ -47,7 +47,6 @@
     <Compile Include="CellAdressTests.cs" />
     <Compile Include="ExpressionParserTests.cs" />
     <Compile Include="ExpressionStreamTokenizerTests.cs" />
-    <Compile Include="ExpressionTokenizerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

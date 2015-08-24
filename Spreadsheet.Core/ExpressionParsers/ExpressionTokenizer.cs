@@ -9,103 +9,15 @@ using SpreadsheetProcessors;
 
 namespace SpreadsheetProcessor.ExpressionParsers
 {
-    [Obsolete]
-    internal class ExpressionTokenizer
+    internal interface ISpreadsheetTokenizer : IDisposable
     {
-        private static readonly Dictionary<string, TokenType> TokenIdentifiers = new Dictionary<string, TokenType>
-        {
-            {ParserSettings.AdditionOperator, TokenType.Operator},
-            {ParserSettings.SubtractionOperator, TokenType.Operator},
-            {ParserSettings.MultiplicationOperator, TokenType.Operator},
-            {ParserSettings.DivisionOperator, TokenType.Operator},
-            {ParserSettings.ExpressionStart, TokenType.ExpressionStart},
-            {ParserSettings.LeftParanthesis, TokenType.LeftParanthesis},
-            {ParserSettings.RightParanthesis, TokenType.RightParanthesis}
-        };
+        Token Peek();
 
-        private string _expression;
-
-        private int _index;
-
-        private char Peek()
-        {
-            return _index < _expression.Length
-                   ? _expression[_index]
-                   : ParserSettings.StreamEndChar;
-        }
-
-        private char Next()
-        {
-            return _index < _expression.Length 
-                   ? _expression[_index++] 
-                   : ParserSettings.StreamEndChar;
-        }
-
-        private string RemainExpression()
-        {
-            var result = _expression.Substring(_index);
-            _index = _expression.Length;
-            return result;
-        }
-
-        private string CharsTill(Func<char, bool> selector)
-        {
-            var result = new string(_expression.Skip(_index).TakeWhile(selector).ToArray());
-            _index += result.Length;
-            return result;
-        }
-
-        public IEnumerable<Token> GetTokens(string expression)
-        {
-            _expression = expression;
-            _index = 0;
-            Token? token;
-            do
-            {
-                token = NextToken();
-                if (token.HasValue)
-                    yield return token.Value;
-            } while (token.HasValue);
-        }
-
-        private Token? NextToken()
-        {
-            while (char.IsWhiteSpace(Peek())) Next();
-
-            var peek = Peek();
-
-            if (char.IsDigit(peek)) return ReadNumber();
-            if (char.IsLetter(peek)) return ReadCellReference();
-            if (peek == ParserSettings.StreamEndChar) return null;
-
-            var key = peek.ToString();
-            if (key == ParserSettings.StringStart) return ReadString();
-            if (TokenIdentifiers.ContainsKey(key))
-            {
-                Next();
-                return new Token(TokenIdentifiers[key], peek.ToString());
-            }
-            return new Token(TokenType.Unknown, RemainExpression());
-        }
-
-        private Token ReadNumber()
-        {
-            return new Token(TokenType.Integer, CharsTill(char.IsDigit));
-        }
-
-        private Token ReadString()
-        {
-            Next();
-            return new Token(TokenType.String, RemainExpression());
-        }
-
-        private Token ReadCellReference()
-        {
-            return new Token(TokenType.CellReference, CharsTill(char.IsLetterOrDigit));
-        }
+        Token Next();
     }
 
-    internal class ExpressionStreamTokenizer : IDisposable
+
+    internal class SpreadsheetStreamTokenizer : ISpreadsheetTokenizer
     {
         private static readonly Dictionary<string, TokenType> TokenIdentifiers = new Dictionary<string, TokenType>
         {
@@ -122,11 +34,11 @@ namespace SpreadsheetProcessor.ExpressionParsers
 
         private Token? _currentToken = null;
 
-        public ExpressionStreamTokenizer(Stream stream) : this(new StreamReader(stream))
+        public SpreadsheetStreamTokenizer(Stream stream) : this(new StreamReader(stream))
         {
         }
 
-        public ExpressionStreamTokenizer(StreamReader stream)
+        public SpreadsheetStreamTokenizer(StreamReader stream)
         {
             _stream = stream;
         }
@@ -225,6 +137,7 @@ namespace SpreadsheetProcessor.ExpressionParsers
 
         public void Dispose()
         {
+            //TODO stream should be disposed
             //_stream?.Dispose();
         }
     }

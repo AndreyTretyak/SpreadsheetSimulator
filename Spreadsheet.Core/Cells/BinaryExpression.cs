@@ -38,7 +38,7 @@ namespace SpreadsheetProcessor.Cells
             //    return rightResult;
             
 
-            if (leftResult.HasValue || rightResult.HasValue)
+            if (!leftResult.HasValue || !rightResult.HasValue)
                 throw new ExpressionEvaluationException(Resources.WrongTypeError);
 
             int? result;
@@ -55,13 +55,13 @@ namespace SpreadsheetProcessor.Cells
                     break;
                 case ParserSettings.DivisionOperator:
                     if (rightResult.Value == 0)
-                        return new ExpressionValue(CellValueType.Error, Resources.ZeroDivision);
-                    result = (int)leftResult.Value / rightResult.Value;
+                        return new ExpressionEvaluationException(Resources.ZeroDivision);
+                    result = leftResult.Value / rightResult.Value;
                     break;
                 default:
-                    return new ExpressionValue(CellValueType.Error, string.Format(Resources.UnknownOperator, Operation));
+                    throw new ExpressionEvaluationException(string.Format(Resources.UnknownOperator, Operation));
             }
-            return new ExpressionValue(CellValueType.Integer, result);
+            return result;
         }
 
         public override string ToString() => Right == null ? Left.ToString() : (ParserSettings.LeftParanthesis + Left + Operation + Right + ParserSettings.RightParanthesis);

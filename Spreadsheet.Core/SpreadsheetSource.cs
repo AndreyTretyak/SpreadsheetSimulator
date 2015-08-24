@@ -9,32 +9,6 @@ using SpreadsheetProcessor.ExpressionParsers;
 
 namespace SpreadsheetProcessor
 {
-    [Obsolete]
-    public class SpreadsheetSource
-    {
-        public CellAddress MaxAddress { get; }
-
-        private readonly string[][] _content;
-
-        public SpreadsheetSource(Stream stream)
-        {
-            using (var reader = new StreamReader(stream))
-            {
-                //TODO: need validation
-                var size = reader.ReadLine().Split('\t').ToArray();
-                MaxAddress = new CellAddress(int.Parse(size[0]), int.Parse(size[1]));
-                _content = reader.ReadToEnd().Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(e => e.Split(new [] {'\t'}, StringSplitOptions.RemoveEmptyEntries).ToArray())
-                    .ToArray();
-            }
-        }
-
-        public string GetCellContent(CellAddress cellAddress)
-        {
-            cellAddress.Validate(MaxAddress);
-            return _content[cellAddress.Row][cellAddress.Column];
-        }
-    }
 
     public class SpreadsheetReader
     {
@@ -48,9 +22,9 @@ namespace SpreadsheetProcessor
 
                 var cellCount = maxAddress.Column*maxAddress.Row;
                 var cells = new Cell[cellCount];
-                using (var parser = new ExpressionStreamParser(reader))
+                using (var parser = new SpreadsheetStreamParser(new SpreadsheetStreamTokenizer(reader)))
                 {
-                    for(var i = 0; i < cellCount; i++)
+                    for (var i = 0; i < cellCount; i++)
                         cells[i] = new Cell(new CellAddress(i / maxAddress.Column, i % maxAddress.Column), parser.NextExpression());
                 }
                 return new SpreadsheetArray(maxAddress, cells);
