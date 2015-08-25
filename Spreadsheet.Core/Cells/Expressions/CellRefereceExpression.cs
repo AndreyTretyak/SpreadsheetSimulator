@@ -11,10 +11,10 @@ namespace SpreadsheetProcessor.Cells
             Address = address;
         }
 
-        public object Evaluate(ISpreadsheet processor, string callStack)
+        public object Evaluate(ISpreadsheet spreadsheet)
         {
-            Address.Validate(processor.MaxAddress);
-            return processor.GetCell(Address).Evaluate(processor, callStack);
+            Address.Validate(spreadsheet.MaxAddress);
+            return spreadsheet.GetCellValue(Address);
         }
 
         public override string ToString() => Address.StringValue;

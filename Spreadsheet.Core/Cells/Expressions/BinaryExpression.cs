@@ -24,16 +24,16 @@ namespace SpreadsheetProcessor.Cells
             Operation = operation;
         }
 
-        public object Evaluate(ISpreadsheet processor, string callStack)
+        public object Evaluate(ISpreadsheet processor)
         {
             if (Right == null)
-                return Left.Evaluate(processor, callStack);
+                return Left.Evaluate(processor);
 
-            var leftResult = Left.Evaluate(processor, callStack) as int?;
+            var leftResult = Left.Evaluate(processor) as int?;
             //if (leftResult.Type == CellValueType.Error)
             //    return leftResult;
 
-            var rightResult = Right.Evaluate(processor, callStack) as int?;
+            var rightResult = Right.Evaluate(processor) as int?;
             //if (rightResult.Type == CellValueType.Error)
             //    return rightResult;
             

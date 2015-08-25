@@ -2,6 +2,6 @@ namespace SpreadsheetProcessor.Cells
 {
     public interface IExpression
     {
-        object Evaluate(ISpreadsheet processor, string callStack);
+        object Evaluate(ISpreadsheet processor);
     }
 }
