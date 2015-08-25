@@ -20,14 +20,14 @@ namespace SpreadsheetProcessor
                 var size = reader.ReadLine().Split(new []{' ', '\t', '\r', '\n'}, StringSplitOptions.RemoveEmptyEntries).ToArray();
                 var maxAddress = new CellAddress(int.Parse(size[0]), int.Parse(size[1]));
 
-                var cellCount = maxAddress.Column*maxAddress.Row;
+                var cellCount = maxAddress.Column * maxAddress.Row;
                 var cells = new Cell[cellCount];
                 using (var parser = new SpreadsheetStreamParser(new SpreadsheetStreamTokenizer(reader)))
                 {
                     for (var i = 0; i < cellCount; i++)
                         cells[i] = new Cell(new CellAddress(i / maxAddress.Column, i % maxAddress.Column), parser.NextExpression());
                 }
-                return new SpreadsheetArray(maxAddress, cells);
+                return new Spreadsheet(maxAddress, cells);
             }
         }
     }

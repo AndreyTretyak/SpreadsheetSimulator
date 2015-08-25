@@ -8,17 +8,16 @@ using SpreadsheetProcessor.Cells;
 
 namespace SpreadsheetProcessor
 {
-    public interface IProcessingStrategy
+    public interface IEvaluationStrategy
     {
-        IEnumerable<object> Process(ISpreadsheet spreadsheet);
+        IEnumerable<object> Evaluate(ISpreadsheet spreadsheet);
     }
 
-    public class ParallelProcessingStrategy : IProcessingStrategy
+    public class ParallelEvaluationStrategy : IEvaluationStrategy
     {
-        public IEnumerable<object> Process(ISpreadsheet spreadsheet)
+        public IEnumerable<object> Evaluate(ISpreadsheet spreadsheet)
         {
-           return spreadsheet.GetCells()
-                             .AsParallel()
+           return spreadsheet.AsParallel()
                              .WithDegreeOfParallelism(spreadsheet.MaxAddress.Column)
                              .OrderBy(e => e.Address.Row)
                              .ThenBy(e => e.Address.Column)
@@ -26,12 +25,19 @@ namespace SpreadsheetProcessor
         }
     }
 
-    public class SimpleProcessingStrategy : IProcessingStrategy
+    public class SimpleEvaluationStrategy : IEvaluationStrategy
     {
-        public IEnumerable<object> Process(ISpreadsheet spreadsheet)
+        public IEnumerable<object> Evaluate(ISpreadsheet spreadsheet)
         {
-            return spreadsheet.GetCells()
-                              .Select(c => c.Evaluate(spreadsheet));
+            return spreadsheet.Select(c => c.Evaluate(spreadsheet));
+        }
+    }
+
+    public class SpreadsheetEvaluator
+    {
+        public EvaluatedSpreadsheet Evaluate(ISpreadsheet spreadsheet, IEvaluationStrategy strategy)
+        {
+            return new EvaluatedSpreadsheet(spreadsheet.MaxAddress, strategy.Evaluate(spreadsheet));
         }
     }
 }

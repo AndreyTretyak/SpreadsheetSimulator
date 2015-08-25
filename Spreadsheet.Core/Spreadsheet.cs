@@ -1,30 +1,32 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Runtime.Caching;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 using SpreadsheetProcessor.Cells;
 using SpreadsheetProcessor.ExpressionParsers;
 
 namespace SpreadsheetProcessor
 {
-    public interface ISpreadsheet
+    public interface ISpreadsheet : IEnumerable<ICell>
     {
         CellAddress MaxAddress { get; }
 
-        Cell GetCell(CellAddress cellAddress);
-
-        IEnumerable<Cell> GetCells();
+        object GetCellValue(CellAddress cellAddress);
     }
 
-    public class SpreadsheetArray : ISpreadsheet
+    public class Spreadsheet : ISpreadsheet
     {
         public CellAddress MaxAddress { get; }
 
         private readonly Cell[,] _content;
 
-        public SpreadsheetArray(CellAddress maxAddress, IEnumerable<Cell> content)
+        private readonly MemoryCache cache;
+
+        public Spreadsheet(CellAddress maxAddress, IEnumerable<Cell> content)
         {
             MaxAddress = maxAddress;
             _content = new Cell[maxAddress.Row, maxAddress.Column];
@@ -32,45 +34,67 @@ namespace SpreadsheetProcessor
             {
                 _content[cell.Address.Row, cell.Address.Column] = cell;
             }
+            cache = new MemoryCache("Spreadsheet");
         }
 
-        public Cell GetCell(CellAddress cellAddress)
+        public object GetCellValue(CellAddress cellAddress)
         {
             cellAddress.Validate(MaxAddress);
-            return _content[cellAddress.Row,cellAddress.Column];
+            //return _content[cellAddress.Row,cellAddress.Column].Evaluate(this);
+            var key = cellAddress.StringValue;
+
+            if (cache.Contains(key))
+                return cache.GetCacheItem(key);
+            var value = new Lazy<object>(() => _content[cellAddress.Row, cellAddress.Column].Evaluate(this), 
+                                               LazyThreadSafetyMode.ExecutionAndPublication);
+            cache.Add(key, value, DateTimeOffset.MaxValue);
+            return value.Value;
+        }
+        
+        public IEnumerator<ICell> GetEnumerator()
+        {
+            return _content.Cast<ICell>().GetEnumerator();
         }
 
-        public IEnumerable<Cell> GetCells()
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            return _content.Cast<Cell>();
+            return GetEnumerator();
         }
     }
 
-    /*
-    public class SpreadsheetMemoryCache : ISpreadsheet
+    public class EvaluatedSpreadsheet : ISpreadsheet
     {
         public CellAddress MaxAddress { get; }
 
-        private readonly MemoryCache _cache;
+        private EvaluatedCell[,] _content;
 
-        public SpreadsheetMemoryCache(CellAddress maxAddress, IEnumerable<Cell> content)
+        public EvaluatedSpreadsheet(CellAddress maxAddress, IEnumerable<object> values)
         {
-            MaxAddress = maxAddress;
-            _cache = new MemoryCache("Spreadsheet");
-            var policy = new CacheItemPolicy();          
-            foreach (var cell in content)
+            _content = new EvaluatedCell[maxAddress.Column + 1,maxAddress.Row + 1]; 
+            var index = 0;
+            foreach (var value in values)
             {
-                _cache.Add(cell.Address.StringValue, cell, policy);
+                var row = index / maxAddress.Column;
+                var column = index % maxAddress.Column;
+                _content[row, column] = new EvaluatedCell(new CellAddress(row, column) , value);
+                index++;
             }
         }
 
-        public Cell GetCell(CellAddress cellAddress)
+        public object GetCellValue(CellAddress cellAddress)
         {
-            var validationResult = cellAddress.Validate(MaxAddress);
-            if (!string.IsNullOrWhiteSpace(validationResult))
-                throw new SpreadsheatReadingException(validationResult);
-            return (Cell)_cache.Get(cellAddress.StringValue);
+            cellAddress.Validate(cellAddress);
+            return _content[cellAddress.Row, cellAddress.Column].Evaluate(this);
+        }
+
+        public IEnumerator<ICell> GetEnumerator()
+        {
+            return _content.Cast<ICell>().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
-    */
 }

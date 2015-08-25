@@ -41,11 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cells\BinaryExpression.cs" />
+    <Compile Include="Cells\Expressions\BinaryExpression.cs" />
     <Compile Include="Cells\CellAddress.cs" />
-    <Compile Include="Cells\CellRefereceExpression.cs" />
-    <Compile Include="Cells\ConstantExpression.cs" />
-    <Compile Include="Cells\IExpression.cs" />
+    <Compile Include="Cells\Expressions\CellRefereceExpression.cs" />
+    <Compile Include="Cells\Expressions\ConstantExpression.cs" />
+    <Compile Include="Cells\Expressions\IExpression.cs" />
     <Compile Include="ParallelProcessingStrategy.cs" />
     <Compile Include="ExpressionParsers\ExpressionParser.cs" />
     <Compile Include="ExpressionParsers\ExpressionParsingException.cs" />
@@ -55,7 +55,7 @@
     <Compile Include="ExpressionParsers\Token.cs" />
     <Compile Include="ExpressionParsers\TokenType.cs" />
     <Compile Include="Spreadsheet.cs" />
-    <Compile Include="SpreadsheetSource.cs" />
+    <Compile Include="SpreadsheetReader.cs" />
     <Compile Include="Cells\Cell.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
@@ -64,7 +64,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="SpreedsheatWriter.cs" />
-    <Compile Include="SpreedsheetProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">

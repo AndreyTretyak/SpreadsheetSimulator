@@ -8,22 +8,22 @@ using System.Threading.Tasks;
 namespace SpreadsheetProcessor
 {
 
-    public class SpreedsheatResultWriter : IDisposable
+    public class SpreedsheatWriter : IDisposable
     {
         private readonly StreamWriter _stream;
 
-        public SpreedsheatResultWriter(Stream stream)
+        public SpreedsheatWriter(Stream stream)
         {
             _stream = new StreamWriter(stream);
         }
 
-        public void WriteSpreedsheat(ISpreadsheet spreadsheat, IProcessingStrategy strategy)
+        public void WriteSpreedsheat(ISpreadsheet spreadsheat)
         {
             //TODO: done for testing should be changed
             var index = 1;
-            foreach (var value in strategy.Process(spreadsheat))
+            foreach (var cell in spreadsheat)
             {
-                _stream.Write(value + "\t");
+                _stream.Write($"{spreadsheat.GetCellValue(cell.Address)}\t");
                 if (index++ % spreadsheat.MaxAddress.Column == 0)
                     _stream.WriteLine();
             }      

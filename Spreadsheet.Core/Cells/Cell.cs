@@ -10,7 +10,14 @@ using SpreadsheetProcessors;
 
 namespace SpreadsheetProcessor.Cells
 {
-    public class Cell
+    public interface ICell
+    {
+        CellAddress Address { get; }
+
+        object Evaluate(ISpreadsheet processor);
+    }
+
+    public class Cell : ICell
     {
         public CellAddress Address { get; }
 
@@ -23,23 +30,28 @@ namespace SpreadsheetProcessor.Cells
         }
         
 
-        public object Evaluate(ISpreadsheet processor, string callStack = null)
+        public object Evaluate(ISpreadsheet processor)
         {
             if (Expression == null)
                 return null;
-
-            if (callStack == null)
-                callStack = string.Empty;
-
-            var key = Address.StringValue + ParserSettings.CallStackSeparator;
-            if (callStack.Contains(key))
-                throw new ExpressionEvaluationException(string.Format(Resources.CircularReferenceDetected, Address.StringValue));
-
-            callStack += key;
-
-            return Expression.Evaluate(processor, callStack);
+            return Expression.Evaluate(processor);
         }
 
         public override string ToString() => $"{Address}|{Expression}";
+    }
+
+    public class EvaluatedCell : ICell
+    {
+        public CellAddress Address { get; }
+
+        public object Value { get; }
+
+        public EvaluatedCell(CellAddress address, object value)
+        {
+            Address = address;
+            Value = value;
+        }
+
+        public object Evaluate(ISpreadsheet processor) => Value;
     }
 }
