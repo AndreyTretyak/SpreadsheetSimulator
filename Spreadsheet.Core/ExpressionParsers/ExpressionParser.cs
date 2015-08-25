@@ -3,10 +3,9 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using SpreadsheetProcessor.Cells;
-using SpreadsheetProcessors;
+using Spreadsheet.Core.Cells;
 
-namespace SpreadsheetProcessor.ExpressionParsers
+namespace Spreadsheet.Core.ExpressionParsers
 {
     interface ISpreadsheetSourse : IDisposable
     {

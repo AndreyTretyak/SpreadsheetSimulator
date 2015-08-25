@@ -1,4 +1,4 @@
-namespace SpreadsheetProcessors
+namespace Spreadsheet.Core.ExpressionParsers
 {
     public static class ParserSettings
     {

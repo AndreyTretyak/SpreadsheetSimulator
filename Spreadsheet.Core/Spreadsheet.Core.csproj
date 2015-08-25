@@ -7,8 +7,8 @@
     <ProjectGuid>{F3F7714D-497F-4F82-BF5F-96AA21B0266F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SpreadsheetProcessor</RootNamespace>
-    <AssemblyName>SpreadsheetProcessor</AssemblyName>
+    <RootNamespace>Spreadsheet.Core</RootNamespace>
+    <AssemblyName>Spreadsheet.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

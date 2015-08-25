@@ -1,4 +1,4 @@
-namespace SpreadsheetProcessor.ExpressionParsers
+namespace Spreadsheet.Core.ExpressionParsers
 {
     internal enum TokenType
     {

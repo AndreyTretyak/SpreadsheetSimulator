@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
-using SpreadsheetProcessor.ExpressionParsers;
+using Spreadsheet.Core.ExpressionParsers;
 
-namespace SpreadsheetProcessor
+namespace Spreadsheet.Core
 {
     public struct CellAddress
     {

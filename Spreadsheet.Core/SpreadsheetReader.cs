@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Caching;
-using SpreadsheetProcessor.Cells;
-using SpreadsheetProcessor.ExpressionParsers;
+using Spreadsheet.Core.Cells;
+using Spreadsheet.Core.ExpressionParsers;
 
-namespace SpreadsheetProcessor
+namespace Spreadsheet.Core
 {
 
     public class SpreadsheetReader

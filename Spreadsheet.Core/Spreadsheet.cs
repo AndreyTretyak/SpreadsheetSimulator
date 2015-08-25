@@ -6,10 +6,10 @@ using System.Linq;
 using System.Runtime.Caching;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
-using SpreadsheetProcessor.Cells;
-using SpreadsheetProcessor.ExpressionParsers;
+using Spreadsheet.Core.Cells;
+using Spreadsheet.Core.ExpressionParsers;
 
-namespace SpreadsheetProcessor
+namespace Spreadsheet.Core
 {
     public interface ISpreadsheet : IEnumerable<ICell>
     {

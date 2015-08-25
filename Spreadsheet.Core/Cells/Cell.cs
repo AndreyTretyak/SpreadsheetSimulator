@@ -5,10 +5,9 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.XPath;
-using SpreadsheetProcessor.ExpressionParsers;
-using SpreadsheetProcessors;
+using Spreadsheet.Core.ExpressionParsers;
 
-namespace SpreadsheetProcessor.Cells
+namespace Spreadsheet.Core.Cells
 {
     public interface ICell
     {

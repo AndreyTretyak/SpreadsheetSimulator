@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using SpreadsheetProcessor.Cells;
-using SpreadsheetProcessor.ExpressionParsers;
+using Spreadsheet.Core.Cells;
+using Spreadsheet.Core.ExpressionParsers;
 
 namespace Spreadsheet.Tests
 {
