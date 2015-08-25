@@ -13,88 +13,69 @@ namespace SpreadsheetProcessor
 {
     public interface ISpreadsheet : IEnumerable<ICell>
     {
-        CellAddress MaxAddress { get; }
+        int RowCount { get; }
 
-        object GetCellValue(CellAddress cellAddress);
+        int ColumnCount { get; }
+
+        ICell this[CellAddress index] { get; }
     }
 
     public class Spreadsheet : ISpreadsheet
     {
-        public CellAddress MaxAddress { get; }
-
         private readonly Cell[,] _content;
 
-        private readonly MemoryCache cache;
-
-        public Spreadsheet(CellAddress maxAddress, IEnumerable<Cell> content)
+        public Spreadsheet(int rowCount, int columnCount, IEnumerable<Cell> content)
         {
-            MaxAddress = maxAddress;
-            _content = new Cell[maxAddress.Row, maxAddress.Column];
+            _content = new Cell[rowCount, columnCount];
             foreach (var cell in content)
             {
                 _content[cell.Address.Row, cell.Address.Column] = cell;
             }
-            cache = new MemoryCache("Spreadsheet");
         }
+        public int RowCount => _content.GetLength(0);
 
-        public object GetCellValue(CellAddress cellAddress)
-        {
-            cellAddress.Validate(MaxAddress);
-            //return _content[cellAddress.Row,cellAddress.Column].Evaluate(this);
-            var key = cellAddress.StringValue;
+        public int ColumnCount => _content.GetLength(1);
 
-            if (cache.Contains(key))
-                return cache.GetCacheItem(key);
-            var value = new Lazy<object>(() => _content[cellAddress.Row, cellAddress.Column].Evaluate(this), 
-                                               LazyThreadSafetyMode.ExecutionAndPublication);
-            cache.Add(key, value, DateTimeOffset.MaxValue);
-            return value.Value;
-        }
+        public ICell this[CellAddress index] => _content[index.Row, index.Column];
         
-        public IEnumerator<ICell> GetEnumerator()
-        {
-            return _content.Cast<ICell>().GetEnumerator();
-        }
+        public IEnumerator<ICell> GetEnumerator() => _content.Cast<ICell>().GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
-    public class EvaluatedSpreadsheet : ISpreadsheet
-    {
-        public CellAddress MaxAddress { get; }
+    //public class EvaluatedSpreadsheet : ISpreadsheet
+    //{
+    //    public CellAddress MaxAddress { get; }
 
-        private EvaluatedCell[,] _content;
+    //    private EvaluatedCell[,] _content;
 
-        public EvaluatedSpreadsheet(CellAddress maxAddress, IEnumerable<object> values)
-        {
-            _content = new EvaluatedCell[maxAddress.Column + 1,maxAddress.Row + 1]; 
-            var index = 0;
-            foreach (var value in values)
-            {
-                var row = index / maxAddress.Column;
-                var column = index % maxAddress.Column;
-                _content[row, column] = new EvaluatedCell(new CellAddress(row, column) , value);
-                index++;
-            }
-        }
+    //    public EvaluatedSpreadsheet(CellAddress maxAddress, IEnumerable<object> values)
+    //    {
+    //        _content = new EvaluatedCell[maxAddress.Column + 1,maxAddress.Row + 1]; 
+    //        var index = 0;
+    //        foreach (var value in values)
+    //        {
+    //            var row = index / maxAddress.Column;
+    //            var column = index % maxAddress.Column;
+    //            _content[row, column] = new EvaluatedCell(new CellAddress(row, column) , value);
+    //            index++;
+    //        }
+    //    }
 
-        public object GetCellValue(CellAddress cellAddress)
-        {
-            cellAddress.Validate(cellAddress);
-            return _content[cellAddress.Row, cellAddress.Column].Evaluate(this);
-        }
+    //    public object GetCellValue(CellAddress cellAddress)
+    //    {
+    //        cellAddress.Validate(cellAddress);
+    //        return _content[cellAddress.Row, cellAddress.Column].Evaluate(this);
+    //    }
 
-        public IEnumerator<ICell> GetEnumerator()
-        {
-            return _content.Cast<ICell>().GetEnumerator();
-        }
+    //    public IEnumerator<ICell> GetEnumerator()
+    //    {
+    //        return _content.Cast<ICell>().GetEnumerator();
+    //    }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-    }
+    //    IEnumerator IEnumerable.GetEnumerator()
+    //    {
+    //        return GetEnumerator();
+    //    }
+    //}
 }
