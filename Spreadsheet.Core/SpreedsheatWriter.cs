@@ -17,14 +17,14 @@ namespace SpreadsheetProcessor
             _stream = new StreamWriter(stream);
         }
 
-        public void WriteSpreedsheat(ISpreadsheet spreadsheat)
+        public void WriteSpreedsheat(int columnsCount, IEnumerable<object> values)
         {
             //TODO: done for testing should be changed
             var index = 1;
-            foreach (var cell in spreadsheat)
+            foreach (var value in values)
             {
-                _stream.Write($"{spreadsheat.GetCellValue(cell.Address)}\t");
-                if (index++ % spreadsheat.MaxAddress.Column == 0)
+                _stream.Write($"{value}\t");
+                if (index++ % columnsCount == 0)
                     _stream.WriteLine();
             }      
         }

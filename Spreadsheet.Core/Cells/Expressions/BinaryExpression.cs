@@ -24,7 +24,7 @@ namespace SpreadsheetProcessor.Cells
             Operation = operation;
         }
 
-        public object Evaluate(ISpreadsheet processor)
+        public object Evaluate(ISpreadsheetProcessor processor)
         {
             if (Right == null)
                 return Left.Evaluate(processor);

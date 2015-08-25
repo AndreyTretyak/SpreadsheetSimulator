@@ -14,7 +14,7 @@ namespace SpreadsheetProcessor.Cells
     {
         CellAddress Address { get; }
 
-        object Evaluate(ISpreadsheet processor);
+        object Evaluate(ISpreadsheetProcessor processor);
     }
 
     public class Cell : ICell
@@ -30,28 +30,26 @@ namespace SpreadsheetProcessor.Cells
         }
         
 
-        public object Evaluate(ISpreadsheet processor)
+        public object Evaluate(ISpreadsheetProcessor processor)
         {
-            if (Expression == null)
-                return null;
-            return Expression.Evaluate(processor);
+            return Expression?.Evaluate(processor);
         }
 
         public override string ToString() => $"{Address}|{Expression}";
     }
 
-    public class EvaluatedCell : ICell
-    {
-        public CellAddress Address { get; }
+    //public class EvaluatedCell : ICell
+    //{
+    //    public CellAddress Address { get; }
 
-        public object Value { get; }
+    //    public object Value { get; }
 
-        public EvaluatedCell(CellAddress address, object value)
-        {
-            Address = address;
-            Value = value;
-        }
+    //    public EvaluatedCell(CellAddress address, object value)
+    //    {
+    //        Address = address;
+    //        Value = value;
+    //    }
 
-        public object Evaluate(ISpreadsheet processor) => Value;
-    }
+    //    public object Evaluate(ISpreadsheetProcessor processor) => Value;
+    //}
 }
