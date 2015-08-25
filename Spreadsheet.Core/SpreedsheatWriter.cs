@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SpreadsheetProcessor
+namespace Spreadsheet.Core
 {
 
     public class SpreedsheatWriter : IDisposable

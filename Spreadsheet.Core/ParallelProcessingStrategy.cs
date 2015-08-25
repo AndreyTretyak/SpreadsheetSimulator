@@ -7,9 +7,9 @@ using System.Runtime.Caching;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using SpreadsheetProcessor.Cells;
+using Spreadsheet.Core.Cells;
 
-namespace SpreadsheetProcessor
+namespace Spreadsheet.Core
 {
     public interface IEvaluationStrategy
     {

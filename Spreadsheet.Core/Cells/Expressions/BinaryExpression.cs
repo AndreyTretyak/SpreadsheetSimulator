@@ -1,8 +1,7 @@
 using System.Data;
-using SpreadsheetProcessor.ExpressionParsers;
-using SpreadsheetProcessors;
+using Spreadsheet.Core.ExpressionParsers;
 
-namespace SpreadsheetProcessor.Cells
+namespace Spreadsheet.Core.Cells
 {
     public class BinaryExpression : IExpression
     {

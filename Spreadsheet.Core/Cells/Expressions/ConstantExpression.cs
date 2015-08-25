@@ -1,4 +1,4 @@
-namespace SpreadsheetProcessor.Cells
+namespace Spreadsheet.Core.Cells
 {
     public class ConstantExpression : IExpression
     {

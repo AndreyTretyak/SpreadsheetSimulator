@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SpreadsheetProcessor.Cells;
+using Spreadsheet.Core.Cells;
 
-namespace SpreadsheetProcessor.ExpressionParsers
+namespace Spreadsheet.Core.ExpressionParsers
 {
     internal class OperatorManager
     {

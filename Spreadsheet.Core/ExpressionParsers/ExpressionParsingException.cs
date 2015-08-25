@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SpreadsheetProcessor.ExpressionParsers
+namespace Spreadsheet.Core.ExpressionParsers
 {
     internal class ExpressionParsingException : InvalidOperationException
     {
