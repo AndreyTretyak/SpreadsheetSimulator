@@ -27,7 +27,7 @@ namespace Spreadsheet.Core
             return GetCellValue(_spreadsheet[address]);
         }
 
-        private object GetCellValue(ICell cell)
+        private object GetCellValue(Cell cell)
         {
             if (_memoryCache[cell.Address.Row, cell.Address.Column] == null)
             {
@@ -36,7 +36,7 @@ namespace Spreadsheet.Core
             return _memoryCache[cell.Address.Row, cell.Address.Column].Value;
         }
 
-        private object EvaluateCell(ICell cell)
+        private object EvaluateCell(Cell cell)
         {
             try
             {

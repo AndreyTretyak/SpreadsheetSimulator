@@ -18,16 +18,22 @@ namespace Spreadsheet.Core.ExpressionParsers
 
     internal class SpreadsheetStreamTokenizer : ISpreadsheetTokenizer
     {
-        private static readonly Dictionary<string, TokenType> TokenIdentifiers = new Dictionary<string, TokenType>
+        private static readonly Dictionary<char, TokenType> TokenIdentifiers = new Dictionary<char, TokenType>
         {
-            {ParserSettings.AdditionOperator, TokenType.Operator},
-            {ParserSettings.SubtractionOperator, TokenType.Operator},
-            {ParserSettings.MultiplicationOperator, TokenType.Operator},
-            {ParserSettings.DivisionOperator, TokenType.Operator},
-            {ParserSettings.ExpressionStart, TokenType.ExpressionStart},
-            {ParserSettings.LeftParanthesis, TokenType.LeftParanthesis},
-            {ParserSettings.RightParanthesis, TokenType.RightParanthesis}
+            {ParserSettings.AdditionOperator[0], TokenType.Operator},
+            {ParserSettings.SubtractionOperator[0], TokenType.Operator},
+            {ParserSettings.MultiplicationOperator[0], TokenType.Operator},
+            {ParserSettings.DivisionOperator[0], TokenType.Operator},
+            {ParserSettings.ExpressionStart[0], TokenType.ExpressionStart},
+            {ParserSettings.LeftParanthesis[0], TokenType.LeftParanthesis},
+            {ParserSettings.RightParanthesis[0], TokenType.RightParanthesis}
         };
+
+        private static readonly Func<char, bool> Number = char.IsDigit;
+
+        private static readonly Func<char, bool> CellReference = char.IsLetterOrDigit;
+
+        private static readonly Func<char, bool> RemainExpression = c => !char.IsWhiteSpace(c) && c != ParserSettings.StreamEndChar;
 
         private readonly StreamReader _stream;
 
@@ -76,11 +82,6 @@ namespace Spreadsheet.Core.ExpressionParsers
                 return ParserSettings.StreamEndChar;
             return (char)result;
         }
-        
-        private string RemainExpression()
-        {
-            return CharsTill(c => !char.IsWhiteSpace(c) && c != ParserSettings.StreamEndChar);
-        }
 
         private string CharsTill(Func<char, bool> selector)
         {
@@ -109,32 +110,30 @@ namespace Spreadsheet.Core.ExpressionParsers
             if (char.IsLetter(peek)) 
                 return ReadCellReference();
 
-            var key = peek.ToString();
-
-            if (key == ParserSettings.StringStart)
+            if (peek == ParserSettings.StringStart[0])
                 return ReadString();
 
-            if (!TokenIdentifiers.ContainsKey(key))
-                return new Token(TokenType.Unknown, RemainExpression());
+            if (!TokenIdentifiers.ContainsKey(peek))
+                return new Token(TokenType.Unknown, CharsTill(RemainExpression));
 
             ReadChar();
-            return new Token(TokenIdentifiers[key], key);
+            return new Token(TokenIdentifiers[peek], peek.ToString());
         }
 
         private Token ReadNumber()
         {
-            return new Token(TokenType.Integer, CharsTill(char.IsDigit));
+            return new Token(TokenType.Integer, CharsTill(Number));
         }
 
         private Token ReadString()
         {
             ReadChar();
-            return new Token(TokenType.String, RemainExpression());
+            return new Token(TokenType.String, CharsTill(RemainExpression));
         }
 
         private Token ReadCellReference()
         {
-            return new Token(TokenType.CellReference, CharsTill(char.IsLetterOrDigit));
+            return new Token(TokenType.CellReference, CharsTill(CellReference));
         }
 
         public void Dispose()

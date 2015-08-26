@@ -6,6 +6,6 @@ namespace Spreadsheet.Core
 {
     public interface IProcessingStrategy
     {
-        IEnumerable<object> Evaluate(ISpreadsheet spreadsheet, Func<ICell, object> evaluation);
+        IEnumerable<object> Evaluate(ISpreadsheet spreadsheet, Func<Cell, object> evaluation);
     }
 }

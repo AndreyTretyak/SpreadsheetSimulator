@@ -11,13 +11,13 @@ using Spreadsheet.Core.ExpressionParsers;
 
 namespace Spreadsheet.Core
 {
-    public interface ISpreadsheet : IEnumerable<ICell>
+    public interface ISpreadsheet : IEnumerable<Cell>
     {
         int RowCount { get; }
 
         int ColumnCount { get; }
 
-        ICell this[CellAddress index] { get; }
+        Cell this[CellAddress index] { get; }
     }
 
     public class Spreadsheet : ISpreadsheet
@@ -36,9 +36,9 @@ namespace Spreadsheet.Core
 
         public int ColumnCount => _content.GetLength(1);
 
-        public ICell this[CellAddress index] => _content[index.Row, index.Column];
+        public Cell this[CellAddress index] => _content[index.Row, index.Column];
         
-        public IEnumerator<ICell> GetEnumerator() => _content.Cast<ICell>().GetEnumerator();
+        public IEnumerator<Cell> GetEnumerator() => _content.Cast<Cell>().GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }

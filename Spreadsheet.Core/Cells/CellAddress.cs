@@ -22,8 +22,29 @@ namespace Spreadsheet.Core
             Column = column;
         }
 
-        public CellAddress(string reference) : this(GetRowNumber(reference),GetColumnNumber(reference))
+        public CellAddress(string reference)
         {
+            var index = 0;
+            //transformation char index to  zero based row index
+            var column = 0;
+            while (index < reference.Length && char.IsLetter(reference[index]))
+            {
+                column = column * LettersUsedForRowNumber + (reference[index] - StartLetter + 1);
+                index++;
+            }
+            Column = column - 1;
+
+            //manual number parsing to avoid memory allocation on Substring call
+            var row = 0;
+            while (index < reference.Length && char.IsDigit(reference[index]))
+            {
+                row = row * 10 + (reference[index] - '0');
+                index++;
+            }
+            Row = row - 1;
+
+            if (index < reference.Length)
+                throw new ExpressionParsingException(string.Format(Resources.WrongCellAddress, reference));
         }
 
         public void Validate(CellAddress maxPosible)
@@ -40,35 +61,6 @@ namespace Spreadsheet.Core
 
             if (!string.IsNullOrEmpty(error))
                 throw new InvalidCellAdressException(error);
-        }
-
-        private static int GetRowNumber(string reference)
-        {
-            int result;
-            if (int.TryParse(reference.Substring(GetIndex(reference, char.IsDigit)), out result))
-                return result - 1;
-            throw new ExpressionParsingException(string.Format(Resources.WrongCellAddress, reference));
-        }
-
-        private static int GetIndex(string reference, Func<char, bool> condition)
-        {
-            for (var i = 0; i < reference.Length; i++)
-            {
-                if (condition(reference[i]))
-                    return i;
-            }
-            return -1;
-        }
-
-        private static int GetColumnNumber(string reference)
-        {
-            //transformation char index to  zero based row index
-            var result = 0;
-            for (var i = 0; i < reference.Length && char.IsLetter(reference[i]); i++)
-            {
-                result = result * LettersUsedForRowNumber + (reference[i] - StartLetter + 1);
-            }
-            return result - 1;
         }
 
         private string GetColumnLetter()

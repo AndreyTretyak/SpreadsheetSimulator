@@ -9,7 +9,7 @@ using Spreadsheet.Core.ExpressionParsers;
 
 namespace Spreadsheet.Core.Cells
 {
-    public class Cell : ICell
+    public class Cell
     {
         public CellAddress Address { get; }
 
@@ -21,7 +21,6 @@ namespace Spreadsheet.Core.Cells
             Expression = expression;
         }
         
-
         public object Evaluate(ISpreadsheetProcessor processor)
         {
             return Expression?.Evaluate(processor);

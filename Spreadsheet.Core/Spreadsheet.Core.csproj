@@ -46,7 +46,6 @@
     <Compile Include="Cells\Expressions\CellRefereceExpression.cs" />
     <Compile Include="Cells\Expressions\ConstantExpression.cs" />
     <Compile Include="Cells\Expressions\IExpression.cs" />
-    <Compile Include="Cells\ICell.cs" />
     <Compile Include="ProcessingStrategies\IProcessingStrategy.cs" />
     <Compile Include="ISpreadsheetProcessor.cs" />
     <Compile Include="ProcessingStrategies\ParallelProcessingStrategy.cs" />
