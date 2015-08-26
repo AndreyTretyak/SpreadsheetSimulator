@@ -153,6 +153,9 @@
   <data name="UnknownOperator" xml:space="preserve">
     <value>Unknown operator type {0}</value>
   </data>
+  <data name="WrongCellAddress" xml:space="preserve">
+    <value>Unable to parse cell address '{0}'</value>
+  </data>
   <data name="WrongCellColumn" xml:space="preserve">
     <value>Cell column is more then table size</value>
   </data>

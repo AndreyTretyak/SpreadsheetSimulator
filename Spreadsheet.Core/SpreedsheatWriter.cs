@@ -14,7 +14,7 @@ namespace Spreadsheet.Core
 
         public SpreedsheatWriter(Stream stream)
         {
-            _stream = new StreamWriter(stream);
+            _stream = new StreamWriter(new BufferedStream(stream));
         }
 
         public void WriteSpreedsheat(SpreadsheetEvaluationResult result)
@@ -23,7 +23,8 @@ namespace Spreadsheet.Core
             var index = 1;
             foreach (var value in result.Values)
             {
-                _stream.Write($"{value}\t");
+                _stream.Write(value);
+                _stream.Write("\t");
                 if (index++ % result.ColumnCount == 0)
                     _stream.WriteLine();
             }

@@ -169,6 +169,15 @@ namespace Spreadsheet.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to parse cell address &apos;{0}&apos;.
+        /// </summary>
+        public static string WrongCellAddress {
+            get {
+                return ResourceManager.GetString("WrongCellAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cell column is more then table size.
         /// </summary>
         public static string WrongCellColumn {
