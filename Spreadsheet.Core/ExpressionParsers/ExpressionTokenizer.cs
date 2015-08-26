@@ -33,6 +33,8 @@ namespace Spreadsheet.Core.ExpressionParsers
 
         private Token? _currentToken = null;
 
+        private readonly StringBuilder _stringBuilder;
+
         public SpreadsheetStreamTokenizer(Stream stream) : this(new StreamReader(stream))
         {
         }
@@ -40,6 +42,7 @@ namespace Spreadsheet.Core.ExpressionParsers
         public SpreadsheetStreamTokenizer(StreamReader stream)
         {
             _stream = stream;
+            _stringBuilder = new StringBuilder();
         }
 
         public Token Peek()
@@ -81,9 +84,9 @@ namespace Spreadsheet.Core.ExpressionParsers
 
         private string CharsTill(Func<char, bool> selector)
         {
-            var result = new StringBuilder();
-            while (selector(PeekChar())) result.Append(ReadChar());
-            return result.ToString();
+            _stringBuilder.Clear();
+            while (selector(PeekChar())) _stringBuilder.Append(ReadChar());
+            return _stringBuilder.ToString();
         }
 
         private Token NextToken()

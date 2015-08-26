@@ -9,12 +9,12 @@ namespace Spreadsheet.Core
     {
         private readonly ISpreadsheet _spreadsheet;
 
-        private readonly MemoryCache _memoryCache;
+        private readonly Lazy<object>[,] _memoryCache;
 
         public SpreadsheetProcessor(ISpreadsheet spreadsheet)
         {
             _spreadsheet = spreadsheet;
-            _memoryCache = new MemoryCache("Spreadsheet");
+            _memoryCache = new Lazy<object>[spreadsheet.RowCount, spreadsheet.ColumnCount];
         }
 
         public SpreadsheetEvaluationResult Evaluate(IProcessingStrategy strategy)
@@ -29,14 +29,11 @@ namespace Spreadsheet.Core
 
         private object GetCellValue(ICell cell)
         {
-            var key = cell.Address.StringValue;
-            var cacheValue = _memoryCache.Get(key);
-            if (cacheValue != null)
-                return ((Lazy<object>)cacheValue).Value;
-
-            var value = new Lazy<object>(() => EvaluateCell(cell), LazyThreadSafetyMode.ExecutionAndPublication);
-            _memoryCache.Add(key, value, DateTimeOffset.MaxValue);
-            return value.Value;
+            if (_memoryCache[cell.Address.Row, cell.Address.Column] == null)
+            {
+                _memoryCache[cell.Address.Row, cell.Address.Column] = new Lazy<object>(() => EvaluateCell(cell), LazyThreadSafetyMode.ExecutionAndPublication);
+            }
+            return _memoryCache[cell.Address.Row, cell.Address.Column].Value;
         }
 
         private object EvaluateCell(ICell cell)

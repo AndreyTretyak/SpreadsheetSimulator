@@ -45,18 +45,30 @@ namespace Spreadsheet.Core
         private static int GetRowNumber(string reference)
         {
             int result;
-            if (int.TryParse(new string(reference.SkipWhile(char.IsLetter).ToArray()), out result))
+            if (int.TryParse(reference.Substring(GetIndex(reference, char.IsDigit)), out result))
                 return result - 1;
-            throw new ExpressionParsingException($"Unable to parse cell address '{reference}'");
+            throw new ExpressionParsingException(string.Format(Resources.WrongCellAddress, reference));
+        }
+
+        private static int GetIndex(string reference, Func<char, bool> condition)
+        {
+            for (var i = 0; i < reference.Length; i++)
+            {
+                if (condition(reference[i]))
+                    return i;
+            }
+            return -1;
         }
 
         private static int GetColumnNumber(string reference)
         {
             //transformation char index to  zero based row index
-            return reference.TakeWhile(char.IsLetter)
-                            .Reverse()
-                            .Select((c, i) => (char.ToUpper(c) - StartLetter + 1) * (int)Math.Pow(LettersUsedForRowNumber, i))
-                            .Sum() - 1;
+            var result = 0;
+            for (var i = 0; i < reference.Length && char.IsLetter(reference[i]); i++)
+            {
+                result = result * LettersUsedForRowNumber + (reference[i] - StartLetter + 1);
+            }
+            return result - 1;
         }
 
         private string GetColumnLetter()
@@ -66,7 +78,7 @@ namespace Spreadsheet.Core
             var result = new StringBuilder();
             while (index / LettersUsedForRowNumber > 1)
             {
-                result.Append((char) (StartLetter + index%LettersUsedForRowNumber - 1));
+                result.Append((char) (StartLetter + index % LettersUsedForRowNumber - 1));
                 index = index / LettersUsedForRowNumber;
             }
             result.Append((char)(StartLetter + index - 1));
