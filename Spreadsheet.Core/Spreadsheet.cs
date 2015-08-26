@@ -42,40 +42,4 @@ namespace Spreadsheet.Core
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
-
-    //public class EvaluatedSpreadsheet : ISpreadsheet
-    //{
-    //    public CellAddress MaxAddress { get; }
-
-    //    private EvaluatedCell[,] _content;
-
-    //    public EvaluatedSpreadsheet(CellAddress maxAddress, IEnumerable<object> values)
-    //    {
-    //        _content = new EvaluatedCell[maxAddress.Column + 1,maxAddress.Row + 1]; 
-    //        var index = 0;
-    //        foreach (var value in values)
-    //        {
-    //            var row = index / maxAddress.Column;
-    //            var column = index % maxAddress.Column;
-    //            _content[row, column] = new EvaluatedCell(new CellAddress(row, column) , value);
-    //            index++;
-    //        }
-    //    }
-
-    //    public object GetCellValue(CellAddress cellAddress)
-    //    {
-    //        cellAddress.Validate(cellAddress);
-    //        return _content[cellAddress.Row, cellAddress.Column].Evaluate(this);
-    //    }
-
-    //    public IEnumerator<ICell> GetEnumerator()
-    //    {
-    //        return _content.Cast<ICell>().GetEnumerator();
-    //    }
-
-    //    IEnumerator IEnumerable.GetEnumerator()
-    //    {
-    //        return GetEnumerator();
-    //    }
-    //}
 }

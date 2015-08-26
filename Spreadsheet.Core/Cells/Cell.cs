@@ -9,13 +9,6 @@ using Spreadsheet.Core.ExpressionParsers;
 
 namespace Spreadsheet.Core.Cells
 {
-    public interface ICell
-    {
-        CellAddress Address { get; }
-
-        object Evaluate(ISpreadsheetProcessor processor);
-    }
-
     public class Cell : ICell
     {
         public CellAddress Address { get; }
@@ -36,19 +29,4 @@ namespace Spreadsheet.Core.Cells
 
         public override string ToString() => $"{Address}|{Expression}";
     }
-
-    //public class EvaluatedCell : ICell
-    //{
-    //    public CellAddress Address { get; }
-
-    //    public object Value { get; }
-
-    //    public EvaluatedCell(CellAddress address, object value)
-    //    {
-    //        Address = address;
-    //        Value = value;
-    //    }
-
-    //    public object Evaluate(ISpreadsheetProcessor processor) => Value;
-    //}
 }

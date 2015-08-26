@@ -17,16 +17,17 @@ namespace Spreadsheet.Core
             _stream = new StreamWriter(stream);
         }
 
-        public void WriteSpreedsheat(int columnsCount, IEnumerable<object> values)
+        public void WriteSpreedsheat(SpreadsheetEvaluationResult result)
         {
             //TODO: done for testing should be changed
             var index = 1;
-            foreach (var value in values)
+            foreach (var value in result.Values)
             {
                 _stream.Write($"{value}\t");
-                if (index++ % columnsCount == 0)
+                if (index++ % result.ColumnCount == 0)
                     _stream.WriteLine();
-            }      
+            }
+            _stream.Flush();      
         }
 
         public void Dispose()
