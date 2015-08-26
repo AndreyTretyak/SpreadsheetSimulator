@@ -5,13 +5,13 @@ using Spreadsheet.Core.Cells;
 
 namespace Spreadsheet.Core
 {
-    public class SpreadsheetProcessor : ISpreadsheetProcessor
+    public class SpreadsheetProcessor
     {
-        private readonly ISpreadsheet _spreadsheet;
+        private readonly Spreadsheet _spreadsheet;
 
         private readonly Lazy<object>[,] _memoryCache;
 
-        public SpreadsheetProcessor(ISpreadsheet spreadsheet)
+        public SpreadsheetProcessor(Spreadsheet spreadsheet)
         {
             _spreadsheet = spreadsheet;
             _memoryCache = new Lazy<object>[spreadsheet.RowCount, spreadsheet.ColumnCount];

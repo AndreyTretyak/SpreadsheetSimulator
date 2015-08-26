@@ -9,7 +9,7 @@ namespace Spreadsheet.Core.Cells
             Value = value;
         }
 
-        public object Evaluate(ISpreadsheetProcessor processor) => Value;
+        public object Evaluate(SpreadsheetProcessor processor) => Value;
 
         public override string ToString() => Value?.ToString() ?? Resources.Nothing;
     }

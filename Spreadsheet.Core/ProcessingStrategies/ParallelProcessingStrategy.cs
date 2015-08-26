@@ -11,7 +11,7 @@ namespace Spreadsheet.Core
 {
     public class ParallelProcessingStrategy : IProcessingStrategy
     {
-        public IEnumerable<object> Evaluate(ISpreadsheet spreadsheet, Func<Cell,object> evaluation)
+        public IEnumerable<object> Evaluate(Spreadsheet spreadsheet, Func<Cell,object> evaluation)
         {
            return spreadsheet.AsParallel()
                              .WithDegreeOfParallelism(spreadsheet.ColumnCount)

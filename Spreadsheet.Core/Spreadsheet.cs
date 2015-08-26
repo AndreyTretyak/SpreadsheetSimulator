@@ -11,16 +11,7 @@ using Spreadsheet.Core.ExpressionParsers;
 
 namespace Spreadsheet.Core
 {
-    public interface ISpreadsheet : IEnumerable<Cell>
-    {
-        int RowCount { get; }
-
-        int ColumnCount { get; }
-
-        Cell this[CellAddress index] { get; }
-    }
-
-    public class Spreadsheet : ISpreadsheet
+    public class Spreadsheet : IEnumerable<Cell>
     {
         private readonly Cell[,] _content;
 
