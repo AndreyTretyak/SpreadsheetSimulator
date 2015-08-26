@@ -22,6 +22,11 @@ namespace Spreadsheet.Core
             return new SpreadsheetEvaluationResult(_spreadsheet.ColumnCount, strategy.Evaluate(_spreadsheet, GetCellValue));
         }
 
+        public object GetCellValue(CellAddress address)
+        {
+            return GetCellValue(_spreadsheet[address]);
+        }
+
         private object GetCellValue(ICell cell)
         {
             var key = cell.Address.StringValue;
@@ -29,14 +34,22 @@ namespace Spreadsheet.Core
             if (cacheValue != null)
                 return ((Lazy<object>)cacheValue).Value;
 
-            var value = new Lazy<object>(() => cell.Evaluate(this), LazyThreadSafetyMode.ExecutionAndPublication);
+            var value = new Lazy<object>(() => EvaluateCell(cell), LazyThreadSafetyMode.ExecutionAndPublication);
             _memoryCache.Add(key, value, DateTimeOffset.MaxValue);
             return value.Value;
         }
 
-        public object GetCellValue(CellAddress address)
+        private object EvaluateCell(ICell cell)
         {
-            return GetCellValue(_spreadsheet[address]);
+            try
+            {
+                return cell.Evaluate(this);
+            }
+            //TODO more exact types should be specified
+            catch (Exception exception)
+            {
+                return exception;
+            }
         }
     }
 }

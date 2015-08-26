@@ -13,8 +13,11 @@ namespace Spreadsheet.Core.Cells
 
         public object Evaluate(ISpreadsheetProcessor processor)
         {
-            //Address.Validate(spreadsheet.MaxAddress);
-            return processor.GetCellValue(Address);
+            var result = processor.GetCellValue(Address);
+            var exception = result as Exception;
+            if (exception != null)
+                throw exception;
+            return result;
         }
 
         public override string ToString() => Address.StringValue;
