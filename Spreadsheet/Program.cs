@@ -15,10 +15,10 @@ namespace SpreadsheetSimulator
             var stream = File.Open("input.txt", FileMode.Open);
             var spreadsheet = new SpreadsheetReader().GetSpreadsheet(stream);
             var processor = new SpreadsheetProcessor(spreadsheet);
-            var result = processor.Evaluate(new ParallelEvaluationStrategy());
+            var result = processor.Evaluate(new ParallelProcessingStrategy());
             using (var write = new SpreedsheatWriter(Console.OpenStandardOutput()))
             {
-                write.WriteSpreedsheat(spreadsheet.ColumnCount, result);
+                write.WriteSpreedsheat(result);
             }
             Console.ReadKey();
         }

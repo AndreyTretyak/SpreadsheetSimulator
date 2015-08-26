@@ -46,7 +46,10 @@
     <Compile Include="Cells\Expressions\CellRefereceExpression.cs" />
     <Compile Include="Cells\Expressions\ConstantExpression.cs" />
     <Compile Include="Cells\Expressions\IExpression.cs" />
-    <Compile Include="ParallelProcessingStrategy.cs" />
+    <Compile Include="Cells\ICell.cs" />
+    <Compile Include="ProcessingStrategies\IProcessingStrategy.cs" />
+    <Compile Include="ISpreadsheetProcessor.cs" />
+    <Compile Include="ProcessingStrategies\ParallelProcessingStrategy.cs" />
     <Compile Include="ExpressionParsers\ExpressionParser.cs" />
     <Compile Include="ExpressionParsers\ExpressionParsingException.cs" />
     <Compile Include="ExpressionParsers\ExpressionTokenizer.cs" />
@@ -54,6 +57,9 @@
     <Compile Include="ExpressionParsers\ParserSettings.cs" />
     <Compile Include="ExpressionParsers\Token.cs" />
     <Compile Include="ExpressionParsers\TokenType.cs" />
+    <Compile Include="ProcessingStrategies\SimpleProcessingStrategy.cs" />
+    <Compile Include="SpreadsheetEvaluationResult.cs" />
+    <Compile Include="SpreadsheetProcessor.cs" />
     <Compile Include="Spreadsheet.cs" />
     <Compile Include="SpreadsheetReader.cs" />
     <Compile Include="Cells\Cell.cs" />
