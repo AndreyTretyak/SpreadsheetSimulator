@@ -11,7 +11,7 @@ namespace Spreadsheet.Core.Cells
             Address = address;
         }
 
-        public object Evaluate(ISpreadsheetProcessor processor)
+        public object Evaluate(SpreadsheetProcessor processor)
         {
             var result = processor.GetCellValue(Address);
             var exception = result as Exception;

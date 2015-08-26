@@ -12,7 +12,7 @@ namespace Spreadsheet.Core
 
     public class SpreadsheetReader
     {
-        public ISpreadsheet GetSpreadsheet(Stream stream)
+        public Spreadsheet GetSpreadsheet(Stream stream)
         {
             using (var reader = new StreamReader(stream))
             {

@@ -10,11 +10,15 @@ namespace Spreadsheet.Core
 
     public class SpreedsheatWriter : IDisposable
     {
-        private readonly StreamWriter _stream;
+        private readonly StreamWriter _streamWriter;
 
-        public SpreedsheatWriter(Stream stream)
+        public SpreedsheatWriter(StreamWriter streamWriter)
         {
-            _stream = new StreamWriter(new BufferedStream(stream));
+            _streamWriter = streamWriter;
+        }
+
+        public SpreedsheatWriter(Stream stream) : this(new StreamWriter(new BufferedStream(stream)))
+        {
         }
 
         public void WriteSpreedsheat(SpreadsheetEvaluationResult result)
@@ -23,17 +27,17 @@ namespace Spreadsheet.Core
             var index = 1;
             foreach (var value in result.Values)
             {
-                _stream.Write(value);
-                _stream.Write("\t");
+                _streamWriter.Write(value);
+                _streamWriter.Write("\t");
                 if (index++ % result.ColumnCount == 0)
-                    _stream.WriteLine();
+                    _streamWriter.WriteLine();
             }
-            _stream.Flush();      
+            _streamWriter.Flush();      
         }
 
         public void Dispose()
         {
-            _stream?.Dispose();
+            _streamWriter?.Dispose();
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Spreadsheet.Core.Cells
             Operation = operation;
         }
 
-        public object Evaluate(ISpreadsheetProcessor processor)
+        public object Evaluate(SpreadsheetProcessor processor)
         {
             if (Right == null)
                 return Left.Evaluate(processor);

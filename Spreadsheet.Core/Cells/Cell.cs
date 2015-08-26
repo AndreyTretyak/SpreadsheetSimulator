@@ -21,7 +21,7 @@ namespace Spreadsheet.Core.Cells
             Expression = expression;
         }
         
-        public object Evaluate(ISpreadsheetProcessor processor)
+        public object Evaluate(SpreadsheetProcessor processor)
         {
             return Expression?.Evaluate(processor);
         }
