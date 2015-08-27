@@ -6,31 +6,34 @@ using System.Threading.Tasks;
 
 namespace Spreadsheet.Core.ExpressionParsers
 {
-    internal class ExpressionParsingException : InvalidOperationException
+    internal class SpreadsheetException : SystemException
     {
-        public ExpressionParsingException(string message) : base(message)
-        {
-        }
+        public SpreadsheetException(string message) : base(message) { }
+
+        public SpreadsheetException(string message, Exception innerException) : base(message, innerException) { }
+
+        public override string ToString() => Message;
     }
 
-    internal class ExpressionEvaluationException : InvalidOperationException
+    internal class SpreadsheatReadingException : SpreadsheetException
     {
-        public ExpressionEvaluationException(string message) : base(message)
-        {
-        }
+        public SpreadsheatReadingException(string message) : base(message) { }
     }
 
-    internal class SpreadsheatReadingException : InvalidOperationException
+    internal class ExpressionParsingException : SpreadsheetException
     {
-        public SpreadsheatReadingException(string message) : base(message)
-        {
-        }
+        public ExpressionParsingException(string message) : base(message) { }
     }
 
-    internal class InvalidCellAdressException : InvalidOperationException
+    internal class ExpressionEvaluationException : SpreadsheetException
     {
-        public InvalidCellAdressException(string message) : base(message)
-        {
-        }
+        public ExpressionEvaluationException(string message) : base(message) { }
+
+        public ExpressionEvaluationException(string message, Exception innerException) : base(message, innerException) { }
+    }
+
+    internal class InvalidCellAdressException : SpreadsheetException
+    {
+        public InvalidCellAdressException(string message) : base(message) { }
     }
 }

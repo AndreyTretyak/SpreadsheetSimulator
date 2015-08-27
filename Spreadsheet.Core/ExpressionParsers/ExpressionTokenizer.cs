@@ -8,15 +8,7 @@ using System.Threading.Tasks;
 
 namespace Spreadsheet.Core.ExpressionParsers
 {
-    internal interface ISpreadsheetTokenizer : IDisposable
-    {
-        Token Peek();
-
-        Token Next();
-    }
-
-
-    internal class SpreadsheetStreamTokenizer : ISpreadsheetTokenizer
+    internal class SpreadsheetStreamTokenizer
     {
         private static readonly Dictionary<char, TokenType> TokenIdentifiers = new Dictionary<char, TokenType>
         {
@@ -134,12 +126,6 @@ namespace Spreadsheet.Core.ExpressionParsers
         private Token ReadCellReference()
         {
             return new Token(TokenType.CellReference, CharsTill(CellReference));
-        }
-
-        public void Dispose()
-        {
-            //TODO stream should be disposed
-            //_stream?.Dispose();
         }
     }
 }

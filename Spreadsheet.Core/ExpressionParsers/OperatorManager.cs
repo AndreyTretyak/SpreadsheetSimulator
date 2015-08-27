@@ -36,7 +36,18 @@ namespace Spreadsheet.Core.ExpressionParsers
         object Evaluate(object left, object right);
     }
 
-    internal class BinaryOperator<TLeft,TRight> : IBinaryOperator    {
+    internal class Operator
+    {
+        protected T Cast<T>(object value)
+        {
+            if (typeof(T) != value?.GetType())
+                throw new ExpressionEvaluationException(string.Format(Resources.WrongTypeError, typeof(T), value?.GetType()));
+            return (T)value;
+        }
+    }
+
+    internal class BinaryOperator<TLeft,TRight> : Operator, IBinaryOperator
+    {
         public int Priority { get; }
 
         public string Operator { get; }
@@ -52,9 +63,7 @@ namespace Spreadsheet.Core.ExpressionParsers
 
         public object Evaluate(object left, object right)
         {
-            var leftValue = (TLeft) left;
-            var rightValue = (TRight) right;
-            return Operation(leftValue, rightValue);
+            return Operation(Cast<TLeft>(left), Cast<TRight>(right));
         }
     }
 
@@ -63,7 +72,7 @@ namespace Spreadsheet.Core.ExpressionParsers
         object Evaluate(object value);
     }
 
-    internal class PrefixOperator<T> : IPrefixOperator
+    internal class PrefixOperator<T> : Operator, IPrefixOperator
     {
         public string Operator { get; }
 
@@ -77,9 +86,7 @@ namespace Spreadsheet.Core.ExpressionParsers
 
         public object Evaluate(object value)
         {
-            var castedValue = (T) value;
-            return Operation(castedValue);
+            return Operation(Cast<T>(value));
         }
     }
-
 }

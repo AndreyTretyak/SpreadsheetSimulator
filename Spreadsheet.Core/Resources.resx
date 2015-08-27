@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CircularReferenceDetected" xml:space="preserve">
-    <value>Circular reference detected for cell {0}</value>
+    <value>Circular reference detected</value>
   </data>
   <data name="EndOfExpression" xml:space="preserve">
     <value>End of expression</value>
@@ -169,7 +169,7 @@
     <value>Wrong token type '{0}' expected</value>
   </data>
   <data name="WrongTypeError" xml:space="preserve">
-    <value>Wrong data type in expression </value>
+    <value>Wrong data type in expression. Expected '{0}' but was '{1}'</value>
   </data>
   <data name="ZeroDivision" xml:space="preserve">
     <value>Zero division</value>

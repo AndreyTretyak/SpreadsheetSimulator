@@ -7,16 +7,11 @@ using Spreadsheet.Core.Cells;
 
 namespace Spreadsheet.Core.ExpressionParsers
 {
-    interface ISpreadsheetSourse : IDisposable
+    internal class SpreadsheetStreamParser
     {
-        IExpression NextExpression();
-    }
+        private readonly SpreadsheetStreamTokenizer _tokenizer;
 
-    internal class SpreadsheetStreamParser : ISpreadsheetSourse
-    {
-        private readonly ISpreadsheetTokenizer _tokenizer;
-
-        public SpreadsheetStreamParser(ISpreadsheetTokenizer tokenizer)
+        public SpreadsheetStreamParser(SpreadsheetStreamTokenizer tokenizer)
         {
             _tokenizer = tokenizer;
         }
@@ -32,21 +27,7 @@ namespace Spreadsheet.Core.ExpressionParsers
                     Next();
                     return result;
             }
-
             throw InvalidContent(string.Format(Resources.WrongTokenType, Resources.EndOfExpression));
-            //while (!Peek(TokenType.EndOfStream))
-            //{
-            //    var result = ReadCellContent();
-            //    if (Peek(TokenType.EndOfExpression) || Peek(TokenType.EndOfStream))
-            //    {
-            //        Next();
-            //        yield return result;
-            //    }
-            //    else
-            //    {
-            //        yield return InvalidContent(string.Format(Resources.WrongTokenType, Resources.EndOfExpression));
-            //    }
-            //}
         }
 
         private Token Peek()
@@ -117,6 +98,21 @@ namespace Spreadsheet.Core.ExpressionParsers
             Next();
             return ReadSum();
         }
+
+        //private IExpression ReadOperation(int priority)
+        //{
+        //    var binaryExpression = new BinaryExpression(ReadOperation(priority - 1));
+        //    while (Peek("+") || Peek("-"))
+        //    {
+        //        if (binaryExpression.Right != null)
+        //        {
+        //            binaryExpression = new BinaryExpression(binaryExpression);
+        //        }
+        //        binaryExpression.Operation = Next().Value;
+        //        binaryExpression.Right = ReadOperation(priority - 1);
+        //    }
+        //    return binaryExpression;
+        //}
 
         private IExpression ReadSum()
         {
@@ -190,11 +186,6 @@ namespace Spreadsheet.Core.ExpressionParsers
         private ExpressionParsingException InvalidContent(string additionMessage)
         {
             return new ExpressionParsingException($"{string.Format(Resources.InvalidCellContent, _tokenizer.Next().Value)} {additionMessage}");
-        }
-
-        public void Dispose()
-        {
-            _tokenizer?.Dispose();
         }
     }
 }
