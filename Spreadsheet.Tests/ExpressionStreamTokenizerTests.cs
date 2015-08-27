@@ -25,14 +25,12 @@ namespace Spreadsheet.Tests
         
         private IEnumerable<Token> GetTokens(string text)
         {
-            using (var tokenizer = new SpreadsheetStreamTokenizer(GenerateStreamFromString(text)))
+            var tokenizer = new SpreadsheetStreamTokenizer(GenerateStreamFromString(text));
+            Token token;
+            do
             {
-                Token token;
-                do
-                {
-                    yield return token = tokenizer.Next();
-                } while (token.Type != TokenType.EndOfStream);
-            }
+                yield return token = tokenizer.Next();
+            } while (token.Type != TokenType.EndOfStream);
         }
 
         [Test]

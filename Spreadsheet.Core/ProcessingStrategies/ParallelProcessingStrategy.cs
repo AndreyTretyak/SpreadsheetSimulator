@@ -14,9 +14,7 @@ namespace Spreadsheet.Core
         public IEnumerable<object> Evaluate(Spreadsheet spreadsheet, Func<Cell,object> evaluation)
         {
            return spreadsheet.AsParallel()
-                             .WithDegreeOfParallelism(spreadsheet.ColumnCount)
-                             .OrderBy(e => e.Address.Row)
-                             .ThenBy(e => e.Address.Column)
+                             .AsOrdered()
                              .Select(evaluation);
         }
     }

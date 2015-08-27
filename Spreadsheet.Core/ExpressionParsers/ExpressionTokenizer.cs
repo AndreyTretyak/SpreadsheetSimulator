@@ -8,7 +8,15 @@ using System.Threading.Tasks;
 
 namespace Spreadsheet.Core.ExpressionParsers
 {
-    internal class SpreadsheetStreamTokenizer
+    internal interface ISpreadsheetTokenizer
+    {
+        Token Peek();
+
+        Token Next();
+    }
+
+
+    internal class SpreadsheetStreamTokenizer : ISpreadsheetTokenizer
     {
         private static readonly Dictionary<char, TokenType> TokenIdentifiers = new Dictionary<char, TokenType>
         {

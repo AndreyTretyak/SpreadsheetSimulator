@@ -9,9 +9,9 @@ namespace Spreadsheet.Core.ExpressionParsers
 {
     internal class SpreadsheetStreamParser
     {
-        private readonly SpreadsheetStreamTokenizer _tokenizer;
+        private readonly ISpreadsheetTokenizer _tokenizer;
 
-        public SpreadsheetStreamParser(SpreadsheetStreamTokenizer tokenizer)
+        public SpreadsheetStreamParser(ISpreadsheetTokenizer tokenizer)
         {
             _tokenizer = tokenizer;
         }
