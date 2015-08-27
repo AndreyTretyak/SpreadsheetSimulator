@@ -10,7 +10,7 @@ using Spreadsheet.Core.ExpressionParsers;
 
 namespace Spreadsheet.Tests
 {
-    internal class SpreadsheetTokenizerMock
+    internal class SpreadsheetTokenizerMock : ISpreadsheetTokenizer
     {
         private static readonly Token EndToken = new Token(TokenType.EndOfStream);
 
@@ -33,8 +33,6 @@ namespace Spreadsheet.Tests
         {
             return _index < _tokens.Length ? _tokens[_index++] : EndToken;
         }
-
-        public void Dispose() {}
     }
 
     [TestFixture]
@@ -42,16 +40,14 @@ namespace Spreadsheet.Tests
     {
         private IEnumerable<IExpression> GetExpressions(params Token[] tokens)
         {
-            using (var parser = new SpreadsheetStreamParser(new SpreadsheetTokenizerMock(tokens)))
+            var parser = new SpreadsheetStreamParser(new SpreadsheetTokenizerMock(tokens));
+            IExpression expression;
+            do
             {
-                IExpression expression;
-                do
-                {
-                    expression = parser.NextExpression();
-                    if (expression != null)
-                        yield return expression;
-                } while (expression != null);
-            }
+                expression = parser.NextExpression();
+                if (expression != null)
+                    yield return expression;
+            } while (expression != null);
         }
 
         private object Parse(params Token[] tokens)
