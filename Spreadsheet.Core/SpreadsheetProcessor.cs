@@ -2,6 +2,7 @@ using System;
 using System.Runtime.Caching;
 using System.Threading;
 using Spreadsheet.Core.Cells;
+using Spreadsheet.Core.ExpressionParsers;
 
 namespace Spreadsheet.Core
 {
@@ -42,10 +43,19 @@ namespace Spreadsheet.Core
             {
                 return cell.Evaluate(this);
             }
+            catch (ExpressionEvaluationException exception)
+            {
+                return  exception;
+            }
+            //circular reference
+            catch (InvalidOperationException exception)
+            {
+                return new ExpressionEvaluationException(Resources.CircularReferenceDetected, exception);
+            }
             //TODO more exact types should be specified
             catch (Exception exception)
             {
-                return exception;
+                return new ExpressionEvaluationException(exception.Message, exception);
             }
         }
     }

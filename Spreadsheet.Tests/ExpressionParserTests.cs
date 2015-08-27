@@ -10,7 +10,7 @@ using Spreadsheet.Core.ExpressionParsers;
 
 namespace Spreadsheet.Tests
 {
-    internal class SpreadsheetTokenizerMock : ISpreadsheetTokenizer
+    internal class SpreadsheetTokenizerMock
     {
         private static readonly Token EndToken = new Token(TokenType.EndOfStream);
 

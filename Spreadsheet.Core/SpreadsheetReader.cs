@@ -10,27 +10,41 @@ using Spreadsheet.Core.ExpressionParsers;
 namespace Spreadsheet.Core
 {
 
-    public class SpreadsheetReader
+    public class SpreadsheetReader : IDisposable
     {
-        public Spreadsheet GetSpreadsheet(Stream stream)
+        private readonly StreamReader _streamReader;
+
+        public SpreadsheetReader(Stream stream) : this(new StreamReader(stream))
         {
-            using (var reader = new StreamReader(stream))
-            {
-                //TODO: need validation
-                var size = reader.ReadLine().Split(new []{' ', '\t', '\r', '\n'}, StringSplitOptions.RemoveEmptyEntries).ToArray();
+        }
+
+        public SpreadsheetReader(StreamReader streamReader)
+        {
+            _streamReader = streamReader;
+        }
+
+        public Spreadsheet ReadSpreadsheet()
+        {
+            //TODO: need validation
+            var size = _streamReader.ReadLine()
+                                    .Split(new []{' ', '\t', '\r', '\n'}, StringSplitOptions.RemoveEmptyEntries)
+                                    .ToArray();
                 
-                var maxRow = int.Parse(size[0]);
-                var maxColumn = int.Parse(size[1]);
-                var cellCount = maxColumn * maxRow;
-                var cells = new Cell[cellCount];
-                using (var parser = new SpreadsheetStreamParser(new SpreadsheetStreamTokenizer(reader)))
-                {
-                    for (var i = 0; i < cellCount; i++)
-                        cells[i] = new Cell(new CellAddress(i / maxColumn, i % maxColumn), parser.NextExpression());
-                }
-                return new Spreadsheet(maxRow, maxColumn, cells);
-            }
+            var maxRow = int.Parse(size[0]);
+            var maxColumn = int.Parse(size[1]);
+            return new Spreadsheet(maxRow, maxColumn, GetCells(maxColumn, maxColumn * maxRow));
+        }
+
+        private IEnumerable<Cell> GetCells(int maxColumn, int cellCount)
+        {
+            var parser = new SpreadsheetStreamParser(new SpreadsheetStreamTokenizer(_streamReader));
+            for (var i = 0; i < cellCount; i++)
+                yield return new Cell(new CellAddress(i / maxColumn, i % maxColumn), parser.NextExpression());
+        }
+
+        public void Dispose()
+        {
+            _streamReader?.Dispose();
         }
     }
-
 }

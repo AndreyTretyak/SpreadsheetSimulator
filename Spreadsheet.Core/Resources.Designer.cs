@@ -61,7 +61,7 @@ namespace Spreadsheet.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Circular reference detected for cell {0}.
+        ///   Looks up a localized string similar to Circular reference detected.
         /// </summary>
         public static string CircularReferenceDetected {
             get {
@@ -214,7 +214,7 @@ namespace Spreadsheet.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wrong data type in expression .
+        ///   Looks up a localized string similar to Wrong data type in expression. Expected &apos;{0}&apos; but was &apos;{1}&apos;.
         /// </summary>
         public static string WrongTypeError {
             get {
