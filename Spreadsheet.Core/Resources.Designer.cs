@@ -106,6 +106,15 @@ namespace Spreadsheet.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Integer number is too big consier to use long.
+        /// </summary>
+        public static string IntegerToBig {
+            get {
+                return ResourceManager.GetString("IntegerToBig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to define content type of cell &quot;{0}&quot;..
         /// </summary>
         public static string InvalidCellContent {

@@ -132,6 +132,9 @@
   <data name="IdentifierExpected" xml:space="preserve">
     <value>Integer or CellNumber expected</value>
   </data>
+  <data name="IntegerToBig" xml:space="preserve">
+    <value>Integer number is too big consier to use long</value>
+  </data>
   <data name="InvalidCellContent" xml:space="preserve">
     <value>Unable to define content type of cell "{0}".</value>
   </data>

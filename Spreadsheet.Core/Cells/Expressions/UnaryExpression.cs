@@ -6,7 +6,7 @@ namespace Spreadsheet.Core.Cells
     {
         public IExpression Value { get; }
 
-        public IOperator Operation { get; set; }
+        public IOperator Operation { get; }
 
         public UnaryExpression(IOperator operation, IExpression value)
         {
