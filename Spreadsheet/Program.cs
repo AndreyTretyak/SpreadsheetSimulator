@@ -12,7 +12,7 @@ namespace SpreadsheetSimulator
     {
         static void Main(string[] args)
         {
-            var input = File.Open(args.Length > 0 ? args[0] : "input.txt", FileMode.Open);
+            var input = args.Length > 0 ? File.Open(args[0], FileMode.Open) : Console.OpenStandardInput();
             var output = args.Length > 1 ? File.Open(args[1], FileMode.CreateNew) : Console.OpenStandardOutput();
             using (var reader = new SpreadsheetReader(input))
             {
