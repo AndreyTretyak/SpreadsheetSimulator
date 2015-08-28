@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using Spreadsheet.Core;
 using Spreadsheet.Core.Cells;
 using Spreadsheet.Core.ExpressionParsers;
 
@@ -34,23 +35,50 @@ namespace Spreadsheet.Tests
         }
 
         [Test]
+        [TestCase("A17", 16, 0)]
+        [TestCase("C5", 4, 2)]
+        [TestCase("A1", 0, 0)]
+        [TestCase("A2", 1, 0)]
+        [TestCase("B1", 0, 1)]
+        [TestCase("BVC197", 196, 1926)]
+        public void CellAddressTest(string address, int row, int column)
+        {
+            var token = GetTokens(address).First();
+            Assert.AreEqual(token.Type, TokenType.CellReference);
+            Assert.AreEqual(row, token.Address.Row, "row");
+            Assert.AreEqual(column, token.Address.Column, "column");
+        }
+
+        [Test]
+        [TestCase("179", 179)]
+        [TestCase("0", 0)]
+        [TestCase("009", 9)]
+        [TestCase("2147483647", int.MaxValue)]
+        public void IntegerTest(string text, int value)
+        {
+            var token = GetTokens(text).First();
+            Assert.AreEqual(token.Type, TokenType.Integer);
+            Assert.AreEqual(value, token.Integer);
+        }
+
+        [Test]
         public void TokenizerComplexTest()
         {
             CollectionAssert.AreEqual(new []
             {
                 new Token(TokenType.String,"test"),
                 new Token(TokenType.EndOfExpression),
-                new Token(TokenType.Integer,"19"),
+                new Token(19),
                 new Token(TokenType.EndOfExpression),
-                new Token(TokenType.ExpressionStart,"="),
-                new Token(TokenType.CellReference,"T31"),
+                new Token(TokenType.ExpressionStart),
+                new Token(new CellAddress("T31")),
                 new Token(TokenType.EndOfExpression),
-                new Token(TokenType.ExpressionStart,"="),
-                new Token(TokenType.Integer,"14"),
-                new Token(TokenType.Operator,"+"),
-                new Token(TokenType.CellReference,"VK34"),
-                new Token(TokenType.Operator,"/"),
-                new Token(TokenType.Integer,"7"),
+                new Token(TokenType.ExpressionStart),
+                new Token(14),
+                new Token(OperatorManager.Default.Operators['+']),
+                new Token(new CellAddress("VK34")),
+                new Token(OperatorManager.Default.Operators['/']),
+                new Token(7),
                 new Token(TokenType.EndOfStream),
             },
             GetTokens("'test\t19\n\r=T31\t=14+VK34/7"));

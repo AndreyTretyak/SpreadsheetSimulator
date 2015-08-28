@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BinaryOperationNotSupported" xml:space="preserve">
+    <value>Binary operation not supported for operator '{0}'</value>
+  </data>
   <data name="CircularReferenceDetected" xml:space="preserve">
     <value>Circular reference detected</value>
   </data>
@@ -146,6 +149,9 @@
   </data>
   <data name="UnableToParseCellAddress" xml:space="preserve">
     <value>Unable to parse cell address '{0}'</value>
+  </data>
+  <data name="UnaryOperationNotSupported" xml:space="preserve">
+    <value>Unary operation not supported for operator '{0}'</value>
   </data>
   <data name="UnknownContentType" xml:space="preserve">
     <value>Cell can contain only number, string or expression</value>

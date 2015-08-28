@@ -1,19 +1,60 @@
+using System.ComponentModel;
+
 namespace Spreadsheet.Core.ExpressionParsers
 {
     internal struct Token
     {
         public TokenType Type { get; }
 
-        public string Value { get; }
+        public string String { get; }
 
-        public Token(TokenType type) : this(type, null) { }
+        public int Integer { get; }
 
-        public Token(TokenType type, string value)
+        public CellAddress Address { get; }
+
+        public IOperator Operator { get; }
+
+        public Token(TokenType type) : this()
         {
             Type = type;
-            Value = value;
         }
 
-        public override string ToString() => Type + "|" + Value;
+        public Token(TokenType type, string value) : this(type)
+        {
+            String = value;
+        }
+
+        public Token(int value) : this(TokenType.Integer)
+        {
+            Integer = value;
+        }
+
+        public Token(CellAddress value) : this(TokenType.CellReference)
+        {
+            Address = value;
+        }
+
+        public Token(IOperator value) : this(TokenType.Operator)
+        {
+            Operator = value;
+        }
+
+        public override string ToString()
+        {
+            object value = String;
+            switch (Type)
+            {
+                case TokenType.Integer:
+                    value = Integer;
+                    break;
+                case TokenType.CellReference:
+                    value = Address;
+                    break;
+                case TokenType.Operator:
+                    value = Operator;
+                    break;
+            }
+            return $"{Type}|{value}";
+        }
     }
 }

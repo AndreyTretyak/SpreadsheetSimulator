@@ -8,10 +8,6 @@ namespace Spreadsheet.Core
 {
     public struct CellAddress
     {
-        private const char StartLetter = 'A';
-
-        private const int LettersUsedForRowNumber = 26;
-
         public int Row { get; }
 
         public int Column { get; }
@@ -29,7 +25,7 @@ namespace Spreadsheet.Core
             var column = 0;
             while (index < reference.Length && char.IsLetter(reference[index]))
             {
-                column = column * LettersUsedForRowNumber + (reference[index] - StartLetter + 1);
+                column = column * ParserSettings.LettersUsedForRowNumber + (reference[index] - ParserSettings.RowNumberStartLetter + 1);
                 index++;
             }
             Column = column - 1;
@@ -68,12 +64,12 @@ namespace Spreadsheet.Core
             //transformation of zero based row index to char index
             var index = Column + 1;
             var result = new StringBuilder();
-            while (index / LettersUsedForRowNumber > 1)
+            while (index / ParserSettings.LettersUsedForRowNumber > 1)
             {
-                result.Append((char) (StartLetter + index % LettersUsedForRowNumber - 1));
-                index = index / LettersUsedForRowNumber;
+                result.Append((char) (ParserSettings.RowNumberStartLetter + index % ParserSettings.LettersUsedForRowNumber - 1));
+                index = index / ParserSettings.LettersUsedForRowNumber;
             }
-            result.Append((char)(StartLetter + index - 1));
+            result.Append((char)(ParserSettings.RowNumberStartLetter + index - 1));
             return new string(result.ToString().Reverse().ToArray());
         }
 

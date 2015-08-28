@@ -35,11 +35,6 @@ namespace Spreadsheet.Core.ExpressionParsers
             return _tokenizer.Peek();
         }
 
-        private bool Peek(string value)
-        {
-            return Peek().Value == value;
-        }
-
         private bool Peek(TokenType type)
         {
             return Peek().Type == type;
@@ -75,73 +70,47 @@ namespace Spreadsheet.Core.ExpressionParsers
 
         private IExpression ReadInteger()
         {
-            int result;
-            var text = _tokenizer.Next().Value;
-            if (int.TryParse(text, out result))
-                return new ConstantExpression(result);
-            throw new ExpressionParsingException(string.Format(Resources.FailedToParseNumber, text));
-            
+            return new ConstantExpression(_tokenizer.Next().Integer);            
         }
 
         private IExpression ReadString()
         {
-            return new ConstantExpression(_tokenizer.Next().Value);
+            return new ConstantExpression(_tokenizer.Next().String);
         }
 
         private IExpression ReadCellReference()
         {
-            return new CellRefereceExpression(new CellAddress(_tokenizer.Next().Value));
+            return new CellRefereceExpression(_tokenizer.Next().Address);
         }
         
         private IExpression ReadExpression()
         {
             Next();
-            return ReadSum();
+            return ReadOperation();
         }
 
-        //private IExpression ReadOperation(int priority)
-        //{
-        //    var binaryExpression = new BinaryExpression(ReadOperation(priority - 1));
-        //    while (Peek("+") || Peek("-"))
-        //    {
-        //        if (binaryExpression.Right != null)
-        //        {
-        //            binaryExpression = new BinaryExpression(binaryExpression);
-        //        }
-        //        binaryExpression.Operation = Next().Value;
-        //        binaryExpression.Right = ReadOperation(priority - 1);
-        //    }
-        //    return binaryExpression;
-        //}
-
-        private IExpression ReadSum()
+        private IExpression ReadOperation(int priority = 0)
         {
-            var binaryExpression = new BinaryExpression(ReadFract());
-            while (Peek("+") || Peek("-"))
+            if (_tokenizer.OperatorManager.OperatorsByPriority.Count <= priority)
+                return ReadIdentifier();
+
+            var binaryExpression = new BinaryExpression(ReadOperation(priority + 1));
+            while (Peek(TokenType.Operator) && Peek().Operator.Priority == priority)
             {
                 if (binaryExpression.Right != null)
                 {
                     binaryExpression = new BinaryExpression(binaryExpression);
                 }
-                binaryExpression.Operation = Next().Value;
-                binaryExpression.Right = ReadFract();
-            }
-            return binaryExpression;
-        }
 
-        private IExpression ReadFract()
-        {
-            var binaryExpression = new BinaryExpression(ReadIdentifier());
-            while (Peek("*") || Peek("/") || Peek("%"))
-            {
-                if (binaryExpression.Right != null)
-                {
-                    binaryExpression = new BinaryExpression(binaryExpression);
-                }
-                binaryExpression.Operation = Next().Value;
-                binaryExpression.Right = ReadIdentifier();
+                if (!Peek(TokenType.Operator))
+                    throw InvalidContent(Resources.OperatorExpected);
+
+                binaryExpression.Operation = Next().Operator;
+                binaryExpression.Right = ReadOperation(priority + 1);
             }
-            return binaryExpression;
+            return binaryExpression.Operation == null 
+                   ? binaryExpression.Left
+                   : binaryExpression;
         }
 
         private IExpression ReadIdentifier()
@@ -149,31 +118,17 @@ namespace Spreadsheet.Core.ExpressionParsers
             if (Peek(TokenType.LeftParanthesis))
             {
                 Next();
-                var expresion = ReadSum();
+                var expresion = ReadOperation();
                 if (!Peek(TokenType.RightParanthesis))
                     throw InvalidContent(string.Format(Resources.WrongTokenType, ParserSettings.RightParanthesis));
                 Next();
                 return expresion;
             }
-            
-            //Stub for prefix addition operator
-            if (Peek(ParserSettings.AdditionOperator))
-            {
-                Next();
-                return ReadIdentifier();
-            }
-            
-            //Stub for prefix subtraction operator
-            if (Peek(ParserSettings.SubtractionOperator))
-            {
-                Next();
-                return new BinaryExpression(new ConstantExpression(-1), 
-                                            ParserSettings.MultiplicationOperator, 
-                                            ReadIdentifier());
-            }
-            
+
             switch (Peek().Type)
             {
+                case TokenType.Operator:
+                    return new UnaryExpression(Next().Operator, ReadIdentifier());
                 case TokenType.Integer:
                     return ReadInteger();
                 case TokenType.CellReference:
@@ -185,7 +140,7 @@ namespace Spreadsheet.Core.ExpressionParsers
 
         private ExpressionParsingException InvalidContent(string additionMessage)
         {
-            return new ExpressionParsingException($"{string.Format(Resources.InvalidCellContent, _tokenizer.Next().Value)} {additionMessage}");
+            return new ExpressionParsingException($"{string.Format(Resources.InvalidCellContent, _tokenizer.Next().String)} {additionMessage}");
         }
     }
 }
