@@ -86,13 +86,6 @@ namespace Spreadsheet.Tests
         }
 
         [Test]
-        [ExpectedException(typeof(ExpressionParsingException))]
-        public void TestHugeInteger()
-        {
-            Parse<ConstantExpression>(new Token(TokenType.Integer, "987654321123456789"));
-        }
-
-        [Test]
         [TestCase("test1 string")]
         [TestCase("'+test2")]
         [TestCase("12+test3")]

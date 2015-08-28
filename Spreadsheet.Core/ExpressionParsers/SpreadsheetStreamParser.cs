@@ -88,29 +88,19 @@ namespace Spreadsheet.Core.ExpressionParsers
             Next();
             return ReadOperation();
         }
-
+        
         private IExpression ReadOperation(int priority = 0)
         {
-            if (_tokenizer.OperatorManager.OperatorsByPriority.Count <= priority)
+            if (_tokenizer.OperatorManager.Priorities.Count <= priority)
                 return ReadIdentifier();
 
-            var binaryExpression = new BinaryExpression(ReadOperation(priority + 1));
-            while (Peek(TokenType.Operator) && Peek().Operator.Priority == priority)
+            var expression = ReadOperation(priority + 1);
+            while (Peek(TokenType.Operator)
+                   && Peek().Operator.Priority == _tokenizer.OperatorManager.Priorities.ElementAt(priority))
             {
-                if (binaryExpression.Right != null)
-                {
-                    binaryExpression = new BinaryExpression(binaryExpression);
-                }
-
-                if (!Peek(TokenType.Operator))
-                    throw InvalidContent(Resources.OperatorExpected);
-
-                binaryExpression.Operation = Next().Operator;
-                binaryExpression.Right = ReadOperation(priority + 1);
+                expression = new BinaryExpression(expression, Next().Operator, ReadOperation(priority + 1));
             }
-            return binaryExpression.Operation == null 
-                   ? binaryExpression.Left
-                   : binaryExpression;
+            return expression;
         }
 
         private IExpression ReadIdentifier()

@@ -13,15 +13,15 @@ namespace Spreadsheet.Core.ExpressionParsers
     {
         public IReadOnlyDictionary<char, IOperator> Operators { get; }
 
-        public IReadOnlyCollection<IReadOnlyDictionary<char, IOperator>> OperatorsByPriority { get; }
+        public IReadOnlyCollection<int> Priorities { get; }
 
         public OperatorManager(IList<IOperator> operators)
         {
             Operators = operators.ToDictionary(o => o.OperatorCharacter, o => o);
-            OperatorsByPriority = operators.GroupBy(o => o.Priority, o => o)
-                                           .OrderBy(g => g.Key)
-                                           .Select(g => g.ToDictionary(o => o.OperatorCharacter, o => o))
-                                           .ToArray();
+            Priorities = operators.GroupBy(o => o.Priority, o => o)
+                                  .Select(g => g.Key)
+                                  .OrderBy(g => g)
+                                  .ToArray();
         }
 
         private readonly static Lazy<OperatorManager> _default;

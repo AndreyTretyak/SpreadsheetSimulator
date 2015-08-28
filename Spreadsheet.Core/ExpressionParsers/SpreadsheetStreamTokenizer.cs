@@ -143,19 +143,23 @@ namespace Spreadsheet.Core.ExpressionParsers
         private int ReadInteger()
         {
             //manual integer reading to avoid memory allocation on string creation
-            var row = 0;
+            var value = 0;
             while (char.IsDigit(PeekChar()))
             {
-                row = row * 10 + (ReadChar() - '0');
+                if ((uint)value > (0x7FFFFFFF / 10)) //check if next iteration make it bigger that MaxInt
+                {
+                    throw new ExpressionParsingException(Resources.IntegerToBig);
+                }
+                value = value * 10 + (ReadChar() - '0');
             }
-            return row;
+            return value;
         }
 
         private string ReadRemainExpression()
         {
             _stringBuilder.Clear();
             var nextChar = PeekChar();
-            while (!char.IsWhiteSpace(nextChar) && nextChar != ParserSettings.StreamEndChar)
+            while (nextChar != ParserSettings.CellSeparatorChar && nextChar != ParserSettings.StreamEndChar && !ParserSettings.RowSeparators.Contains(nextChar))
             {
                 _stringBuilder.Append(ReadChar());
                 nextChar = PeekChar();

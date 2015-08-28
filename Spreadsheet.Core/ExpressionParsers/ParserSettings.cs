@@ -12,6 +12,10 @@ namespace Spreadsheet.Core.ExpressionParsers
 
         public const char StreamEndChar = '\0';
 
+        public const char CellSeparatorChar = '\t';
+
+        public const string RowSeparators = "\r\n";
+
         public const char RowNumberStartLetter = 'A';
 
         public const int LettersUsedForRowNumber = 26;

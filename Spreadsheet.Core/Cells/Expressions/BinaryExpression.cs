@@ -7,9 +7,9 @@ namespace Spreadsheet.Core.Cells
     {
         public IExpression Left { get; }
 
-        public IExpression Right { get; set; }
+        public IExpression Right { get; }
 
-        public IOperator Operation { get; set; }
+        public IOperator Operation { get; }
 
         public BinaryExpression(IExpression left)
         {

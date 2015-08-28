@@ -62,6 +62,26 @@ namespace Spreadsheet.Tests
         }
 
         [Test]
+        [ExpectedException(typeof(ExpressionParsingException))]
+        public void TestHugeInteger()
+        {
+            var token = GetTokens("987654321123456789").First();
+        }
+
+        [Test]
+        [TestCase("hello world")]
+        [TestCase("     1   1")]
+        [TestCase("  test ")]
+        [TestCase("'  ' 9 # @  '1")]
+        [TestCase("")]
+        public void StringTest(string expect)
+        {
+            var token = GetTokens($"{ParserSettings.StringStart}{expect}").First();
+            Assert.AreEqual(token.Type, TokenType.String);
+            Assert.AreEqual(expect, token.String);
+        }
+
+        [Test]
         public void TokenizerComplexTest()
         {
             CollectionAssert.AreEqual(new []
