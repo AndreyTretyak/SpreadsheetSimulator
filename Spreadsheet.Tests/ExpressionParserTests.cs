@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using Spreadsheet.Core;
 using Spreadsheet.Core.Cells;
 using Spreadsheet.Core.ExpressionParsers;
 
@@ -22,6 +23,7 @@ namespace Spreadsheet.Tests
         {
             _tokens = tokens;
             _index = 0;
+            OperatorManager = OperatorManager.Default;
         }
 
         public Token Peek()
@@ -33,6 +35,8 @@ namespace Spreadsheet.Tests
         {
             return _index < _tokens.Length ? _tokens[_index++] : EndToken;
         }
+
+        public OperatorManager OperatorManager { get; }
     }
 
     [TestFixture]
@@ -78,7 +82,7 @@ namespace Spreadsheet.Tests
         [Test]
         public void TestInteger()
         {
-            Assert.AreEqual(123, Parse<ConstantExpression>(new Token(TokenType.Integer, "123")).Value);
+            Assert.AreEqual(123, Parse<ConstantExpression>(new Token(123)).Value);
         }
 
         [Test]
@@ -102,11 +106,11 @@ namespace Spreadsheet.Tests
         [TestCase("BVC197")]
         public void TestExpressionReference(string expect)
         {
-            var expression = Parse<BinaryExpression>(
+            var expression = Parse<CellRefereceExpression>(
                                 new Token(TokenType.ExpressionStart), 
-                                new Token(TokenType.CellReference, expect));
+                                new Token(new CellAddress(expect)));
             //TODO: should be changed if redundant elements of tree will be removed from parser result
-            Assert.AreEqual(expect, Cast<CellRefereceExpression>(Cast<BinaryExpression>(expression.Left).Left).Address.StringValue);
+            Assert.AreEqual(expect, expression.Address.StringValue);
         }
         
         [Test]
@@ -115,17 +119,17 @@ namespace Spreadsheet.Tests
             //var expression = Parse<BinaryExpression>("=197-98/3");
             var expression = Parse<BinaryExpression>(
                 new Token(TokenType.ExpressionStart),
-                new Token(TokenType.Integer, "197"),
-                new Token(TokenType.Operator, "-"),
-                new Token(TokenType.Integer, "98"),
-                new Token(TokenType.Operator, "/"),
-                new Token(TokenType.Integer, "3"));
+                new Token(197),
+                new Token(OperatorManager.Default.Operators['-']),
+                new Token(98),
+                new Token(OperatorManager.Default.Operators['/']),
+                new Token(3));
             //TODO: should be changed if redundant elements of tree will be removed from parser result
-            Assert.AreEqual(197, Cast<ConstantExpression>(Cast<BinaryExpression>(expression.Left).Left).Value);
-            Assert.AreEqual("-", expression.Operation);
+            Assert.AreEqual(197, Cast<ConstantExpression>(expression.Left).Value);
+            Assert.AreEqual('-', expression.Operation.OperatorCharacter);
             var right = Cast<BinaryExpression>(expression.Right);
             Assert.AreEqual(98, Cast<ConstantExpression>(right.Left).Value);
-            Assert.AreEqual("/", right.Operation);
+            Assert.AreEqual('/', right.Operation.OperatorCharacter);
             Assert.AreEqual(3, Cast<ConstantExpression>(right.Right).Value);
         }
     }

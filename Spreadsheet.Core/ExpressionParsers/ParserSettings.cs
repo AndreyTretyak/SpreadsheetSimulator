@@ -2,24 +2,18 @@ namespace Spreadsheet.Core.ExpressionParsers
 {
     public static class ParserSettings
     {
-        public const string StringStart = "\'";
+        public const char StringStart = '\'';
 
-        public const string ExpressionStart = "=";
+        public const char ExpressionStart = '=';
 
-        public const string AdditionOperator = "+";
+        public const char LeftParanthesis = '(';
 
-        public const string SubtractionOperator = "-";
+        public const char RightParanthesis = ')';
 
-        public const string MultiplicationOperator = "*";
+        public const char StreamEndChar = '\0';
 
-        public const string DivisionOperator = "/";
+        public const char RowNumberStartLetter = 'A';
 
-        public const string LeftParanthesis = "(";
-
-        public const string RightParanthesis = ")";
-
-        public const string CallStackSeparator = "|";
-
-        public static char StreamEndChar = '\0';
+        public const int LettersUsedForRowNumber = 26;
     }
 }

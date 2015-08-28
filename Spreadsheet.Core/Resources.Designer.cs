@@ -61,6 +61,15 @@ namespace Spreadsheet.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Binary operation not supported for operator &apos;{0}&apos;.
+        /// </summary>
+        public static string BinaryOperationNotSupported {
+            get {
+                return ResourceManager.GetString("BinaryOperationNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Circular reference detected.
         /// </summary>
         public static string CircularReferenceDetected {
@@ -147,6 +156,15 @@ namespace Spreadsheet.Core {
         public static string UnableToParseCellAddress {
             get {
                 return ResourceManager.GetString("UnableToParseCellAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unary operation not supported for operator &apos;{0}&apos;.
+        /// </summary>
+        public static string UnaryOperationNotSupported {
+            get {
+                return ResourceManager.GetString("UnaryOperationNotSupported", resourceCulture);
             }
         }
         
