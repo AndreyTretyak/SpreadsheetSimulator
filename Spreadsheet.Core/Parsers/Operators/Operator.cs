@@ -1,6 +1,6 @@
 using System;
 
-namespace Spreadsheet.Core.ExpressionParsers
+namespace Spreadsheet.Core.Parsers.Operators
 {
     internal class Operator<T> : IOperator
     {

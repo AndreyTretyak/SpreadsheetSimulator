@@ -1,6 +1,6 @@
-namespace Spreadsheet.Core.Cells
+namespace Spreadsheet.Core.Cells.Expressions
 {
-    public class ConstantExpression : IExpression
+    internal class ConstantExpression : IExpression
     {
         public object Value { get; }
 

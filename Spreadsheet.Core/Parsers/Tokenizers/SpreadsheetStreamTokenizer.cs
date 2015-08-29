@@ -1,30 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading.Tasks;
+using Spreadsheet.Core.Cells;
+using Spreadsheet.Core.Parsers.Operators;
+using static Spreadsheet.Core.Parsers.Tokenizers.TokenizerSettings;
 
-namespace Spreadsheet.Core.ExpressionParsers
+namespace Spreadsheet.Core.Parsers.Tokenizers
 {
-    internal interface ISpreadsheetTokenizer
-    {
-        Token Peek();
-
-        Token Next();
-
-        OperatorManager OperatorManager { get; }
-    }
-
-
     internal class SpreadsheetStreamTokenizer : ISpreadsheetTokenizer
     {
         private static readonly Dictionary<char, TokenType> TokenIdentifiers = new Dictionary<char, TokenType>
         {
-            {ParserSettings.ExpressionStart, TokenType.ExpressionStart},
-            {ParserSettings.LeftParanthesis, TokenType.LeftParanthesis},
-            {ParserSettings.RightParanthesis, TokenType.RightParanthesis}
+            {ExpressionStart, TokenType.ExpressionStart},
+            {LeftParanthesis, TokenType.LeftParanthesis},
+            {RightParanthesis, TokenType.RightParanthesis}
         };
 
         public OperatorManager OperatorManager { get; }
@@ -67,7 +56,7 @@ namespace Spreadsheet.Core.ExpressionParsers
         {
             var result = _stream.Peek();
             if (result == -1)
-                return ParserSettings.StreamEndChar;
+                return StreamEndChar;
             return (char) result;
         }
 
@@ -75,7 +64,7 @@ namespace Spreadsheet.Core.ExpressionParsers
         {
             var result = _stream.Read();
             if (result == -1)
-                return ParserSettings.StreamEndChar;
+                return StreamEndChar;
             return (char)result;
         }
 
@@ -90,7 +79,7 @@ namespace Spreadsheet.Core.ExpressionParsers
                 return new Token(TokenType.EndOfExpression);
             }
 
-            if (peek == ParserSettings.StreamEndChar)
+            if (peek == StreamEndChar)
                 return new Token(TokenType.EndOfStream);
 
             if (char.IsDigit(peek))
@@ -99,7 +88,7 @@ namespace Spreadsheet.Core.ExpressionParsers
             if (char.IsLetter(peek)) 
                 return ReadCellReferenceToken();
 
-            if (peek == ParserSettings.StringStart)
+            if (peek == StringStart)
                 return ReadStringToken();
 
             if (TokenIdentifiers.ContainsKey(peek))
@@ -114,13 +103,13 @@ namespace Spreadsheet.Core.ExpressionParsers
                 return new Token(OperatorManager.Operators[peek]);
             }
 
-            return new Token(TokenType.Unknown, ReadRemainExpression());
+            throw new ExpressionParsingException(ReadRemainExpression());
         }
 
         private Token ReadStringToken()
         {
             ReadChar();
-            return new Token(TokenType.String, ReadRemainExpression());
+            return new Token(ReadRemainExpression());
         }
 
         private Token ReadIntegerToken()
@@ -130,41 +119,60 @@ namespace Spreadsheet.Core.ExpressionParsers
 
         public Token ReadCellReferenceToken()
         {
-            var column = 0;
-            while (char.IsLetter(PeekChar()))
-            {
-                column = column * ParserSettings.LettersUsedForRowNumber + (ReadChar() - ParserSettings.RowNumberStartLetter + 1);
-            }
-
+            var column = ReadInteger(LettersUsedForRowNumber, RowNumberStartLetter, 1);
+            var row = ReadInteger();
             //indexes is zero based, so we need to subtract 1 from current row and column values
-            return new Token(new CellAddress(ReadInteger() - 1, column - 1));
-        }
-
-        private int ReadInteger()
-        {
-            //manual integer reading to avoid memory allocation on string creation
-            var value = 0;
-            while (char.IsDigit(PeekChar()))
-            {
-                if ((uint)value > (0x7FFFFFFF / 10)) //check if next iteration make it bigger that MaxInt
-                {
-                    throw new ExpressionParsingException(Resources.IntegerToBig);
-                }
-                value = value * 10 + (ReadChar() - '0');
-            }
-            return value;
+            return new Token(new CellAddress(row - 1, column - 1));
         }
 
         private string ReadRemainExpression()
         {
             _stringBuilder.Clear();
             var nextChar = PeekChar();
-            while (nextChar != ParserSettings.CellSeparatorChar && nextChar != ParserSettings.StreamEndChar && !ParserSettings.RowSeparators.Contains(nextChar))
+            while (nextChar != CellSeparator
+                && nextChar != CarriageReturn
+                && nextChar != RowSeparator
+                && nextChar != StreamEndChar)
             {
                 _stringBuilder.Append(ReadChar());
                 nextChar = PeekChar();
             }
             return _stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Manual integer reading to avoid memory allocation on string creation.
+        /// Reads integer from input stream in given system of calculation, by default use decimal.
+        /// </summary>
+        /// <param name="systemBase">Base of calculation system.</param>
+        /// <param name="startChar">
+        /// Character with minimal value. 
+        /// Range of allowed characters is between startChar and startChar plus systemBase minus shift.
+        /// </param>
+        /// <param name="shift">
+        /// Difference between start character and character that represent zero. 
+        /// If start character 'A' means 1 than swift should be one, 
+        /// for '0' that already means 0 shift is zero.  
+        /// </param>
+        /// <returns>Read int value as regular integer.</returns>
+        private int ReadInteger(int systemBase = 10, char startChar = '0', int shift = 0)
+        {
+            var zeroChar = startChar - shift;
+            var maxAllowedChar = systemBase + zeroChar;
+
+            var value = 0;
+            var peek = PeekChar();
+            while (peek >= startChar && peek <= maxAllowedChar)
+            {
+                //check that next iteration will not make it bigger that MaxInt
+                if ((uint)value > (int.MaxValue / systemBase))
+                {
+                    throw new ExpressionParsingException(Resources.IntegerToBig);
+                }
+                value = value * systemBase + (ReadChar() - zeroChar);
+                peek = PeekChar();
+            }
+            return value;
         }
     }
 }

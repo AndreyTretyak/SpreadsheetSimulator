@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Spreadsheet.Core.Cells;
 
-namespace Spreadsheet.Core
+namespace Spreadsheet.Core.ProcessingStrategies
 {
     public interface IProcessingStrategy
     {

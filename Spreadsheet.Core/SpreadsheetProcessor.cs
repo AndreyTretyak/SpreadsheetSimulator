@@ -2,7 +2,8 @@ using System;
 using System.Runtime.Caching;
 using System.Threading;
 using Spreadsheet.Core.Cells;
-using Spreadsheet.Core.ExpressionParsers;
+using Spreadsheet.Core.ProcessingStrategies;
+using Spreadsheet.Core.Utils;
 
 namespace Spreadsheet.Core
 {
@@ -10,12 +11,12 @@ namespace Spreadsheet.Core
     {
         private readonly Spreadsheet _spreadsheet;
 
-        private readonly Lazy<object>[,] _memoryCache;
+        private readonly ExtendedLazy<Cell, object>[,] _memoryCache;
 
         public SpreadsheetProcessor(Spreadsheet spreadsheet)
         {
             _spreadsheet = spreadsheet;
-            _memoryCache = new Lazy<object>[spreadsheet.RowCount, spreadsheet.ColumnCount];
+            _memoryCache = new ExtendedLazy<Cell, object>[spreadsheet.RowCount, spreadsheet.ColumnCount];
         }
 
         public SpreadsheetEvaluationResult Evaluate(IProcessingStrategy strategy)
@@ -32,7 +33,7 @@ namespace Spreadsheet.Core
         {
             if (_memoryCache[cell.Address.Row, cell.Address.Column] == null)
             {
-                _memoryCache[cell.Address.Row, cell.Address.Column] = new Lazy<object>(() => EvaluateCell(cell), LazyThreadSafetyMode.ExecutionAndPublication);
+                _memoryCache[cell.Address.Row, cell.Address.Column] = new ExtendedLazy<Cell,object>(cell, EvaluateCell);
             }
             return _memoryCache[cell.Address.Row, cell.Address.Column].Value;
         }

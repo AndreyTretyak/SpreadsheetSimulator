@@ -1,13 +1,10 @@
-using System;
-using System.CodeDom;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Spreadsheet.Core.Cells;
+using Spreadsheet.Core.Cells.Expressions;
+using Spreadsheet.Core.Parsers.Tokenizers;
 
-namespace Spreadsheet.Core.ExpressionParsers
+namespace Spreadsheet.Core.Parsers
 {
-    internal class SpreadsheetStreamParser
+    internal class SpreadsheetStreamParser : ISpreadsheetParser
     {
         private readonly ISpreadsheetTokenizer _tokenizer;
 
@@ -24,26 +21,17 @@ namespace Spreadsheet.Core.ExpressionParsers
             var result = ReadCellContent();
             if (Peek(TokenType.EndOfExpression) || Peek(TokenType.EndOfStream))
             {
-                    Next();
-                    return result;
+                Next();
+                return result;
             }
             throw InvalidContent(string.Format(Resources.WrongTokenType, Resources.EndOfExpression));
         }
 
-        private Token Peek()
-        {
-            return _tokenizer.Peek();
-        }
+        private Token Peek() => _tokenizer.Peek();
 
-        private bool Peek(TokenType type)
-        {
-            return Peek().Type == type;
-        }
+        private bool Peek(TokenType type) => Peek().Type == type;
 
-        private Token Next()
-        {
-            return _tokenizer.Next();
-        }
+        private Token Next() => _tokenizer.Next();
 
         private IExpression ReadCellContent()
         {
@@ -68,21 +56,12 @@ namespace Spreadsheet.Core.ExpressionParsers
             return new ConstantExpression(null);
         }
 
-        private IExpression ReadInteger()
-        {
-            return new ConstantExpression(_tokenizer.Next().Integer);            
-        }
+        private IExpression ReadInteger() => new ConstantExpression(_tokenizer.Next().Integer);
 
-        private IExpression ReadString()
-        {
-            return new ConstantExpression(_tokenizer.Next().String);
-        }
+        private IExpression ReadString() => new ConstantExpression(_tokenizer.Next().String);
 
-        private IExpression ReadCellReference()
-        {
-            return new CellRefereceExpression(_tokenizer.Next().Address);
-        }
-        
+        private IExpression ReadCellReference() => new CellRefereceExpression(_tokenizer.Next().Address);
+
         private IExpression ReadExpression()
         {
             Next();
@@ -110,7 +89,7 @@ namespace Spreadsheet.Core.ExpressionParsers
                 Next();
                 var expresion = ReadOperation();
                 if (!Peek(TokenType.RightParanthesis))
-                    throw InvalidContent(string.Format(Resources.WrongTokenType, ParserSettings.RightParanthesis));
+                    throw InvalidContent(string.Format(Resources.WrongTokenType, TokenizerSettings.RightParanthesis));
                 Next();
                 return expresion;
             }
@@ -130,7 +109,7 @@ namespace Spreadsheet.Core.ExpressionParsers
 
         private ExpressionParsingException InvalidContent(string additionMessage)
         {
-            return new ExpressionParsingException($"{string.Format(Resources.InvalidCellContent, _tokenizer.Next().String)} {additionMessage}");
+            return new ExpressionParsingException($"{string.Format(Resources.InvalidCellContent, _tokenizer.Next())}. {additionMessage}");
         }
     }
 }

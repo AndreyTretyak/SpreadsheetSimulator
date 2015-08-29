@@ -1,4 +1,4 @@
-namespace Spreadsheet.Core.ExpressionParsers
+namespace Spreadsheet.Core.Parsers.Operators
 {
     public interface IOperator
     {

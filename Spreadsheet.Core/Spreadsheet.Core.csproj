@@ -47,18 +47,25 @@
     <Compile Include="Cells\Expressions\ConstantExpression.cs" />
     <Compile Include="Cells\Expressions\IExpression.cs" />
     <Compile Include="Cells\Expressions\UnaryExpression.cs" />
-    <Compile Include="ExpressionParsers\Operators\IOperator.cs" />
-    <Compile Include="ExpressionParsers\Operators\Operator.cs" />
-    <Compile Include="ExtendedLazy.cs" />
+    <Compile Include="Exceptions\ExpressionEvaluationException.cs" />
+    <Compile Include="Exceptions\InvalidCellAdressException.cs" />
+    <Compile Include="Exceptions\SpreadsheatReadingException.cs" />
+    <Compile Include="Exceptions\SpreadsheetException.cs" />
+    <Compile Include="Parsers\ISpreadsheetParser.cs" />
+    <Compile Include="Parsers\Operators\IOperator.cs" />
+    <Compile Include="Parsers\Operators\Operator.cs" />
+    <Compile Include="Parsers\Tokenizers\ISpreadsheetTokenizer.cs" />
+    <Compile Include="Utils\CellAddressConverter.cs" />
+    <Compile Include="Utils\ExtendedLazy.cs" />
     <Compile Include="ProcessingStrategies\IProcessingStrategy.cs" />
     <Compile Include="ProcessingStrategies\ParallelProcessingStrategy.cs" />
-    <Compile Include="ExpressionParsers\SpreadsheetStreamParser.cs" />
-    <Compile Include="ExpressionParsers\ExpressionParsingException.cs" />
-    <Compile Include="ExpressionParsers\SpreadsheetStreamTokenizer.cs" />
-    <Compile Include="ExpressionParsers\Operators\OperatorManager.cs" />
-    <Compile Include="ExpressionParsers\ParserSettings.cs" />
-    <Compile Include="ExpressionParsers\Token.cs" />
-    <Compile Include="ExpressionParsers\TokenType.cs" />
+    <Compile Include="Parsers\SpreadsheetStreamParser.cs" />
+    <Compile Include="Exceptions\ExpressionParsingException.cs" />
+    <Compile Include="Parsers\Tokenizers\SpreadsheetStreamTokenizer.cs" />
+    <Compile Include="Parsers\Operators\OperatorManager.cs" />
+    <Compile Include="Parsers\Tokenizers\TokenizerSettings.cs" />
+    <Compile Include="Parsers\Tokenizers\Token.cs" />
+    <Compile Include="Parsers\Tokenizers\TokenType.cs" />
     <Compile Include="ProcessingStrategies\SimpleProcessingStrategy.cs" />
     <Compile Include="SpreadsheetEvaluationResult.cs" />
     <Compile Include="Spreadsheet.cs" />
@@ -79,6 +86,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
