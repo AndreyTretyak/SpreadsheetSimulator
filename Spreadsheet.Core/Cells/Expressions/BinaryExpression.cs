@@ -1,35 +1,28 @@
-using System.Data;
-using Spreadsheet.Core.ExpressionParsers;
+using Spreadsheet.Core.Parsers.Operators;
+using Spreadsheet.Core.Parsers.Tokenizers;
 
-namespace Spreadsheet.Core.Cells
+namespace Spreadsheet.Core.Cells.Expressions
 {
-    public class BinaryExpression : IExpression
+    internal class BinaryExpression : IExpression
     {
         public IExpression Left { get; }
 
         public IExpression Right { get; }
 
         public IOperator Operation { get; }
-
-        public BinaryExpression(IExpression left)
-        {
-            Left = left;
-        }
-
+        
         public BinaryExpression(IExpression left, IOperator operation, IExpression right)
         {
             Left = left;
-            Right = right;
             Operation = operation;
+            Right = right;
         }
 
         public object Evaluate(SpreadsheetProcessor processor)
         {
-            return Right == null 
-                   ? Left.Evaluate(processor) 
-                   : Operation.BinaryOperation(Left.Evaluate(processor), Right.Evaluate(processor));
+            return Operation.BinaryOperation(Left.Evaluate(processor), Right.Evaluate(processor));
         }
 
-        public override string ToString() => Right == null ? Left.ToString() : (ParserSettings.LeftParanthesis + Left.ToString() + Operation + Right + ParserSettings.RightParanthesis);
+        public override string ToString() => $"{TokenizerSettings.LeftParanthesis}{Left}{Operation}{Right}{TokenizerSettings.RightParanthesis}";
     }
 }

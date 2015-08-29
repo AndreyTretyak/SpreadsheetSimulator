@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using Spreadsheet.Core;
 using Spreadsheet.Core.Cells;
-using Spreadsheet.Core.ExpressionParsers;
+using Spreadsheet.Core.Parsers.Operators;
+using Spreadsheet.Core.Parsers.Tokenizers;
+using Spreadsheet.Core.Utils;
 
 namespace Spreadsheet.Tests
 {
-    [TestFixture]
-    public class ExpressionStreamTokenizerTests
+    internal static class StreamUtils
     {
-        private Stream GenerateStreamFromString(string s)
+        public static Stream GenerateStreamFromString(string s)
         {
             var stream = new MemoryStream();
             var writer = new StreamWriter(stream);
@@ -23,10 +24,16 @@ namespace Spreadsheet.Tests
             stream.Position = 0;
             return stream;
         }
+    }
+
+    [TestFixture]
+    public class ExpressionStreamTokenizerTests
+    {
+
         
         private IEnumerable<Token> GetTokens(string text)
         {
-            var tokenizer = new SpreadsheetStreamTokenizer(GenerateStreamFromString(text));
+            var tokenizer = new SpreadsheetStreamTokenizer(StreamUtils.GenerateStreamFromString(text));
             Token token;
             do
             {
@@ -76,7 +83,7 @@ namespace Spreadsheet.Tests
         [TestCase("")]
         public void StringTest(string expect)
         {
-            var token = GetTokens($"{ParserSettings.StringStart}{expect}").First();
+            var token = GetTokens($"{TokenizerSettings.StringStart}{expect}").First();
             Assert.AreEqual(token.Type, TokenType.String);
             Assert.AreEqual(expect, token.String);
         }
@@ -86,17 +93,17 @@ namespace Spreadsheet.Tests
         {
             CollectionAssert.AreEqual(new []
             {
-                new Token(TokenType.String,"test"),
+                new Token("test"),
                 new Token(TokenType.EndOfExpression),
                 new Token(19),
                 new Token(TokenType.EndOfExpression),
                 new Token(TokenType.ExpressionStart),
-                new Token(new CellAddress("T31")),
+                new Token(CellAddressConverter.FromString("T31")),
                 new Token(TokenType.EndOfExpression),
                 new Token(TokenType.ExpressionStart),
                 new Token(14),
                 new Token(OperatorManager.Default.Operators['+']),
-                new Token(new CellAddress("VK34")),
+                new Token(CellAddressConverter.FromString("VK34")),
                 new Token(OperatorManager.Default.Operators['/']),
                 new Token(7),
                 new Token(TokenType.EndOfStream),

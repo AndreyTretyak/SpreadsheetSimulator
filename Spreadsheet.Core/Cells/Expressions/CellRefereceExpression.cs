@@ -1,8 +1,8 @@
 using System;
 
-namespace Spreadsheet.Core.Cells
+namespace Spreadsheet.Core.Cells.Expressions
 {
-    public class CellRefereceExpression : IExpression
+    internal class CellRefereceExpression : IExpression
     {
         public CellAddress Address { get; }
 
@@ -20,6 +20,6 @@ namespace Spreadsheet.Core.Cells
             return result;
         }
 
-        public override string ToString() => Address.StringValue;
+        public override string ToString() => Address.ToString();
     }
 }

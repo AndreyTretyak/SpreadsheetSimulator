@@ -1,4 +1,4 @@
-namespace Spreadsheet.Core.ExpressionParsers
+namespace Spreadsheet.Core.Parsers.Tokenizers
 {
     internal enum TokenType
     {
@@ -10,7 +10,6 @@ namespace Spreadsheet.Core.ExpressionParsers
         LeftParanthesis,
         RightParanthesis,
         EndOfExpression,
-        Unknown,
         EndOfStream
     }
 }

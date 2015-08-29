@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Spreadsheet.Core.Cells;
 
-namespace Spreadsheet.Core
+namespace Spreadsheet.Core.ProcessingStrategies
 {
     public class ParallelProcessingStrategy : IProcessingStrategy
     {

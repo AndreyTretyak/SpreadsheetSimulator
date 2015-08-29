@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using Spreadsheet.Core.Cells;
 
-namespace Spreadsheet.Core.ExpressionParsers
+namespace Spreadsheet.Core.Parsers.Operators
 {
     internal class OperatorManager
     {
@@ -18,8 +14,8 @@ namespace Spreadsheet.Core.ExpressionParsers
         public OperatorManager(IList<IOperator> operators)
         {
             Operators = operators.ToDictionary(o => o.OperatorCharacter, o => o);
-            Priorities = operators.GroupBy(o => o.Priority, o => o)
-                                  .Select(g => g.Key)
+            Priorities = operators.Select(o => o.Priority)
+                                  .Distinct()
                                   .OrderBy(g => g)
                                   .ToArray();
         }
@@ -33,7 +29,7 @@ namespace Spreadsheet.Core.ExpressionParsers
                     {
                         new Operator<int>('+', 0, (l, r) => l + r, v => v),
                         new Operator<int>('-', 0, (l, r) => l - r, v => -v),
-                        new Operator<int>('*', 1, (l, r) => l* r),
+                        new Operator<int>('*', 1, (l, r) => l * r),
                         new Operator<int>('/', 1, (l, r) => l / r),
                         new Operator<int>('^', 2, (l, r) => (int) Math.Pow(l, r))
                     }), LazyThreadSafetyMode.ExecutionAndPublication);

@@ -5,7 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Spreadsheet.Core;
-using Spreadsheet.Core.ExpressionParsers;
+using Spreadsheet.Core.Cells;
+using Spreadsheet.Core.Utils;
 
 namespace Spreadsheet.Tests
 {
@@ -21,7 +22,7 @@ namespace Spreadsheet.Tests
         [TestCase("BVC197")]
         public void TestStringAddress(string reference)
         {
-            Assert.AreEqual(reference, new CellAddress(reference).StringValue);
+            Assert.AreEqual(reference, CellAddressConverter.FromString(reference).ToString());
         }
 
         [Test]
@@ -31,7 +32,7 @@ namespace Spreadsheet.Tests
         [TestCase("BVC197", 196, 1926)]
         public void TestAddress(string reference, int row, int column)
         {
-            var address = new CellAddress(reference);
+            var address = CellAddressConverter.FromString(reference);
             Assert.AreEqual(row, address.Row, "Wrong row value");
             Assert.AreEqual(column, address.Column, "Wrong column value");
         }
@@ -45,7 +46,8 @@ namespace Spreadsheet.Tests
         [ExpectedException(typeof(InvalidCellAdressException))]
         public void TestErrors(int row, int column, string maxAddress)
         {
-            new CellAddress(row, column).Validate(new CellAddress(maxAddress));
+            var limit = CellAddressConverter.FromString(maxAddress);
+            new CellAddress(row, column).Validate(limit.Row, limit.Column);
         }
     }
 }

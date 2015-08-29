@@ -129,6 +129,9 @@
   <data name="FailedToParseNumber" xml:space="preserve">
     <value>Error in reading number {0}</value>
   </data>
+  <data name="FailedToReadSpreadsheetSize" xml:space="preserve">
+    <value>Failed to read spreadsheet size</value>
+  </data>
   <data name="IdentifierExpected" xml:space="preserve">
     <value>Integer or CellNumber expected</value>
   </data>

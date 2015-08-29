@@ -1,6 +1,4 @@
-using Spreadsheet.Core.ExpressionParsers;
-
-namespace Spreadsheet.Core.Cells
+namespace Spreadsheet.Core.Cells.Expressions
 {
     public interface IExpression
     {

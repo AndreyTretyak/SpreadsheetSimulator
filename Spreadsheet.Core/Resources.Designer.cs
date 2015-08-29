@@ -97,6 +97,15 @@ namespace Spreadsheet.Core {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to read spreadsheet size.
+        /// </summary>
+        public static string FailedToReadSpreadsheetSize {
+            get {
+                return ResourceManager.GetString("FailedToReadSpreadsheetSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Integer or CellNumber expected.
         /// </summary>
         public static string IdentifierExpected {

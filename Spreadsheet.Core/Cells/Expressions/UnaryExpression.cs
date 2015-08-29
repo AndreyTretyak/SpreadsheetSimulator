@@ -1,8 +1,8 @@
-using Spreadsheet.Core.ExpressionParsers;
+using Spreadsheet.Core.Parsers.Operators;
 
-namespace Spreadsheet.Core.Cells
+namespace Spreadsheet.Core.Cells.Expressions
 {
-    public class UnaryExpression : IExpression
+    internal class UnaryExpression : IExpression
     {
         public IExpression Value { get; }
 
@@ -19,6 +19,6 @@ namespace Spreadsheet.Core.Cells
             return Operation.UnaryOperation(Value.Evaluate(processor));
         }
 
-        public override string ToString() => Operation.ToString() + Value;
+        public override string ToString() => $"{Operation}{Value}";
     }
 }

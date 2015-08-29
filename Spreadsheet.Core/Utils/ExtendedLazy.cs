@@ -15,17 +15,13 @@
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 using System;
-using System.Runtime;
-using System.Runtime.InteropServices;
-using System.Security;
-using System.Security.Permissions;
 using System.Diagnostics;
-using System.Runtime.Serialization;
-using System.Threading;
 using System.Diagnostics.Contracts;
 using System.Runtime.ExceptionServices;
+using System.Runtime.Serialization;
+using System.Threading;
 
-namespace Spreadsheet.Core
+namespace Spreadsheet.Core.Utils
 {
     // Lazy<T> is generic, but not all of its state needs to be generic.  Avoid creating duplicate
     // objects per instantiation by putting them here.
@@ -38,15 +34,16 @@ namespace Spreadsheet.Core
     /// <summary>
     /// Provides support for lazy initialization.
     /// </summary>
-    /// <typeparam name="T">Specifies the type of element being lazily initialized.</typeparam>
+    /// <typeparam name="TParametr">Specifies the type of parameter that will be passed to initialization function.</typeparam>
+    /// <typeparam name="TResult">Specifies the type of element being lazily initialized.</typeparam>
     /// <remarks>
     /// <para>
-    /// By default, all public and protected members of <see cref="Lazy{T}"/> are thread-safe and may be used
+    /// By default, all public and protected members of <see cref="ExtendedLazy{TResult,TParametr}"/> are thread-safe and may be used
     /// concurrently from multiple threads.  These thread-safety guarantees may be removed optionally and per instance
     /// using parameters to the type's constructors.
     /// </para>
     /// </remarks>
-    public class ExtendedLazy<T>
+    public class ExtendedLazy<TParametr, TResult>
     {
 
         #region Inner classes
@@ -56,16 +53,16 @@ namespace Spreadsheet.Core
         /// </summary>
         class Boxed
         {
-            internal Boxed(T value)
+            internal Boxed(TResult value)
             {
                 m_value = value;
             }
-            internal T m_value;
+            internal TResult m_value;
         }
 
 
         /// <summary>
-        /// Wrapper class to wrap the excpetion thrown by the value factory
+        /// Wrapper class to wrap the exception thrown by the value factory
         /// </summary>
         class LazyInternalExceptionHolder
         {
@@ -80,10 +77,10 @@ namespace Spreadsheet.Core
         // A dummy delegate used as a  :
         // 1- Flag to avoid recursive call to Value in None and ExecutionAndPublication modes in m_valueFactory
         // 2- Flag to m_threadSafeObj if ExecutionAndPublication mode and the value is known to be initialized
-        static readonly Func<object, T> ALREADY_INVOKED_SENTINEL = delegate
+        static readonly Func<TParametr, TResult> ALREADY_INVOKED_SENTINEL = delegate
         {
             Contract.Assert(false, "ALREADY_INVOKED_SENTINEL should never be invoked.");
-            return default(T);
+            return default(TResult);
         };
 
         //null --> value is not created
@@ -93,11 +90,11 @@ namespace Spreadsheet.Core
 
         // The factory delegate that returns the value.
         [NonSerialized]
-        private object m_state;
+        private TParametr m_state;
 
         // The factory delegate that returns the value.
         [NonSerialized]
-        private Func<object, T> m_valueFactory;
+        private Func<TParametr, TResult> m_valueFactory;
 
         // object if ExecutionAndPublication mode (may be ALREADY_INVOKED_SENTINEL if the value is already initialized)
         [NonSerialized]
@@ -114,10 +111,10 @@ namespace Spreadsheet.Core
         /// <exception cref="System.ArgumentNullException"><paramref name="valueFactory"/> is
         /// a null reference (Nothing in Visual Basic).</exception>
         /// <exception cref="System.ArgumentOutOfRangeException"><paramref name="mode"/> mode contains an invalid value.</exception>
-        public ExtendedLazy(Func<object, T> valueFactory, object state)
+        public ExtendedLazy(TParametr state, Func<TParametr, TResult> valueFactory)
         {
             if (valueFactory == null)
-                throw new ArgumentNullException("valueFactory");
+                throw new ArgumentNullException(nameof(valueFactory));
             m_state = state;
             m_threadSafeObj = new object();
             m_valueFactory = valueFactory;
@@ -130,7 +127,7 @@ namespace Spreadsheet.Core
         private void OnSerializing(StreamingContext context)
         {
             // Force initialization
-            T dummy = Value;
+            TResult dummy = Value;
         }
 
         /// <summary>Creates and returns a string representation of this instance.</summary>
@@ -145,13 +142,13 @@ namespace Spreadsheet.Core
         }
 
         /// <summary>Gets the value of the Lazy&lt;T&gt; for debugging display purposes.</summary>
-        internal T ValueForDebugDisplay
+        internal TResult ValueForDebugDisplay
         {
             get
             {
                 if (!IsValueCreated)
                 {
-                    return default(T);
+                    return default(TResult);
                 }
                 return ((Boxed)m_boxed).m_value;
             }
@@ -215,7 +212,7 @@ namespace Spreadsheet.Core
         /// from initialization delegate.
         /// </remarks>
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public T Value
+        public TResult Value
         {
             get
             {
@@ -249,7 +246,7 @@ namespace Spreadsheet.Core
         /// local helper method to initialize the value 
         /// </summary>
         /// <returns>The inititialized T value</returns>
-        private T LazyInitValue()
+        private TResult LazyInitValue()
         {
             Boxed boxed = null;
 
@@ -300,7 +297,7 @@ namespace Spreadsheet.Core
                 if (m_valueFactory == ALREADY_INVOKED_SENTINEL)
                     throw new InvalidOperationException(("Lazy_Value_RecursiveCallsToValue"));
 
-                Func<object, T> factory = m_valueFactory;
+                Func<TParametr, TResult> factory = m_valueFactory;
                 m_valueFactory = ALREADY_INVOKED_SENTINEL;
                 boxed = new Boxed(factory(m_state));
             }

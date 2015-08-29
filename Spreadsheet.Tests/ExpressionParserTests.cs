@@ -7,16 +7,22 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using Spreadsheet.Core;
 using Spreadsheet.Core.Cells;
-using Spreadsheet.Core.ExpressionParsers;
+using Spreadsheet.Core.Cells.Expressions;
+using Spreadsheet.Core.Parsers;
+using Spreadsheet.Core.Parsers.Operators;
+using Spreadsheet.Core.Parsers.Tokenizers;
+using Spreadsheet.Core.Utils;
 
 namespace Spreadsheet.Tests
 {
     internal class SpreadsheetTokenizerMock : ISpreadsheetTokenizer
     {
-        private static readonly Token EndToken = new Token(TokenType.EndOfStream);
-
         private readonly Token[] _tokens;
 
+        public OperatorManager OperatorManager { get; }
+
+        private static readonly Token EndToken = new Token(TokenType.EndOfStream);
+        
         private int _index;
         
         public SpreadsheetTokenizerMock(params Token[] tokens)
@@ -35,8 +41,6 @@ namespace Spreadsheet.Tests
         {
             return _index < _tokens.Length ? _tokens[_index++] : EndToken;
         }
-
-        public OperatorManager OperatorManager { get; }
     }
 
     [TestFixture]
@@ -48,7 +52,14 @@ namespace Spreadsheet.Tests
             IExpression expression;
             do
             {
-                expression = parser.NextExpression();
+                try
+                {
+                    expression = parser.NextExpression();
+                }
+                catch (ExpressionParsingException exception)
+                {
+                    expression = new ConstantExpression(exception);
+                }
                 if (expression != null)
                     yield return expression;
             } while (expression != null);
@@ -91,7 +102,7 @@ namespace Spreadsheet.Tests
         [TestCase("12+test3")]
         public void TestStringValue(string expect)
         {
-            Assert.AreEqual(expect, Parse<ConstantExpression>(new Token(TokenType.String, $"{expect}")).Value);
+            Assert.AreEqual(expect, Parse<ConstantExpression>(new Token($"{expect}")).Value);
         }
         
         [Test]
@@ -101,9 +112,8 @@ namespace Spreadsheet.Tests
         {
             var expression = Parse<CellRefereceExpression>(
                                 new Token(TokenType.ExpressionStart), 
-                                new Token(new CellAddress(expect)));
-            //TODO: should be changed if redundant elements of tree will be removed from parser result
-            Assert.AreEqual(expect, expression.Address.StringValue);
+                                new Token(CellAddressConverter.FromString(expect)));
+            Assert.AreEqual(expect, expression.Address.ToString());
         }
         
         [Test]
@@ -117,7 +127,6 @@ namespace Spreadsheet.Tests
                 new Token(98),
                 new Token(OperatorManager.Default.Operators['/']),
                 new Token(3));
-            //TODO: should be changed if redundant elements of tree will be removed from parser result
             Assert.AreEqual(197, Cast<ConstantExpression>(expression.Left).Value);
             Assert.AreEqual('-', expression.Operation.OperatorCharacter);
             var right = Cast<BinaryExpression>(expression.Right);

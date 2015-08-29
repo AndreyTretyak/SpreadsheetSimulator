@@ -1,6 +1,7 @@
-using System.ComponentModel;
+using Spreadsheet.Core.Cells;
+using Spreadsheet.Core.Parsers.Operators;
 
-namespace Spreadsheet.Core.ExpressionParsers
+namespace Spreadsheet.Core.Parsers.Tokenizers
 {
     internal struct Token
     {
@@ -19,7 +20,7 @@ namespace Spreadsheet.Core.ExpressionParsers
             Type = type;
         }
 
-        public Token(TokenType type, string value) : this(type)
+        public Token(string value) : this(TokenType.String)
         {
             String = value;
         }

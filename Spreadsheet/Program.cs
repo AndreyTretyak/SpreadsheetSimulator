@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Spreadsheet.Core;
+using Spreadsheet.Core.ProcessingStrategies;
 
 namespace SpreadsheetSimulator
 {
@@ -13,7 +14,7 @@ namespace SpreadsheetSimulator
         static void Main(string[] args)
         {
             var input = args.Length > 0 ? File.Open(args[0], FileMode.Open) : Console.OpenStandardInput();
-            var output = args.Length > 1 ? File.Open(args[1], FileMode.CreateNew) : Console.OpenStandardOutput();
+            var output = args.Length > 1 ? File.Create(args[1]) : Console.OpenStandardOutput();
             using (var reader = new SpreadsheetReader(input))
             {
                 var spreadsheet = reader.ReadSpreadsheet();
