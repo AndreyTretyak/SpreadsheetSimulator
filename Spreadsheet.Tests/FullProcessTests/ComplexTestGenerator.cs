@@ -37,7 +37,7 @@ namespace Spreadsheet.Tests
         public string GenerateData()
         {
             _builder.Append(_row);
-            _builder.Append(TokenizerSettings.WhiteSpace);
+            _builder.Append(ConstantsSettings.WhiteSpace);
             _builder.Append(_column);
             _builder.AppendLine();
             for (var i = 0; i < _row; i++)
@@ -45,11 +45,11 @@ namespace Spreadsheet.Tests
                 for (var j = 0; j < _column; j++)
                 {
                     GenerateCell(i,j);
-                    _builder.Append(TokenizerSettings.CellSeparator);
+                    _builder.Append(ConstantsSettings.CellSeparator);
                 }
                 if (_random.NextDouble() < 0.5)
-                    _builder.Append(TokenizerSettings.CarriageReturn);
-                _builder.Append(TokenizerSettings.RowSeparator);
+                    _builder.Append(ConstantsSettings.CarriageReturn);
+                _builder.Append(ConstantsSettings.RowSeparator);
             }
             return _builder.ToString();
         }
@@ -79,7 +79,7 @@ namespace Spreadsheet.Tests
         private void GenerateExpression(int currentRow, int currentColumn)
         {
             _calculatableCells.Add(new CellAddress(currentRow, currentColumn));
-            _builder.Append(TokenizerSettings.ExpressionStart);
+            _builder.Append(ConstantsSettings.ExpressionStart);
             GenerateIdentifier();
             while (_random.NextDouble() < 0.5)
             {
@@ -129,7 +129,7 @@ namespace Spreadsheet.Tests
 
         private void GenerateString()
         {
-            _builder.Append(TokenizerSettings.StringStart);
+            _builder.Append(ConstantsSettings.StringStart);
             var stringSize = _random.Next(25);
             for (var i = 0; i < stringSize; i++)
             {
@@ -148,7 +148,7 @@ namespace Spreadsheet.Tests
                 }
                 else
                 {
-                    _builder.Append(TokenizerSettings.WhiteSpace);
+                    _builder.Append(ConstantsSettings.WhiteSpace);
                 }
             }
         }

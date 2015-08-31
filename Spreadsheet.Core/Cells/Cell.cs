@@ -13,20 +13,28 @@ namespace Spreadsheet.Core.Cells
     {
         public CellAddress Address { get; }
 
+        public bool IsCashingRequered { get; }
+
         private readonly IExpression _expression;
-        
-        public Cell(CellAddress address, IExpression expression)
+
+        internal Cell(CellAddress address, IExpression expression)
         {
             Address = address;
             _expression = expression;
+            IsCashingRequered = !(_expression is ConstantExpression);
         }
         
         public object Evaluate(SpreadsheetProcessor processor)
         {
-            return _expression.Evaluate(processor);
+            try
+            {
+                return _expression.Evaluate(processor);
+            }
+            catch (SpreadsheetException exception)
+            {
+                throw SpreadsheetException.SetCellAddressToStack(exception, Address);
+            }
         }
-
-        public bool IsCashingRequered => !(_expression is ConstantExpression);
 
         public override string ToString() => $"{Address}|{_expression}";
     }

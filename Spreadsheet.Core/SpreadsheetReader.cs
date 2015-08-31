@@ -8,7 +8,7 @@ using Spreadsheet.Core.Cells;
 using Spreadsheet.Core.Cells.Expressions;
 using Spreadsheet.Core.Parsers;
 using Spreadsheet.Core.Parsers.Tokenizers;
-using static Spreadsheet.Core.Parsers.Tokenizers.TokenizerSettings;
+using static Spreadsheet.Core.Parsers.Tokenizers.ConstantsSettings;
 
 namespace Spreadsheet.Core
 {

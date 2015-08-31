@@ -88,7 +88,7 @@ namespace Spreadsheet.Core.Parsers
                 Next();
                 var expresion = ReadOperation();
                 if (!Peek(TokenType.RightParanthesis))
-                    throw InvalidContent(string.Format(Resources.WrongTokenType, TokenizerSettings.RightParanthesis));
+                    throw InvalidContent(string.Format(Resources.WrongTokenType, ConstantsSettings.RightParanthesis));
                 Next();
                 return expresion;
             }

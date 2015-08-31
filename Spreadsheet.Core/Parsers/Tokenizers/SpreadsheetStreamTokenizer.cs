@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using Spreadsheet.Core.Cells;
 using Spreadsheet.Core.Parsers.Operators;
-using static Spreadsheet.Core.Parsers.Tokenizers.TokenizerSettings;
+using static Spreadsheet.Core.Parsers.Tokenizers.ConstantsSettings;
 
 namespace Spreadsheet.Core.Parsers.Tokenizers
 {
