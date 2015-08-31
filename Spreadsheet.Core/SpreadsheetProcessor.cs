@@ -31,6 +31,9 @@ namespace Spreadsheet.Core
 
         private object GetCellValue(Cell cell)
         {
+            if (!cell.IsCashingRequered)
+                return EvaluateCell(cell);
+
             if (_memoryCache[cell.Address.Row, cell.Address.Column] == null)
             {
                 _memoryCache[cell.Address.Row, cell.Address.Column] = new ExtendedLazy<Cell,object>(cell, EvaluateCell);
@@ -44,7 +47,7 @@ namespace Spreadsheet.Core
             {
                 return cell.Evaluate(this);
             }
-            catch (ExpressionEvaluationException exception)
+            catch (SpreadsheetException exception)
             {
                 return  exception;
             }

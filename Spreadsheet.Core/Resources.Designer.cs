@@ -97,7 +97,7 @@ namespace Spreadsheet.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to read spreadsheet size.
+        ///   Looks up a localized string similar to Failed to read spreadsheet size from line &apos;{0}&apos;.
         /// </summary>
         public static string FailedToReadSpreadsheetSize {
             get {

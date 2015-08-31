@@ -19,7 +19,7 @@ namespace Spreadsheet.Core.Parsers
                 return null;
 
             var result = ReadCellContent();
-            if (Peek(TokenType.EndOfExpression) || Peek(TokenType.EndOfStream))
+            if (Peek(TokenType.EndOfCell) || Peek(TokenType.EndOfStream))
             {
                 Next();
                 return result;
@@ -37,7 +37,7 @@ namespace Spreadsheet.Core.Parsers
         {
             switch (_tokenizer.Peek().Type)
             {
-                case TokenType.EndOfExpression:
+                case TokenType.EndOfCell:
                     return ReadNothing();
                 case TokenType.Integer:
                     return ReadInteger();
@@ -52,7 +52,6 @@ namespace Spreadsheet.Core.Parsers
 
         private IExpression ReadNothing()
         {
-            _tokenizer.Next();
             return new ConstantExpression(null);
         }
 
@@ -75,7 +74,7 @@ namespace Spreadsheet.Core.Parsers
 
             var expression = ReadOperation(priority + 1);
             while (Peek(TokenType.Operator)
-                   && Peek().Operator.Priority == _tokenizer.OperatorManager.Priorities.ElementAt(priority))
+                   && Peek().Operator.Priority == _tokenizer.OperatorManager.Priorities[priority])
             {
                 expression = new BinaryExpression(expression, Next().Operator, ReadOperation(priority + 1));
             }

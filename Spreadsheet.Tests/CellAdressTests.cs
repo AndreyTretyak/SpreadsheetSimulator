@@ -13,41 +13,44 @@ namespace Spreadsheet.Tests
     [TestFixture]
     public class CellAdressTests
     {
-
         [Test]
-        [TestCase("C7")]
-        [TestCase("CAD71")]
-        [TestCase("Z9801")]
-        [TestCase("ZDSR901")]
-        [TestCase("BVC197")]
-        public void TestStringAddress(string reference)
-        {
-            Assert.AreEqual(reference, CellAddressConverter.FromString(reference).ToString());
-        }
-
-        [Test]
-        [TestCase("A1", 0, 0)]
-        [TestCase("A2", 1, 0)]
-        [TestCase("B1", 0, 1)]
-        [TestCase("BVC197", 196, 1926)]
-        public void TestAddress(string reference, int row, int column)
-        {
-            var address = CellAddressConverter.FromString(reference);
-            Assert.AreEqual(row, address.Row, "Wrong row value");
-            Assert.AreEqual(column, address.Column, "Wrong column value");
-        }
-
-        [Test]
-        [TestCase(5, 1, "B2")]
-        [TestCase(1, 5, "B2")]
-        [TestCase(5, 5, "B2")]
-        [TestCase(-1, 1, "B2")]
-        [TestCase(1, -1, "B2")]
+        [TestCase(5, 1)]
+        [TestCase(1, 5)]
+        [TestCase(5, 5)]
+        [TestCase(-1, 1)]
+        [TestCase(1, -1)]
         [ExpectedException(typeof(InvalidCellAdressException))]
-        public void TestErrors(int row, int column, string maxAddress)
+        public void ExceptionTests(int row, int column)
         {
-            var limit = CellAddressConverter.FromString(maxAddress);
-            new CellAddress(row, column).Validate(limit.Row, limit.Column);
+            new CellAddress(row, column).Validate(2, 2);
+        }
+
+        [Test]
+        [TestCase(0, 0)]
+        [TestCase(1, 1)]
+        [TestCase(2, 2)]
+        [TestCase(2, 0)]
+        [TestCase(0, 2)]
+        public void ValidateTests(int row, int column)
+        {
+            new CellAddress(row, column).Validate(3, 3);
+        }
+
+        [Test]
+        [TestCase(0, 0)]
+        [TestCase(1, 0)]
+        [TestCase(0, 1)]
+        [TestCase(123, 174)]
+        [TestCase(64, 1981)]
+        public void EqualsTest(int row, int column)
+        {
+            var first = new CellAddress(row, column);
+            var second = new CellAddress(row, column);
+            Assert.IsFalse(first.Equals(null),"first null equals check");
+            Assert.IsFalse(second.Equals(null), "second null equals check");
+            Assert.IsTrue(first.Equals(second));
+            Assert.IsTrue(second.Equals(first));
+            Assert.AreEqual(first.GetHashCode(),second.GetHashCode());
         }
     }
 }

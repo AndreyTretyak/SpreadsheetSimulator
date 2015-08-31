@@ -13,19 +13,21 @@ namespace Spreadsheet.Core.Cells
     {
         public CellAddress Address { get; }
 
-        private IExpression Expression { get; }
+        private readonly IExpression _expression;
         
         public Cell(CellAddress address, IExpression expression)
         {
             Address = address;
-            Expression = expression;
+            _expression = expression;
         }
         
         public object Evaluate(SpreadsheetProcessor processor)
         {
-            return Expression?.Evaluate(processor);
+            return _expression.Evaluate(processor);
         }
 
-        public override string ToString() => $"{Address}|{Expression}";
+        public bool IsCashingRequered => !(_expression is ConstantExpression);
+
+        public override string ToString() => $"{Address}|{_expression}";
     }
 }

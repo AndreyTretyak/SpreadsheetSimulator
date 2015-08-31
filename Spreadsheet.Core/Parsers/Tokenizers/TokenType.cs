@@ -9,7 +9,7 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
         Operator,
         LeftParanthesis,
         RightParanthesis,
-        EndOfExpression,
+        EndOfCell,
         EndOfStream
     }
 }

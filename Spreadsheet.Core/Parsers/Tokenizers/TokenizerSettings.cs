@@ -14,11 +14,11 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
 
         public const char CarriageReturn = '\r';
 
-        public const char StreamEndChar = '\0';
+        public const char StreamEnd = '\0';
+ 
+        public const char ColumnStartLetter = 'A';
 
-        public const char RowNumberStartLetter = 'A';
-
-        public const int LettersUsedForRowNumber = 26;
+        public const int LettersUsedForColumnNumber = 26;
 
         public const char LeftParanthesis = '(';
 

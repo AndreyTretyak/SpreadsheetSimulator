@@ -14,11 +14,11 @@ namespace Spreadsheet.Core.Utils
             var column = 0;
             while (index < address.Length && char.IsLetter(address[index]))
             {
-                if ((uint)column > (int.MaxValue / TokenizerSettings.LettersUsedForRowNumber)) //check if next iteration make it bigger that MaxInt
+                if ((uint)column > (int.MaxValue / TokenizerSettings.LettersUsedForColumnNumber)) //check if next iteration make it bigger that MaxInt
                 {
-                    throw new ExpressionParsingException(Resources.IntegerToBig);
+                    throw new InvalidCellAdressException(Resources.IntegerToBig);
                 }
-                column = column * TokenizerSettings.LettersUsedForRowNumber + (address[index] - TokenizerSettings.RowNumberStartLetter + 1);
+                column = column * TokenizerSettings.LettersUsedForColumnNumber + (char.ToUpper(address[index]) - TokenizerSettings.ColumnStartLetter + 1);
                 index++;
             }
             column = column - 1;
@@ -29,7 +29,7 @@ namespace Spreadsheet.Core.Utils
             {
                 if ((uint)row > (int.MaxValue / 10)) //check if next iteration make it bigger that MaxInt
                 {
-                    throw new ExpressionParsingException(Resources.IntegerToBig);
+                    throw new InvalidCellAdressException((Resources.IntegerToBig));
                 }
                 row = row * 10 + (address[index] - '0');
                 index++;
@@ -37,7 +37,7 @@ namespace Spreadsheet.Core.Utils
             row = row - 1;
 
             if (index < address.Length)
-                throw new ExpressionParsingException(string.Format(Resources.WrongCellAddress, address));
+                throw new InvalidCellAdressException(string.Format(Resources.WrongCellAddress, address));
 
             return new CellAddress(row, column);
         }
@@ -47,12 +47,12 @@ namespace Spreadsheet.Core.Utils
             //transformation of zero based row index to char index
             var index = address.Column + 1;
             var result = new StringBuilder();
-            while (index / TokenizerSettings.LettersUsedForRowNumber > 1)
+            while (index / TokenizerSettings.LettersUsedForColumnNumber > 1)
             {
-                result.Append((char)(TokenizerSettings.RowNumberStartLetter + index % TokenizerSettings.LettersUsedForRowNumber - 1));
-                index = index / TokenizerSettings.LettersUsedForRowNumber;
+                result.Append((char)(TokenizerSettings.ColumnStartLetter + index % TokenizerSettings.LettersUsedForColumnNumber - 1));
+                index = index / TokenizerSettings.LettersUsedForColumnNumber;
             }
-            result.Append((char)(TokenizerSettings.RowNumberStartLetter + index - 1));
+            result.Append((char)(TokenizerSettings.ColumnStartLetter + index - 1));
             var column = new string(result.ToString().Reverse().ToArray());
 
             return $"{column}{address.Row + 1}";

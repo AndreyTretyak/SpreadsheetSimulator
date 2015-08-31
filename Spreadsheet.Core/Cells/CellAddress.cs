@@ -13,23 +13,20 @@ namespace Spreadsheet.Core.Cells
         public CellAddress(int row, int column)
         {
             Row = row;
+            if (row < 0)
+                throw new InvalidCellAdressException(Resources.NegetiveCellRow);
+
             Column = column;
+            if (column < 0)
+                throw new InvalidCellAdressException(Resources.NegativeCellColumn);
         }
 
         public void Validate(int maxRow, int maxColumn)
         {
-            string error = null;
-            if (Row < 0)
-                error += Resources.NegetiveCellRow;
-            if (Column < 0)
-                error += Resources.NegativeCellColumn;
             if (maxRow <= Row)
-                error += Resources.WrongCellRow;
+                throw new InvalidCellAdressException(Resources.WrongCellRow);
             if (maxColumn <= Column)
-                error += Resources.WrongCellColumn;
-
-            if (!string.IsNullOrEmpty(error))
-                throw new InvalidCellAdressException(error);
+                throw new InvalidCellAdressException(Resources.WrongCellColumn);
         }
 
         public bool Equals(CellAddress other)

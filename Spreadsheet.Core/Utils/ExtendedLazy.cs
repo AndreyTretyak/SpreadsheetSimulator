@@ -34,7 +34,7 @@ namespace Spreadsheet.Core.Utils
     /// <summary>
     /// Provides support for lazy initialization.
     /// </summary>
-    /// <typeparam name="TParametr">Specifies the type of parameter that will be passed to initialization function.</typeparam>
+    /// <typeparam name="TParameter">Specifies the type of parameter that will be passed to initialization function.</typeparam>
     /// <typeparam name="TResult">Specifies the type of element being lazily initialized.</typeparam>
     /// <remarks>
     /// <para>
@@ -43,7 +43,7 @@ namespace Spreadsheet.Core.Utils
     /// using parameters to the type's constructors.
     /// </para>
     /// </remarks>
-    public class ExtendedLazy<TParametr, TResult>
+    public class ExtendedLazy<TParameter, TResult>
     {
 
         #region Inner classes
@@ -77,7 +77,7 @@ namespace Spreadsheet.Core.Utils
         // A dummy delegate used as a  :
         // 1- Flag to avoid recursive call to Value in None and ExecutionAndPublication modes in m_valueFactory
         // 2- Flag to m_threadSafeObj if ExecutionAndPublication mode and the value is known to be initialized
-        static readonly Func<TParametr, TResult> ALREADY_INVOKED_SENTINEL = delegate
+        static readonly Func<TParameter, TResult> ALREADY_INVOKED_SENTINEL = delegate
         {
             Contract.Assert(false, "ALREADY_INVOKED_SENTINEL should never be invoked.");
             return default(TResult);
@@ -90,11 +90,11 @@ namespace Spreadsheet.Core.Utils
 
         // The factory delegate that returns the value.
         [NonSerialized]
-        private TParametr m_state;
+        private TParameter m_state;
 
         // The factory delegate that returns the value.
         [NonSerialized]
-        private Func<TParametr, TResult> m_valueFactory;
+        private Func<TParameter, TResult> m_valueFactory;
 
         // object if ExecutionAndPublication mode (may be ALREADY_INVOKED_SENTINEL if the value is already initialized)
         [NonSerialized]
@@ -111,7 +111,7 @@ namespace Spreadsheet.Core.Utils
         /// <exception cref="System.ArgumentNullException"><paramref name="valueFactory"/> is
         /// a null reference (Nothing in Visual Basic).</exception>
         /// <exception cref="System.ArgumentOutOfRangeException"><paramref name="mode"/> mode contains an invalid value.</exception>
-        public ExtendedLazy(TParametr state, Func<TParametr, TResult> valueFactory)
+        public ExtendedLazy(TParameter state, Func<TParameter, TResult> valueFactory)
         {
             if (valueFactory == null)
                 throw new ArgumentNullException(nameof(valueFactory));
@@ -297,7 +297,7 @@ namespace Spreadsheet.Core.Utils
                 if (m_valueFactory == ALREADY_INVOKED_SENTINEL)
                     throw new InvalidOperationException(("Lazy_Value_RecursiveCallsToValue"));
 
-                Func<TParametr, TResult> factory = m_valueFactory;
+                Func<TParameter, TResult> factory = m_valueFactory;
                 m_valueFactory = ALREADY_INVOKED_SENTINEL;
                 boxed = new Boxed(factory(m_state));
             }

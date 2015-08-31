@@ -2,7 +2,7 @@ namespace Spreadsheet.Core.Cells.Expressions
 {
     internal class ConstantExpression : IExpression
     {
-        public object Value { get; }
+        internal object Value { get; }
 
         public ConstantExpression(object value)
         {
