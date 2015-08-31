@@ -1,0 +1,184 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml;
+using NUnit.Framework;
+using Spreadsheet.Core;
+using Spreadsheet.Core.Cells;
+using Spreadsheet.Core.Parsers.Operators;
+using Spreadsheet.Core.Parsers.Tokenizers;
+using Spreadsheet.Core.ProcessingStrategies;
+using Spreadsheet.Tests.Mocks;
+
+namespace Spreadsheet.Tests
+{
+    public class ComplexTestGenerator
+    {
+        private readonly int _row;
+        private readonly int _column;
+        private readonly Random _random;
+        private readonly StringBuilder _builder;
+        private readonly List<CellAddress> _calculatableCells;
+        private readonly IOperator[] _operators; 
+
+        public ComplexTestGenerator(int row, int column, int seed = 1)
+        {
+            _row = row;
+            _column = column;
+            _random = new Random(seed);
+            _builder = new StringBuilder(row * column * 3);
+            _calculatableCells = new List<CellAddress>();
+            _operators = OperatorManager.Default.Operators.Values.ToArray();
+        }
+
+        public string GenerateData()
+        {
+            _builder.Append(_row);
+            _builder.Append(TokenizerSettings.WhiteSpace);
+            _builder.Append(_column);
+            _builder.AppendLine();
+            for (var i = 0; i < _row; i++)
+            {
+                for (var j = 0; j < _column; j++)
+                {
+                    GenerateCell(i,j);
+                    _builder.Append(TokenizerSettings.CellSeparator);
+                }
+                if (_random.NextDouble() < 0.5)
+                    _builder.Append(TokenizerSettings.CarriageReturn);
+                _builder.Append(TokenizerSettings.RowSeparator);
+            }
+            return _builder.ToString();
+        }
+
+        private void GenerateCell(int currentRow, int currentColumn)
+        {
+            var cellType = _random.NextDouble();
+            //string
+            if (cellType < 0.25)
+            {
+                GenerateString();
+            }
+            //integer
+            else if (cellType < 0.5)
+            {
+                _calculatableCells.Add(new CellAddress(currentRow, currentColumn));
+                GenerateNumber();
+            }
+            //expression
+            else if (cellType < 0.75)
+            {
+                GenerateExpression(currentRow, currentColumn);
+            }
+            //nothing
+        }
+
+        private void GenerateExpression(int currentRow, int currentColumn)
+        {
+            _calculatableCells.Add(new CellAddress(currentRow, currentColumn));
+            _builder.Append(TokenizerSettings.ExpressionStart);
+            GenerateIdentifier();
+            while (_random.NextDouble() < 0.5)
+            {
+                var @operator = _operators[_random.Next(_operators.Length)];
+                _builder.Append(@operator.OperatorCharacter);
+                GenerateIdentifier();
+            }
+        }
+
+        private void GenerateIdentifier()
+        {
+            var type = _random.NextDouble();
+            if (type < 0.5)
+            {
+                _builder.Append(_random.Next());
+            }
+            else
+            {
+                GenerateCellReference();
+            }
+        }
+
+        private void GenerateNumber()
+        {
+            _builder.Append(_random.Next());
+        }
+
+        private void GenerateCellReference()
+        {
+            var refType = _random.NextDouble();
+            //valid ref
+            if (_calculatableCells.Any() && refType < 0.74)
+            {
+                _builder.Append(_calculatableCells[_random.Next(_calculatableCells.Count)]);
+            }
+            //possible valid
+            else if (refType < 0.34)
+            {
+                _builder.Append(new CellAddress(_random.Next(_row), _random.Next(_column)));
+            }
+            //invalid ref
+            else
+            {
+                _builder.Append(new CellAddress(_random.Next() + _row, _random.Next() + _column));
+            }
+        }
+
+        private void GenerateString()
+        {
+            _builder.Append(TokenizerSettings.StringStart);
+            var stringSize = _random.Next(25);
+            for (var i = 0; i < stringSize; i++)
+            {
+                var charType = _random.NextDouble();
+                if (charType < 0.3)
+                {
+                    _builder.Append((char)('A' + _random.Next(26)));
+                }
+                else if (charType < 0.9)
+                {
+                    _builder.Append((char)('a' + _random.Next(26)));
+                }
+                else if (charType < 0.9)
+                {
+                    _builder.Append((char)('0' + _random.Next(10)));
+                }
+                else
+                {
+                    _builder.Append(TokenizerSettings.WhiteSpace);
+                }
+            }
+        }
+    }
+
+    [TestFixture]
+    public class ComplexTest
+    {
+        [Test]
+        public void ComplexTest1()
+        {
+            var data = new ComplexTestGenerator(3,3).GenerateData();
+            var evaluated = Evaluate(data);
+            //TODO need way to test result
+        }
+
+        private static string Evaluate(string data)
+        {
+            var stream = StreamUtils.GenerateStreamFromString(data);
+            using (var reader = new SpreadsheetReader(stream))
+            {
+                using (var ms = new MemoryStream())
+                {
+                    using (var writer = new SpreedsheatWriter(ms))
+                    {
+                        writer.WriteSpreedsheat(new SpreadsheetProcessor(reader.ReadSpreadsheet()).Evaluate(new ParallelProcessingStrategy()));
+                        return Encoding.UTF8.GetString(ms.ToArray());
+                    }
+                }
+            }
+        }
+    }
+}
