@@ -33,7 +33,6 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
             _stream = stream;
             _stringBuilder = new StringBuilder();
             OperatorManager = operatorManager ?? OperatorManager.Default;
-            
         }
 
         public Token Peek()
@@ -56,7 +55,7 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
         {
             var result = _stream.Peek();
             if (result == -1)
-                return StreamEndChar;
+                return StreamEnd;
             return (char) result;
         }
 
@@ -64,32 +63,41 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
         {
             var result = _stream.Read();
             if (result == -1)
-                return StreamEndChar;
+                return StreamEnd;
             return (char)result;
         }
 
         private Token NextToken()
         {
             var peek = PeekChar();
-
-            if (char.IsWhiteSpace(peek))
+            while (char.IsWhiteSpace(peek) && !IsSeparationCharacter(peek))
             {
                 ReadChar();
-                while (char.IsWhiteSpace(PeekChar())) ReadChar();
-                return new Token(TokenType.EndOfExpression);
+                peek = PeekChar();
             }
 
-            if (peek == StreamEndChar)
+            if (peek == StreamEnd)
+            {
                 return new Token(TokenType.EndOfStream);
+            }
+            
+
+            if (IsSeparationCharacter(peek) && peek != StreamEnd)
+            {
+                ReadChar();
+                if (peek == CarriageReturn && PeekChar() == RowSeparator)
+                    ReadChar();
+                return new Token(TokenType.EndOfCell);
+            }
+
+            if (peek == StringStart)
+                return ReadStringToken();
 
             if (char.IsDigit(peek))
                 return ReadIntegerToken();
 
-            if (char.IsLetter(peek)) 
+            if (IsColumnLetter(peek)) 
                 return ReadCellReferenceToken();
-
-            if (peek == StringStart)
-                return ReadStringToken();
 
             if (TokenIdentifiers.ContainsKey(peek))
             {
@@ -119,7 +127,7 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
 
         public Token ReadCellReferenceToken()
         {
-            var column = ReadInteger(LettersUsedForRowNumber, RowNumberStartLetter, 1);
+            var column = ReadColumn();
             var row = ReadInteger();
             //indexes is zero based, so we need to subtract 1 from current row and column values
             return new Token(new CellAddress(row - 1, column - 1));
@@ -128,51 +136,52 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
         private string ReadRemainExpression()
         {
             _stringBuilder.Clear();
-            var nextChar = PeekChar();
-            while (nextChar != CellSeparator
-                && nextChar != CarriageReturn
-                && nextChar != RowSeparator
-                && nextChar != StreamEndChar)
+            while (!IsSeparationCharacter(PeekChar()))
             {
                 _stringBuilder.Append(ReadChar());
-                nextChar = PeekChar();
             }
             return _stringBuilder.ToString();
         }
 
-        /// <summary>
-        /// Manual integer reading to avoid memory allocation on string creation.
-        /// Reads integer from input stream in given system of calculation, by default use decimal.
-        /// </summary>
-        /// <param name="systemBase">Base of calculation system.</param>
-        /// <param name="startChar">
-        /// Character with minimal value. 
-        /// Range of allowed characters is between startChar and startChar plus systemBase minus shift.
-        /// </param>
-        /// <param name="shift">
-        /// Difference between start character and character that represent zero. 
-        /// If start character 'A' means 1 than swift should be one, 
-        /// for '0' that already means 0 shift is zero.  
-        /// </param>
-        /// <returns>Read int value as regular integer.</returns>
-        private int ReadInteger(int systemBase = 10, char startChar = '0', int shift = 0)
+        private int ReadInteger()
         {
-            var zeroChar = startChar - shift;
-            var maxAllowedChar = systemBase + zeroChar;
-
             var value = 0;
-            var peek = PeekChar();
-            while (peek >= startChar && peek <= maxAllowedChar)
+            while (char.IsDigit(PeekChar()))
             {
                 //check that next iteration will not make it bigger that MaxInt
-                if ((uint)value > (int.MaxValue / systemBase))
-                {
+                if ((uint)value > (int.MaxValue / 10))
                     throw new ExpressionParsingException(Resources.IntegerToBig);
-                }
-                value = value * systemBase + (ReadChar() - zeroChar);
-                peek = PeekChar();
+                value = value * 10 + (ReadChar() - '0');
             }
             return value;
+        }
+
+        private int ReadColumn()
+        {
+            var value = 0;
+            while (IsColumnLetter(PeekChar()))
+            {
+                //check that next iteration will not make it bigger that MaxInt
+                if ((uint)value > (int.MaxValue / LettersUsedForColumnNumber))
+                    throw new ExpressionParsingException(Resources.IntegerToBig);
+                value = value * LettersUsedForColumnNumber + (char.ToUpper(ReadChar()) - ColumnStartLetter + 1);
+            }
+            return value;
+        }
+
+        private static bool IsColumnLetter(char character)
+        {
+            character = char.ToUpper(character);
+            //We subtract letter because LettersUsedForColumnNumber means 1
+            return character >= ColumnStartLetter && character <= ColumnStartLetter + LettersUsedForColumnNumber - 1;
+        }
+
+        private static bool IsSeparationCharacter(char character)
+        {
+            return character == CellSeparator 
+                || character == CarriageReturn 
+                || character == RowSeparator
+                || character == StreamEnd;
         }
     }
 }

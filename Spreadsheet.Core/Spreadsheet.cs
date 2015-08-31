@@ -16,6 +16,7 @@ namespace Spreadsheet.Core
 
         public Spreadsheet(int rowCount, int columnCount, IEnumerable<Cell> content)
         {
+
             _content = new Cell[rowCount, columnCount];
             foreach (var cell in content)
             {
@@ -26,8 +27,15 @@ namespace Spreadsheet.Core
 
         public int ColumnCount => _content.GetLength(1);
 
-        public Cell this[CellAddress index] => _content[index.Row, index.Column];
-        
+        public Cell this[CellAddress address]
+        {
+            get
+            {
+                address.Validate(RowCount,ColumnCount);
+                return _content[address.Row, address.Column];
+            }
+        }
+
         public IEnumerator<Cell> GetEnumerator() => _content.Cast<Cell>().GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

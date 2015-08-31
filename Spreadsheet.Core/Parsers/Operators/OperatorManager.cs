@@ -9,7 +9,7 @@ namespace Spreadsheet.Core.Parsers.Operators
     {
         public IReadOnlyDictionary<char, IOperator> Operators { get; }
 
-        public IReadOnlyCollection<int> Priorities { get; }
+        public IReadOnlyList<int> Priorities { get; }
 
         public OperatorManager(IList<IOperator> operators)
         {
