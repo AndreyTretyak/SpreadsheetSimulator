@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace Spreadsheet.Tests
     {
         private ISpreadsheetTokenizer GetTokenizer(string text)
         {
-            return new SpreadsheetStreamTokenizer(StreamUtils.GenerateStreamFromString(text));
+            return new SpreadsheetStreamTokenizer(new StringReader(text));
         }
 
         private IEnumerable<Token> GetTokens(string text)

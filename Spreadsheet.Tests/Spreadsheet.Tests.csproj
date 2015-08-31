@@ -51,21 +51,20 @@
     <Compile Include="CellAddressConverterTests.cs" />
     <Compile Include="CellAdressTests.cs" />
     <Compile Include="CellTests.cs" />
-    <Compile Include="ComplexTestGenerator.cs" />
+    <Compile Include="FullProcessTests\ComplexTestGenerator.cs" />
     <Compile Include="ExpressionTests.cs" />
     <Compile Include="Mocks\ExpressionMock.cs" />
     <Compile Include="Mocks\OperatorMock.cs" />
     <Compile Include="SpreadsheetProcessorTests.cs" />
     <Compile Include="SpreadsheetStreamParserTests.cs" />
     <Compile Include="SpreadsheetStreamTokenizerTests.cs" />
+    <Compile Include="Utils\TestExtensions.cs" />
     <Compile Include="Utils\GenericComparer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Mocks\SpreadsheetParserMock.cs" />
     <Compile Include="SpreadsheetReaderTests.cs" />
     <Compile Include="Mocks\SpreadsheetTokenizerMock.cs" />
     <Compile Include="SpreadsheetWriterTests.cs" />
-    <Compile Include="Mocks\MockCreator.cs" />
-    <Compile Include="Utils\StreamUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

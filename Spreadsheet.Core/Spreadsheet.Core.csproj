@@ -47,6 +47,7 @@
     <Compile Include="Cells\Expressions\ConstantExpression.cs" />
     <Compile Include="Cells\Expressions\IExpression.cs" />
     <Compile Include="Cells\Expressions\UnaryExpression.cs" />
+    <Compile Include="Exceptions\CircularCellRefereceException.cs" />
     <Compile Include="Exceptions\ExpressionEvaluationException.cs" />
     <Compile Include="Exceptions\InvalidCellAdressException.cs" />
     <Compile Include="Exceptions\SpreadsheatReadingException.cs" />

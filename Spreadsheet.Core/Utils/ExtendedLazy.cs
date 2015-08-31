@@ -20,6 +20,7 @@ using System.Diagnostics.Contracts;
 using System.Runtime.ExceptionServices;
 using System.Runtime.Serialization;
 using System.Threading;
+using Spreadsheet.Core.Exceptions;
 
 namespace Spreadsheet.Core.Utils
 {
@@ -295,7 +296,7 @@ namespace Spreadsheet.Core.Utils
             {
                 // check for recursion
                 if (m_valueFactory == ALREADY_INVOKED_SENTINEL)
-                    throw new InvalidOperationException(("Lazy_Value_RecursiveCallsToValue"));
+                    throw new  CircularCellRefereceException(Resources.CircularReferenceDetected);
 
                 Func<TParameter, TResult> factory = m_valueFactory;
                 m_valueFactory = ALREADY_INVOKED_SENTINEL;

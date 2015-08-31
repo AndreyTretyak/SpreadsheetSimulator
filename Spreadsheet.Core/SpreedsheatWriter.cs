@@ -12,9 +12,9 @@ namespace Spreadsheet.Core
     {
         private const string ErrorMarker = "#";
 
-        private readonly StreamWriter _streamWriter;
+        private readonly TextWriter _streamWriter;
 
-        public SpreedsheatWriter(StreamWriter streamWriter)
+        public SpreedsheatWriter(TextWriter streamWriter)
         {
             _streamWriter = streamWriter;
         }

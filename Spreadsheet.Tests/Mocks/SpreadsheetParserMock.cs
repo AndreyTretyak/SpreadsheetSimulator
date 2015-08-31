@@ -1,3 +1,4 @@
+using System;
 using Spreadsheet.Core.Cells.Expressions;
 using Spreadsheet.Core.Parsers;
 
@@ -22,4 +23,20 @@ namespace Spreadsheet.Tests.Mocks
                 : null;
         }
     }
+
+    internal class SpreadsheeParsertWithExceptionMock : ISpreadsheetParser
+    {
+        private readonly Exception _exception;
+
+        public SpreadsheeParsertWithExceptionMock(Exception exception)
+        {
+            _exception = exception;
+        }
+
+        public IExpression NextExpression()
+        {
+            throw _exception;
+        }
+    }
+
 }

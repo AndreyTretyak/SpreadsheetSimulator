@@ -5,9 +5,12 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using Spreadsheet.Core;
 using Spreadsheet.Core.Cells;
 using Spreadsheet.Tests.Mocks;
 using Spreadsheet.Core.Cells.Expressions;
+using Spreadsheet.Tests.Utils;
+using ConstantExpression = Spreadsheet.Core.Cells.Expressions.ConstantExpression;
 
 namespace Spreadsheet.Tests
 {
@@ -25,7 +28,7 @@ namespace Spreadsheet.Tests
             var @operator = new OperatorMock(() => result);
             var expression = new Core.Cells.Expressions.BinaryExpression(leftExpression, @operator, rightExpr);
 
-            var processor = MockCreator.CreateProcessor();
+            var processor = TestExtensions.CreateProcessor();
             Assert.AreEqual(result, expression.Evaluate(processor));
             Assert.AreEqual(processor, leftExpression.Processor, "Left expression");
             Assert.AreEqual(processor, rightExpr.Processor, "Right expression");
@@ -44,7 +47,7 @@ namespace Spreadsheet.Tests
             var @operator = new OperatorMock(() => result);
             var expression = new Core.Cells.Expressions.UnaryExpression(@operator, valueExpression);
 
-            var processor = MockCreator.CreateProcessor();
+            var processor = TestExtensions.CreateProcessor();
             Assert.AreEqual(result, expression.Evaluate(processor));
             Assert.AreEqual(processor, valueExpression.Processor);
             Assert.AreEqual(value, @operator.Value);
@@ -59,13 +62,32 @@ namespace Spreadsheet.Tests
             Assert.AreEqual(value, expression.Evaluate(null));
         }
 
-        //[Test]
-        //public void CellReferenceExpressionTest()
-        //{
-        //    var expression = new CellRefereceExpression(new CellAddress(0, 0));
-        //    var processor = MockCreator.CreateProcessor();
-        //    expression.Evaluate(processor);
-        //    throw new NotImplementedException();
-        //}
+        [Test]
+        [TestCase(9870)]
+        [TestCase("check")]
+        [TestCase(null)]
+        public void CellRefereceExpressionTest(object value)
+        {
+            var cellRefereceExpression = new CellRefereceExpression(new CellAddress(0, 1));
+            var processor = TestExtensions.CreateProcessor(
+                cellRefereceExpression,
+                new ConstantExpression(value));
+            var result = cellRefereceExpression.Evaluate(processor);
+            Assert.AreEqual(value, result);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ExpressionEvaluationException))]
+        public void CellRefereceExpressionEvaluationExceptionTest()
+        {
+            CellRefereceExpressionTest(new ExpressionEvaluationException("error"));
+        }
+
+        [Test]
+        [ExpectedException(typeof(Exception))]
+        public void CellRefereceExpressionGeneralExceptionTest()
+        {
+            CellRefereceExpressionTest(new Exception("error"));
+        }
     }
 }

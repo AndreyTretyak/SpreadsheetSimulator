@@ -18,7 +18,7 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
 
         public OperatorManager OperatorManager { get; }
 
-        private readonly StreamReader _stream;
+        private readonly TextReader _stream;
 
         private Token? _currentToken = null;
 
@@ -28,7 +28,7 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
         {
         }
 
-        public SpreadsheetStreamTokenizer(StreamReader stream, OperatorManager operatorManager = null)
+        public SpreadsheetStreamTokenizer(TextReader stream, OperatorManager operatorManager = null)
         {
             _stream = stream;
             _stringBuilder = new StringBuilder();
