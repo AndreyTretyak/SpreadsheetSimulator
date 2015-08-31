@@ -1,6 +1,6 @@
 namespace Spreadsheet.Core.Cells.Expressions
 {
-    public interface IExpression
+    internal interface IExpression
     {
         object Evaluate(SpreadsheetProcessor processor);
     }

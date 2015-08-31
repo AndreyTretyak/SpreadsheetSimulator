@@ -1,6 +1,6 @@
 namespace Spreadsheet.Core.Parsers.Operators
 {
-    public interface IOperator
+    internal interface IOperator
     {
         int Priority { get; }
 

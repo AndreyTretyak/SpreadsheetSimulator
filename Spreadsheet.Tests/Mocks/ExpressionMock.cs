@@ -12,15 +12,19 @@ namespace Spreadsheet.Tests.Mocks
     {
         private readonly Func<object> _expression;
 
+        public int EvaluateCallCount { get; private set; }
+
         public SpreadsheetProcessor Processor { get; private set; }
 
         public ExpressionMock(Func<object> expression)
         {
             _expression = expression;
+            EvaluateCallCount = 0;
         }
 
         public object Evaluate(SpreadsheetProcessor processor)
         {
+            EvaluateCallCount++;
             Processor = processor;
             return _expression();
         }

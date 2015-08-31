@@ -1,6 +1,6 @@
 namespace Spreadsheet.Core.Parsers.Tokenizers
 {
-    public static class TokenizerSettings
+    internal static class ConstantsSettings
     {
         public const char StringStart = '\'';
 
@@ -23,5 +23,7 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
         public const char LeftParanthesis = '(';
 
         public const char RightParanthesis = ')';
+
+        public const string ErrorStartMarker = "#";
     }
 }

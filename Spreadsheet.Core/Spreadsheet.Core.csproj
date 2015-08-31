@@ -64,7 +64,7 @@
     <Compile Include="Exceptions\ExpressionParsingException.cs" />
     <Compile Include="Parsers\Tokenizers\SpreadsheetStreamTokenizer.cs" />
     <Compile Include="Parsers\Operators\OperatorManager.cs" />
-    <Compile Include="Parsers\Tokenizers\TokenizerSettings.cs" />
+    <Compile Include="Parsers\Tokenizers\ConstantsSettings.cs" />
     <Compile Include="Parsers\Tokenizers\Token.cs" />
     <Compile Include="Parsers\Tokenizers\TokenType.cs" />
     <Compile Include="ProcessingStrategies\SimpleProcessingStrategy.cs" />

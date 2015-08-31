@@ -4,14 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Spreadsheet.Core.Parsers.Tokenizers;
 
 namespace Spreadsheet.Core
 {
 
     public class SpreedsheatWriter : IDisposable
     {
-        private const string ErrorMarker = "#";
-
         private readonly TextWriter _streamWriter;
 
         public SpreedsheatWriter(TextWriter streamWriter)
@@ -31,14 +30,17 @@ namespace Spreadsheet.Core
                 var exception = value as Exception;
                 if (exception != null)
                 {
-                    _streamWriter.Write(ErrorMarker);
-                    _streamWriter.Write(exception.Message);
+                    _streamWriter.Write(ConstantsSettings.ErrorStartMarker);
+                    var spreadsheetException = exception as SpreadsheetException;
+                    _streamWriter.Write(spreadsheetException == null
+                        ? exception.Message
+                        : spreadsheetException.MessageWithCallStack);
                 }
                 else
                 {
                     _streamWriter.Write(value);
                 }
-                _streamWriter.Write("\t");
+                _streamWriter.Write(ConstantsSettings.CellSeparator);
                 if (index++ % result.ColumnCount == 0)
                     _streamWriter.WriteLine();
             }

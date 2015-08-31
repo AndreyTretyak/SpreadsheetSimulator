@@ -33,9 +33,15 @@ namespace Spreadsheet.Tests
         {
             var expression = new ExpressionMock(() => value);
             var processor = CreateProcessor(expression);
-            var result = processor.Evaluate(new SimpleProcessingStrategy());
-            Assert.AreEqual(value, result.Values.First());
-            Assert.AreEqual(processor, expression.Processor);
+            for (var i = 0; i < 5; i++)
+            {
+                var result = processor.Evaluate(new SimpleProcessingStrategy());
+                Assert.AreEqual(value, result.Values.First());
+                Assert.AreEqual(processor, expression.Processor);
+                
+                //check that value cashed, and expression Evaluate method calls only once.
+                Assert.AreEqual(1, expression.EvaluateCallCount);
+            }
         }
 
         [Test]
