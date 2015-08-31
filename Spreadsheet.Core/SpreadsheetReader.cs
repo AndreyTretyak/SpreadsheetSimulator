@@ -23,29 +23,29 @@ namespace Spreadsheet.Core
                 RowSeparator
             };
 
-        private readonly StreamReader _streamReader;
+        private readonly TextReader _textReader;
 
-        private readonly Func<StreamReader, ISpreadsheetParser> _parserFactory;
+        private readonly Func<TextReader, ISpreadsheetParser> _parserFactory;
 
         public SpreadsheetReader(Stream stream) 
             : this(new StreamReader(stream))
         {
         }
 
-        public SpreadsheetReader(StreamReader streamReader)
-            : this(streamReader, CreateParser)
+        public SpreadsheetReader(TextReader textReader)
+            : this(textReader, CreateParser)
         {
         }
 
-        internal SpreadsheetReader(StreamReader streamReader, Func<StreamReader,ISpreadsheetParser> parserFactory)
+        internal SpreadsheetReader(TextReader textReader, Func<TextReader,ISpreadsheetParser> parserFactory)
         {
-            _streamReader = streamReader;
+            _textReader = textReader;
             _parserFactory = parserFactory;
         }
 
         public Spreadsheet ReadSpreadsheet()
         {
-            var line = _streamReader.ReadLine();
+            var line = _textReader?.ReadLine();
             var size = line?.Split(SpreadsheetSizeSeparators, StringSplitOptions.RemoveEmptyEntries)
                             .ToArray();
 
@@ -64,7 +64,7 @@ namespace Spreadsheet.Core
 
         private IEnumerable<Cell> GetCells(int maxColumn, int cellCount)
         {
-            var parser = _parserFactory(_streamReader);
+            var parser = _parserFactory(_textReader);
             for (var i = 0; i < cellCount; i++)
             {
                 IExpression expression;
@@ -84,10 +84,10 @@ namespace Spreadsheet.Core
 
         public void Dispose()
         {
-            _streamReader?.Dispose();
+            _textReader?.Dispose();
         }
 
-        private static ISpreadsheetParser CreateParser(StreamReader s)
+        private static ISpreadsheetParser CreateParser(TextReader s)
         {
             return new SpreadsheetStreamParser(new SpreadsheetStreamTokenizer(s));
         }

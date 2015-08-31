@@ -167,8 +167,7 @@ namespace Spreadsheet.Tests
 
         private static string Evaluate(string data)
         {
-            var stream = StreamUtils.GenerateStreamFromString(data);
-            using (var reader = new SpreadsheetReader(stream))
+            using (var reader = new SpreadsheetReader(new StringReader(data)))
             {
                 using (var ms = new MemoryStream())
                 {

@@ -1,6 +1,6 @@
 ﻿namespace Spreadsheet.Core
 {
-    internal class ExpressionParsingException : SpreadsheetException
+    public class ExpressionParsingException : SpreadsheetException
     {
         public ExpressionParsingException(string message) : base(message) { }
     }

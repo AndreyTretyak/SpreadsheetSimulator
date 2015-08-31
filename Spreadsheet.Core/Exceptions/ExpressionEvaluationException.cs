@@ -2,7 +2,7 @@ using System;
 
 namespace Spreadsheet.Core
 {
-    internal class ExpressionEvaluationException : SpreadsheetException
+    public class ExpressionEvaluationException : SpreadsheetException
     {
         public ExpressionEvaluationException(string message) : base(message) { }
 

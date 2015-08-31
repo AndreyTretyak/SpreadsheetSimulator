@@ -126,14 +126,8 @@
   <data name="EndOfExpression" xml:space="preserve">
     <value>End of expression</value>
   </data>
-  <data name="FailedToParseNumber" xml:space="preserve">
-    <value>Error in reading number {0}</value>
-  </data>
   <data name="FailedToReadSpreadsheetSize" xml:space="preserve">
     <value>Failed to read spreadsheet size from line '{0}'</value>
-  </data>
-  <data name="IdentifierExpected" xml:space="preserve">
-    <value>Integer or CellNumber expected</value>
   </data>
   <data name="IntegerToBig" xml:space="preserve">
     <value>Integer number is too big consier to use long</value>
@@ -150,20 +144,11 @@
   <data name="Nothing" xml:space="preserve">
     <value>Nothing</value>
   </data>
-  <data name="OperatorExpected" xml:space="preserve">
-    <value>Operator expected</value>
-  </data>
-  <data name="UnableToParseCellAddress" xml:space="preserve">
-    <value>Unable to parse cell address '{0}'</value>
-  </data>
   <data name="UnaryOperationNotSupported" xml:space="preserve">
     <value>Unary operation not supported for operator '{0}'</value>
   </data>
   <data name="UnknownContentType" xml:space="preserve">
     <value>Cell can contain only number, string or expression</value>
-  </data>
-  <data name="UnknownOperator" xml:space="preserve">
-    <value>Unknown operator type {0}</value>
   </data>
   <data name="WrongCellAddress" xml:space="preserve">
     <value>Unable to parse cell address '{0}'</value>
@@ -173,9 +158,6 @@
   </data>
   <data name="WrongCellRow" xml:space="preserve">
     <value>Cell row is more then table size</value>
-  </data>
-  <data name="WrongExpressionStart" xml:space="preserve">
-    <value>Expression should start from "{0}" character</value>
   </data>
   <data name="WrongTokenType" xml:space="preserve">
     <value>Wrong token type '{0}' expected</value>

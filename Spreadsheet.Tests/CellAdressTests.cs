@@ -46,11 +46,10 @@ namespace Spreadsheet.Tests
         {
             var first = new CellAddress(row, column);
             var second = new CellAddress(row, column);
-            Assert.IsFalse(first.Equals(null),"first null equals check");
-            Assert.IsFalse(second.Equals(null), "second null equals check");
-            Assert.IsTrue(first.Equals(second));
-            Assert.IsTrue(second.Equals(first));
-            Assert.AreEqual(first.GetHashCode(),second.GetHashCode());
+            Assert.IsFalse(first.Equals(null), "Equals null check");
+            Assert.IsTrue(first.Equals(second), "first equals second");
+            Assert.IsTrue(second.Equals(first), "second equals first");
+            Assert.AreEqual(first.GetHashCode(), second.GetHashCode(), "hash code comparison");
         }
     }
 }

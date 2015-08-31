@@ -18,7 +18,7 @@ namespace Spreadsheet.Tests
     {
         private Core.Spreadsheet ReadSpreadsheet(string size, IExpression[] expressions)
         {
-            using (var reader = new SpreadsheetReader(new StreamReader(StreamUtils.GenerateStreamFromString(size)), 
+            using (var reader = new SpreadsheetReader(new StringReader(size), 
                                                       s => new SpreadsheetParserMock(expressions)))
             {
                 return reader.ReadSpreadsheet();
@@ -26,7 +26,16 @@ namespace Spreadsheet.Tests
         }
 
         [Test]
-        [TestCase(null)]
+        [ExpectedException(typeof(SpreadsheatReadingException))]
+        public void NullTest()
+        {
+            using (var reader = new SpreadsheetReader((TextReader)null))
+            {
+                reader.ReadSpreadsheet();
+            }
+        }
+
+        [Test]
         [TestCase("")]
         [TestCase("12")]
         [TestCase("13a 11")]
@@ -89,6 +98,18 @@ namespace Spreadsheet.Tests
             CollectionAssert.AreEqual(cells.Take(array.Length), 
                                      array, 
                                      new GenericComparer<Cell>((x,y) => string.Compare(x.ToString(), y.ToString(), StringComparison.Ordinal)));
+        }
+
+
+        [Test]
+        public void ExсeptionTest()
+        {
+            var exception = new ExpressionParsingException("error");
+            using (var reader = new SpreadsheetReader(new StringReader("12 6"),
+                                          s => new SpreadsheeParsertWithExceptionMock(exception)))
+            {
+                Assert.AreEqual(exception, reader.ReadSpreadsheet().First().Evaluate(null));
+            }
         }
     }
 }

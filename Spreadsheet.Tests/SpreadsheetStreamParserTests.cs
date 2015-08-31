@@ -13,6 +13,7 @@ using Spreadsheet.Core.Parsers.Operators;
 using Spreadsheet.Core.Parsers.Tokenizers;
 using Spreadsheet.Core.Utils;
 using Spreadsheet.Tests.Mocks;
+using static Spreadsheet.Tests.Utils.TestExtensions;
 
 namespace Spreadsheet.Tests
 {
@@ -42,12 +43,6 @@ namespace Spreadsheet.Tests
         private T Parse<T>(params Token[] tokens)
         {
             return Cast<T>(Parse(tokens));
-        }
-
-        private T Cast<T>(object result)
-        {
-            Assert.IsInstanceOf(typeof(T), result);
-            return (T)result;
         }
 
         [Test]

@@ -8,22 +8,20 @@ using Spreadsheet.Core;
 using Spreadsheet.Core.Cells;
 using Spreadsheet.Core.Cells.Expressions;
 using Spreadsheet.Tests.Mocks;
-using Spreadsheet = Spreadsheet.Core.Spreadsheet;
+using Spreadsheet.Tests.Utils;
 
 namespace Spreadsheet.Tests
 {
     [TestFixture]
     public class CellTests
     {
-
-
         [Test]
         [TestCase(123)]
         [TestCase("test")]
         [TestCase(null)]
         public void EvaluateTests(object value)
         {
-            var processor = CreateProcessor();
+            var processor = TestExtensions.CreateProcessor();
             var expression = new ExpressionMock(() => value);
             var cell = new Cell(default(CellAddress), expression);
 
@@ -47,14 +45,6 @@ namespace Spreadsheet.Tests
 
             cell = new Cell(address, new CellRefereceExpression(address));
             Assert.IsTrue(cell.IsCashingRequered, nameof(CellRefereceExpression));
-        }
-
-        [Test]
-        public void AddressTest()
-        {
-            var address = new CellAddress(0, 0);
-            var cell = new Cell(address, null);
-            Assert.AreEqual(address, cell.Address);
         }
     }
 }

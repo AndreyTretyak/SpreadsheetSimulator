@@ -88,29 +88,11 @@ namespace Spreadsheet.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error in reading number {0}.
-        /// </summary>
-        public static string FailedToParseNumber {
-            get {
-                return ResourceManager.GetString("FailedToParseNumber", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Failed to read spreadsheet size from line &apos;{0}&apos;.
         /// </summary>
         public static string FailedToReadSpreadsheetSize {
             get {
                 return ResourceManager.GetString("FailedToReadSpreadsheetSize", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Integer or CellNumber expected.
-        /// </summary>
-        public static string IdentifierExpected {
-            get {
-                return ResourceManager.GetString("IdentifierExpected", resourceCulture);
             }
         }
         
@@ -160,24 +142,6 @@ namespace Spreadsheet.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Operator expected.
-        /// </summary>
-        public static string OperatorExpected {
-            get {
-                return ResourceManager.GetString("OperatorExpected", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unable to parse cell address &apos;{0}&apos;.
-        /// </summary>
-        public static string UnableToParseCellAddress {
-            get {
-                return ResourceManager.GetString("UnableToParseCellAddress", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Unary operation not supported for operator &apos;{0}&apos;.
         /// </summary>
         public static string UnaryOperationNotSupported {
@@ -192,15 +156,6 @@ namespace Spreadsheet.Core {
         public static string UnknownContentType {
             get {
                 return ResourceManager.GetString("UnknownContentType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unknown operator type {0}.
-        /// </summary>
-        public static string UnknownOperator {
-            get {
-                return ResourceManager.GetString("UnknownOperator", resourceCulture);
             }
         }
         
@@ -228,15 +183,6 @@ namespace Spreadsheet.Core {
         public static string WrongCellRow {
             get {
                 return ResourceManager.GetString("WrongCellRow", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Expression should start from &quot;{0}&quot; character.
-        /// </summary>
-        public static string WrongExpressionStart {
-            get {
-                return ResourceManager.GetString("WrongExpressionStart", resourceCulture);
             }
         }
         

@@ -51,12 +51,6 @@ namespace Spreadsheet.Core
             {
                 return  exception;
             }
-            //circular reference
-            catch (InvalidOperationException exception)
-            {
-                return new ExpressionEvaluationException(Resources.CircularReferenceDetected, exception);
-            }
-            //TODO more exact types should be specified
             catch (Exception exception)
             {
                 return new ExpressionEvaluationException(exception.Message, exception);
