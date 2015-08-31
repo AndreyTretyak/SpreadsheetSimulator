@@ -15,10 +15,7 @@ namespace Spreadsheet.Tests
     [TestFixture]
     public class CellTests
     {
-        private static SpreadsheetProcessor CreateProcessor()
-        {
-            return new SpreadsheetProcessor(new Core.Spreadsheet(0, 0, Enumerable.Empty<Cell>()));
-        }
+
 
         [Test]
         [TestCase(123)]

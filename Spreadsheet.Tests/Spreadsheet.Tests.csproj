@@ -51,6 +51,7 @@
     <Compile Include="CellAddressConverterTests.cs" />
     <Compile Include="CellAdressTests.cs" />
     <Compile Include="CellTests.cs" />
+    <Compile Include="ComplexTestGenerator.cs" />
     <Compile Include="ExpressionTests.cs" />
     <Compile Include="Mocks\ExpressionMock.cs" />
     <Compile Include="Mocks\OperatorMock.cs" />
