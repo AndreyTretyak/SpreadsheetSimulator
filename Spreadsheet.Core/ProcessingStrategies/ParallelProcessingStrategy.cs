@@ -10,7 +10,7 @@ namespace Spreadsheet.Core.ProcessingStrategies
         public IEnumerable<object> Evaluate(Spreadsheet spreadsheet, Func<Cell,object> evaluation)
         {
            return spreadsheet.AsParallel()
-                             .AsOrdered().WithDegreeOfParallelism(1)
+                             .AsOrdered()
                              .Select(evaluation);
         }
     }

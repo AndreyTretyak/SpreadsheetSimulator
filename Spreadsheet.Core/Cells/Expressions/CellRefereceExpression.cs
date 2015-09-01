@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Spreadsheet.Core.Cells.Expressions
 {

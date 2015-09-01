@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Spreadsheet.Core;
+using Spreadsheet.Core.Cells;
 using Spreadsheet.Core.Cells.Expressions;
 
 namespace Spreadsheet.Tests.Mocks
@@ -27,6 +28,11 @@ namespace Spreadsheet.Tests.Mocks
             EvaluateCallCount++;
             Processor = processor;
             return _expression();
+        }
+
+        public IEnumerable<CellAddress> GetDependencies(SpreadsheetProcessor processor)
+        {
+            throw new NotImplementedException();
         }
     }
 }

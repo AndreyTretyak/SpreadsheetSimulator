@@ -16,20 +16,20 @@ namespace Spreadsheet.Core.Cells
 
         public bool IsCashingRequered { get; }
 
-        private readonly IExpression _expression;
+        internal IExpression Expression { get; }
 
         internal Cell(CellAddress address, IExpression expression)
         {
             Address = address;
-            _expression = expression;
-            IsCashingRequered = !(_expression is ConstantExpression);
+            Expression = expression;
+            IsCashingRequered = !(Expression is ConstantExpression);
         }
         
         public object Evaluate(SpreadsheetProcessor processor)
         {
             try
             {
-                return _expression.Evaluate(processor);
+                return Expression.Evaluate(processor);
             }
             catch (SpreadsheetException exception)
             {
@@ -41,6 +41,6 @@ namespace Spreadsheet.Core.Cells
             }
         }
 
-        public override string ToString() => $"{Address}|{_expression}";
+        public override string ToString() => $"{Address}|{Expression}";
     }
 }

@@ -83,18 +83,15 @@ namespace Spreadsheet.Core.Parsers
 
         private IExpression ReadIdentifier()
         {
-            if (Peek(TokenType.LeftParenthesis))
-            {
-                Next();
-                var expresion = ReadOperation();
-                if (!Peek(TokenType.RightParenthesis))
-                    throw InvalidContent(Resources.WrongTokenType, SpesialCharactersSettings.RightParanthesis);
-                Next();
-                return expresion;
-            }
-
             switch (Peek().Type)
             {
+                case TokenType.LeftParenthesis:
+                    Next();
+                    var expresion = ReadOperation();
+                    if (!Peek(TokenType.RightParenthesis))
+                        throw InvalidContent(Resources.WrongTokenType, SpesialCharactersSettings.RightParanthesis);
+                    Next();
+                    return expresion;
                 case TokenType.Operator:
                     return new UnaryExpression(Next().Operator, ReadIdentifier());
                 case TokenType.Integer:
@@ -108,8 +105,6 @@ namespace Spreadsheet.Core.Parsers
 
         private ExpressionParsingException InvalidContent(string message, object expected = null)
         {
-
-
             return new ExpressionParsingException(string.Format(message, _tokenizer.Next(), expected));
         }
     }

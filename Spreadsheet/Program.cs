@@ -22,7 +22,7 @@ namespace SpreadsheetSimulator
                     var spreadsheet = reader.ReadSpreadsheet();
                     var processor = new SpreadsheetProcessor(spreadsheet);
                     var result = processor.Evaluate(new ParallelProcessingStrategy());
-                    using (var write = new SpreedsheatWriter(output))
+                    using (var write = new SpreadsheatWriter(output))
                     {
                         write.WriteSpreedsheat(result);
                     }

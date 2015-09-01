@@ -80,7 +80,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SpreedsheatWriter.cs" />
+    <Compile Include="SpreadsheatWriter.cs" />
+    <Compile Include="Utils\ObjectPool.cs" />
+    <Compile Include="Utils\PooledHashSet.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">

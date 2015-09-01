@@ -1,5 +1,7 @@
+using System.Collections.Generic;
+using System.Linq;
 using Spreadsheet.Core.Parsers.Operators;
-using Spreadsheet.Core.Parsers.Tokenizers;
+using static Spreadsheet.Core.Parsers.Tokenizers.SpesialCharactersSettings;
 
 namespace Spreadsheet.Core.Cells.Expressions
 {
@@ -23,6 +25,6 @@ namespace Spreadsheet.Core.Cells.Expressions
             return Operation.BinaryOperation(Left.Evaluate(processor), Right.Evaluate(processor));
         }
 
-        public override string ToString() => $"{SpesialCharactersSettings.LeftParanthesis}{Left}{Operation}{Right}{SpesialCharactersSettings.RightParanthesis}";
+        public override string ToString() => $"{LeftParanthesis}{Left}{Operation}{Right}{RightParanthesis}";
     }
 }
