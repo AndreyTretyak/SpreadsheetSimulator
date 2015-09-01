@@ -97,20 +97,11 @@ namespace Spreadsheet.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Integer number is too big consier to use long.
+        ///   Looks up a localized string similar to Integer value is too big, consider to use long.
         /// </summary>
         public static string IntegerToBig {
             get {
                 return ResourceManager.GetString("IntegerToBig", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unable to define content type of cell &quot;{0}&quot;..
-        /// </summary>
-        public static string InvalidCellContent {
-            get {
-                return ResourceManager.GetString("InvalidCellContent", resourceCulture);
             }
         }
         
@@ -151,11 +142,20 @@ namespace Spreadsheet.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cell can contain only number, string or expression.
+        ///   Looks up a localized string similar to Unknown cell start &apos;{0}&apos;.
         /// </summary>
-        public static string UnknownContentType {
+        public static string UnknownCellStart {
             get {
-                return ResourceManager.GetString("UnknownContentType", resourceCulture);
+                return ResourceManager.GetString("UnknownCellStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown expression element &apos;{0}&apos;.
+        /// </summary>
+        public static string UnknownExpressionElement {
+            get {
+                return ResourceManager.GetString("UnknownExpressionElement", resourceCulture);
             }
         }
         
@@ -169,7 +169,7 @@ namespace Spreadsheet.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cell column is more then table size.
+        ///   Looks up a localized string similar to Cell column is more then spreadsheet size.
         /// </summary>
         public static string WrongCellColumn {
             get {
@@ -178,7 +178,7 @@ namespace Spreadsheet.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cell row is more then table size.
+        ///   Looks up a localized string similar to Cell row is more then spreadsheet size.
         /// </summary>
         public static string WrongCellRow {
             get {
@@ -187,7 +187,7 @@ namespace Spreadsheet.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wrong token type &apos;{0}&apos; expected.
+        ///   Looks up a localized string similar to Wrong content type. Expected &apos;{1}&apos; but was &apos;{0}&apos;.
         /// </summary>
         public static string WrongTokenType {
             get {
