@@ -69,7 +69,7 @@ namespace Spreadsheet.Tests
         [ExpectedException(typeof(ExpressionParsingException))]
         public void WorngContentUnexpectedTokenErrorTest()
         {
-            Parse(new Token(TokenType.RightParanthesis));
+            Parse(new Token(TokenType.RightParenthesis));
         }
 
         [Test]
@@ -78,7 +78,7 @@ namespace Spreadsheet.Tests
         {
             Parse(new Token(TokenType.ExpressionStart),
                   new Token(45),
-                  new Token(TokenType.LeftParanthesis));
+                  new Token(TokenType.LeftParenthesis));
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace Spreadsheet.Tests
         public void WorngExpressionNoCloseParentsisTest()
         {
             Parse(new Token(TokenType.ExpressionStart),
-                  new Token(TokenType.LeftParanthesis),
+                  new Token(TokenType.LeftParenthesis),
                   new Token(63));
         }
 
@@ -170,11 +170,11 @@ namespace Spreadsheet.Tests
                 new Token(TokenType.ExpressionStart),
                 new Token(18),
                 new Token(OperatorManager.Default.Operators['/']),
-                new Token(TokenType.LeftParanthesis),
+                new Token(TokenType.LeftParenthesis),
                 new Token(3),
                 new Token(OperatorManager.Default.Operators['-']),
                 new Token(1),
-                new Token(TokenType.RightParanthesis));
+                new Token(TokenType.RightParenthesis));
             Assert.AreEqual(18, Cast<ConstantExpression>(expression.Left).Value);
             Assert.AreEqual('/', expression.Operation.OperatorCharacter);
             var right = Cast<BinaryExpression>(expression.Right);

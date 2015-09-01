@@ -23,6 +23,6 @@ namespace Spreadsheet.Core.Cells.Expressions
             return Operation.BinaryOperation(Left.Evaluate(processor), Right.Evaluate(processor));
         }
 
-        public override string ToString() => $"{ConstantsSettings.LeftParanthesis}{Left}{Operation}{Right}{ConstantsSettings.RightParanthesis}";
+        public override string ToString() => $"{SpesialCharactersSettings.LeftParanthesis}{Left}{Operation}{Right}{SpesialCharactersSettings.RightParanthesis}";
     }
 }

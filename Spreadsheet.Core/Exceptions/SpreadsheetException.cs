@@ -7,7 +7,7 @@ using Spreadsheet.Core.Utils;
 
 namespace Spreadsheet.Core
 {
-    public class SpreadsheetException : SystemException
+    public class SpreadsheetException : Exception
     {
 
         protected SpreadsheetException(string message) : base(message) { }
@@ -19,44 +19,25 @@ namespace Spreadsheet.Core
         {
         }
 
-        protected CellAddress? _cellAddress;
+        protected StringBuilder _cellCallStack = new StringBuilder();
 
-        public string MessageWithCallStack => $"{Message} {GetCellCallStack()}";
-
-        public string GetCellCallStack()
-        {
-            var builder = new StringBuilder();
-            if (_cellAddress.HasValue)
-            {
-                builder.Append(CellAddressConverter.GetString(_cellAddress.Value));
-            }
-            
-            var inner = InnerException as SpreadsheetException;
-            if (inner != null)
-            {
-                var stack = inner.GetCellCallStack();
-                if (!string.IsNullOrWhiteSpace(stack))
-                {
-                    builder.Append("<");
-                    builder.Append(stack);
-                }
-            }
-            return builder.ToString();
-        }
+        public string MessageWithCellCallStack => $"{Message} {(InnerException as SpreadsheetException)?._cellCallStack}";
 
         public static T SetCellAddressToStack<T>(T exception, CellAddress address) where T : SpreadsheetException
         {
-            T result;
-            if (exception._cellAddress.HasValue)
+            if (exception._cellCallStack.Length != 0)
             {
-                result = (T)Activator.CreateInstance(exception.GetType(), args: new object[] { exception.Message, exception});
+                var result = (T)Activator.CreateInstance(exception.GetType(), args: new object[] { exception.Message, exception });
+                result._cellCallStack.Append(CellAddressConverter.GetString(address));
+                result._cellCallStack.Append("<");
+                result._cellCallStack.Append(exception._cellCallStack);
+                return result;
             }
             else
             {
-                result = exception;
+                exception._cellCallStack.Append(CellAddressConverter.GetString(address));
+                return exception;
             }
-            result._cellAddress = address;
-            return result;
         }
     }
 }

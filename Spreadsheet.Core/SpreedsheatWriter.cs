@@ -30,17 +30,17 @@ namespace Spreadsheet.Core
                 var exception = value as Exception;
                 if (exception != null)
                 {
-                    _streamWriter.Write(ConstantsSettings.ErrorStartMarker);
+                    _streamWriter.Write(SpesialCharactersSettings.ErrorStartMarker);
                     var spreadsheetException = exception as SpreadsheetException;
                     _streamWriter.Write(spreadsheetException == null
                         ? exception.Message
-                        : spreadsheetException.MessageWithCallStack);
+                        : spreadsheetException.MessageWithCellCallStack);
                 }
                 else
                 {
                     _streamWriter.Write(value);
                 }
-                _streamWriter.Write(ConstantsSettings.CellSeparator);
+                _streamWriter.Write(SpesialCharactersSettings.CellSeparator);
                 if (index++ % result.ColumnCount == 0)
                     _streamWriter.WriteLine();
             }

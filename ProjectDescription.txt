@@ -1,0 +1,24 @@
+I. General description:
+
+II. Configuration of solution:
+
+III. Existing problems:
+1. Table size limitation
+2. Integer size limitation
+3. Boxing of structures
+4. Double memory usage
+5. Calculation starting after complete reading of spreadsheet
+6. Reading much slower that calculation
+7. Multi threading only slow down calculation for simple expressions 
+
+IV. Ways to optimize solution:
+1. Start calculation during reading
+1. Expression cashing
+
+V. Misc(strange part in the project):
+1. Manual integer parsing instead  int.Parser
+Reason of it is that int.Parse requires string for parsing which leads to redundant object creating
+is done to read integer while reading stream char by char without string.
+
+2. Creating of ExtendedLazy class although there are standard class Lazy.
+

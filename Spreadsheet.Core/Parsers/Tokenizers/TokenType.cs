@@ -7,8 +7,8 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
         Integer,
         String,
         Operator,
-        LeftParanthesis,
-        RightParanthesis,
+        LeftParenthesis,
+        RightParenthesis,
         EndOfCell,
         EndOfStream
     }

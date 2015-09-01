@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -33,6 +34,10 @@ namespace Spreadsheet.Core.Cells
             catch (SpreadsheetException exception)
             {
                 throw SpreadsheetException.SetCellAddressToStack(exception, Address);
+            }
+            catch (Exception exception)
+            {
+                throw SpreadsheetException.SetCellAddressToStack(new ExpressionEvaluationException(exception.Message, exception), Address);
             }
         }
 

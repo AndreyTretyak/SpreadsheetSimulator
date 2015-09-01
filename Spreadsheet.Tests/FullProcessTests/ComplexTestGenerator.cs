@@ -15,6 +15,12 @@ using Spreadsheet.Tests.Mocks;
 
 namespace Spreadsheet.Tests
 {
+
+    public class TestGenerator
+    {
+
+    }
+
     public class ComplexTestGenerator
     {
         private readonly int _row;
@@ -37,7 +43,7 @@ namespace Spreadsheet.Tests
         public string GenerateData()
         {
             _builder.Append(_row);
-            _builder.Append(ConstantsSettings.WhiteSpace);
+            _builder.Append(SpesialCharactersSettings.WhiteSpace);
             _builder.Append(_column);
             _builder.AppendLine();
             for (var i = 0; i < _row; i++)
@@ -45,11 +51,11 @@ namespace Spreadsheet.Tests
                 for (var j = 0; j < _column; j++)
                 {
                     GenerateCell(i,j);
-                    _builder.Append(ConstantsSettings.CellSeparator);
+                    _builder.Append(SpesialCharactersSettings.CellSeparator);
                 }
                 if (_random.NextDouble() < 0.5)
-                    _builder.Append(ConstantsSettings.CarriageReturn);
-                _builder.Append(ConstantsSettings.RowSeparator);
+                    _builder.Append(SpesialCharactersSettings.CarriageReturn);
+                _builder.Append(SpesialCharactersSettings.RowSeparator);
             }
             return _builder.ToString();
         }
@@ -79,7 +85,7 @@ namespace Spreadsheet.Tests
         private void GenerateExpression(int currentRow, int currentColumn)
         {
             _calculatableCells.Add(new CellAddress(currentRow, currentColumn));
-            _builder.Append(ConstantsSettings.ExpressionStart);
+            _builder.Append(SpesialCharactersSettings.ExpressionStart);
             GenerateIdentifier();
             while (_random.NextDouble() < 0.5)
             {
@@ -129,7 +135,7 @@ namespace Spreadsheet.Tests
 
         private void GenerateString()
         {
-            _builder.Append(ConstantsSettings.StringStart);
+            _builder.Append(SpesialCharactersSettings.StringStart);
             var stringSize = _random.Next(25);
             for (var i = 0; i < stringSize; i++)
             {
@@ -148,7 +154,7 @@ namespace Spreadsheet.Tests
                 }
                 else
                 {
-                    _builder.Append(ConstantsSettings.WhiteSpace);
+                    _builder.Append(SpesialCharactersSettings.WhiteSpace);
                 }
             }
         }
@@ -160,7 +166,7 @@ namespace Spreadsheet.Tests
         [Test]
         public void ComplexTest1()
         {
-            var data = new ComplexTestGenerator(3,3).GenerateData();
+            var data = new ComplexTestGenerator(100,100).GenerateData();
             var evaluated = Evaluate(data);
             //TODO need way to test result
         }

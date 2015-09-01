@@ -120,8 +120,8 @@
   <data name="BinaryOperationNotSupported" xml:space="preserve">
     <value>Binary operation not supported for operator '{0}'</value>
   </data>
-  <data name="CircularReferenceDetected" xml:space="preserve">
-    <value>Circular reference detected</value>
+  <data name="CircularReference" xml:space="preserve">
+    <value>Circular reference</value>
   </data>
   <data name="EndOfExpression" xml:space="preserve">
     <value>End of expression</value>
@@ -164,8 +164,5 @@
   </data>
   <data name="WrongTypeError" xml:space="preserve">
     <value>Wrong data type in expression. Expected '{0}' but was '{1}'</value>
-  </data>
-  <data name="ZeroDivision" xml:space="preserve">
-    <value>Zero division</value>
   </data>
 </root>
