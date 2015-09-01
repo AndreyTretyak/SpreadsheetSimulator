@@ -9,16 +9,16 @@ using Spreadsheet.Core.Parsers.Tokenizers;
 namespace Spreadsheet.Core
 {
 
-    public class SpreedsheatWriter : IDisposable
+    public class SpreadsheatWriter : IDisposable
     {
         private readonly TextWriter _streamWriter;
 
-        public SpreedsheatWriter(TextWriter streamWriter)
+        public SpreadsheatWriter(TextWriter streamWriter)
         {
             _streamWriter = streamWriter;
         }
 
-        public SpreedsheatWriter(Stream stream) : this(new StreamWriter(new BufferedStream(stream)))
+        public SpreadsheatWriter(Stream stream) : this(new StreamWriter(new BufferedStream(stream)))
         {
         }
 

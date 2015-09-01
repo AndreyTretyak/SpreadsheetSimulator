@@ -177,7 +177,7 @@ namespace Spreadsheet.Tests
             {
                 using (var ms = new MemoryStream())
                 {
-                    using (var writer = new SpreedsheatWriter(ms))
+                    using (var writer = new SpreadsheatWriter(ms))
                     {
                         writer.WriteSpreedsheat(new SpreadsheetProcessor(reader.ReadSpreadsheet()).Evaluate(new ParallelProcessingStrategy()));
                         return Encoding.UTF8.GetString(ms.ToArray());
