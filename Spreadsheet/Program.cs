@@ -27,17 +27,16 @@ namespace SpreadsheetSimulator
                         write.WriteSpreedsheat(result);
                     }
                 }
-
-                if (args.Length < 2)
-                {
-                    Console.ReadKey();
-                }
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception.Message);
             }
 
+            if (args.Length < 2)
+            {
+                Console.ReadKey();
+            }
         }
     }
 }

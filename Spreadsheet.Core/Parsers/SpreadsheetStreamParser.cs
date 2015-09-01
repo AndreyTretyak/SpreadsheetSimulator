@@ -24,7 +24,7 @@ namespace Spreadsheet.Core.Parsers
                 Next();
                 return result;
             }
-            throw InvalidContent(string.Format(Resources.WrongTokenType, Resources.EndOfExpression));
+            throw InvalidContent(Resources.WrongTokenType, Resources.EndOfExpression);
         }
 
         private Token Peek() => _tokenizer.Peek();
@@ -46,7 +46,7 @@ namespace Spreadsheet.Core.Parsers
                 case TokenType.ExpressionStart:
                     return ReadExpression();
                 default:
-                    throw InvalidContent(Resources.UnknownContentType);
+                    throw InvalidContent(Resources.UnknownCellStart);
             }
         }
 
@@ -88,7 +88,7 @@ namespace Spreadsheet.Core.Parsers
                 Next();
                 var expresion = ReadOperation();
                 if (!Peek(TokenType.RightParenthesis))
-                    throw InvalidContent(string.Format(Resources.WrongTokenType, SpesialCharactersSettings.RightParanthesis));
+                    throw InvalidContent(Resources.WrongTokenType, SpesialCharactersSettings.RightParanthesis);
                 Next();
                 return expresion;
             }
@@ -102,13 +102,15 @@ namespace Spreadsheet.Core.Parsers
                 case TokenType.CellReference:
                     return ReadCellReference();
                 default:
-                    throw InvalidContent(Resources.UnknownContentType);
+                    throw InvalidContent(Resources.UnknownExpressionElement);
             }
         }
 
-        private ExpressionParsingException InvalidContent(string additionMessage)
+        private ExpressionParsingException InvalidContent(string message, object expected = null)
         {
-            return new ExpressionParsingException($"{string.Format(Resources.InvalidCellContent, _tokenizer.Next())}. {additionMessage}");
+
+
+            return new ExpressionParsingException(string.Format(message, _tokenizer.Next(), expected));
         }
     }
 }
