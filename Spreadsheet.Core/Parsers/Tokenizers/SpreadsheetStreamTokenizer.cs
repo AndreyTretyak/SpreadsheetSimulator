@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using Spreadsheet.Core.Cells;
 using Spreadsheet.Core.Parsers.Operators;
-using static Spreadsheet.Core.Parsers.Tokenizers.ConstantsSettings;
+using static Spreadsheet.Core.Parsers.Tokenizers.SpesialCharactersSettings;
 
 namespace Spreadsheet.Core.Parsers.Tokenizers
 {
@@ -12,8 +12,8 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
         private static readonly Dictionary<char, TokenType> TokenIdentifiers = new Dictionary<char, TokenType>
         {
             {ExpressionStart, TokenType.ExpressionStart},
-            {LeftParanthesis, TokenType.LeftParanthesis},
-            {RightParanthesis, TokenType.RightParanthesis}
+            {LeftParanthesis, TokenType.LeftParenthesis},
+            {RightParanthesis, TokenType.RightParenthesis}
         };
 
         public OperatorManager OperatorManager { get; }

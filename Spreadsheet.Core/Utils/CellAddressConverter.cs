@@ -14,11 +14,11 @@ namespace Spreadsheet.Core.Utils
             var column = 0;
             while (index < address.Length && char.IsLetter(address[index]))
             {
-                if ((uint)column > (int.MaxValue / ConstantsSettings.LettersUsedForColumnNumber)) //check if next iteration make it bigger that MaxInt
+                if ((uint)column > (int.MaxValue / SpesialCharactersSettings.LettersUsedForColumnNumber)) //check if next iteration make it bigger that MaxInt
                 {
                     throw new InvalidCellAdressException(Resources.IntegerToBig);
                 }
-                column = column * ConstantsSettings.LettersUsedForColumnNumber + (char.ToUpper(address[index]) - ConstantsSettings.ColumnStartLetter + 1);
+                column = column * SpesialCharactersSettings.LettersUsedForColumnNumber + (char.ToUpper(address[index]) - SpesialCharactersSettings.ColumnStartLetter + 1);
                 index++;
             }
             column = column - 1;
@@ -47,12 +47,12 @@ namespace Spreadsheet.Core.Utils
             //transformation of zero based row index to char index
             var index = address.Column + 1;
             var result = new StringBuilder();
-            while (index / ConstantsSettings.LettersUsedForColumnNumber > 1)
+            while (index / SpesialCharactersSettings.LettersUsedForColumnNumber > 1)
             {
-                result.Append((char)(ConstantsSettings.ColumnStartLetter + index % ConstantsSettings.LettersUsedForColumnNumber - 1));
-                index = index / ConstantsSettings.LettersUsedForColumnNumber;
+                result.Append((char)(SpesialCharactersSettings.ColumnStartLetter + index % SpesialCharactersSettings.LettersUsedForColumnNumber - 1));
+                index = index / SpesialCharactersSettings.LettersUsedForColumnNumber;
             }
-            result.Append((char)(ConstantsSettings.ColumnStartLetter + index - 1));
+            result.Append((char)(SpesialCharactersSettings.ColumnStartLetter + index - 1));
             var column = new string(result.ToString().Reverse().ToArray());
 
             return $"{column}{address.Row + 1}";

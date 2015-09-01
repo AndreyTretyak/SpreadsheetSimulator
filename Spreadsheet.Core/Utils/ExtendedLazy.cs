@@ -296,7 +296,7 @@ namespace Spreadsheet.Core.Utils
             {
                 // check for recursion
                 if (m_valueFactory == ALREADY_INVOKED_SENTINEL)
-                    throw new  CircularCellRefereceException(Resources.CircularReferenceDetected);
+                    throw new  CircularCellRefereceException(Resources.CircularReference);
 
                 Func<TParameter, TResult> factory = m_valueFactory;
                 m_valueFactory = ALREADY_INVOKED_SENTINEL;

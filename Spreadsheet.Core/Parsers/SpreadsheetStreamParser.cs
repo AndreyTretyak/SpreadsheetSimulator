@@ -83,12 +83,12 @@ namespace Spreadsheet.Core.Parsers
 
         private IExpression ReadIdentifier()
         {
-            if (Peek(TokenType.LeftParanthesis))
+            if (Peek(TokenType.LeftParenthesis))
             {
                 Next();
                 var expresion = ReadOperation();
-                if (!Peek(TokenType.RightParanthesis))
-                    throw InvalidContent(string.Format(Resources.WrongTokenType, ConstantsSettings.RightParanthesis));
+                if (!Peek(TokenType.RightParenthesis))
+                    throw InvalidContent(string.Format(Resources.WrongTokenType, SpesialCharactersSettings.RightParanthesis));
                 Next();
                 return expresion;
             }

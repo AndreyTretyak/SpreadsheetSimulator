@@ -76,7 +76,7 @@ namespace Spreadsheet.Tests
         [TestCase("")]
         public void StringTest(string expect)
         {
-            var token = GetTokens($"{ConstantsSettings.StringStart}{expect}").First();
+            var token = GetTokens($"{SpesialCharactersSettings.StringStart}{expect}").First();
             Assert.AreEqual(token.Type, TokenType.String);
             Assert.AreEqual(expect, token.String);
         }
@@ -101,9 +101,9 @@ namespace Spreadsheet.Tests
         }
 
         [Test]
-        [TestCase(ConstantsSettings.ExpressionStart, TokenType.ExpressionStart)]
-        [TestCase(ConstantsSettings.LeftParanthesis, TokenType.LeftParanthesis)]
-        [TestCase(ConstantsSettings.RightParanthesis, TokenType.RightParanthesis)]
+        [TestCase(SpesialCharactersSettings.ExpressionStart, TokenType.ExpressionStart)]
+        [TestCase(SpesialCharactersSettings.LeftParanthesis, TokenType.LeftParenthesis)]
+        [TestCase(SpesialCharactersSettings.RightParanthesis, TokenType.RightParenthesis)]
         public void SpesialCharactersTest(char c, int tokenType)
         {
             var token = GetTokens(c.ToString()).First();

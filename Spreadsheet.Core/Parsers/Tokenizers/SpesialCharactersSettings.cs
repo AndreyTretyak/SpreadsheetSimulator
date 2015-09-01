@@ -1,6 +1,6 @@
 namespace Spreadsheet.Core.Parsers.Tokenizers
 {
-    internal static class ConstantsSettings
+    internal static class SpesialCharactersSettings
     {
         public const char StringStart = '\'';
 

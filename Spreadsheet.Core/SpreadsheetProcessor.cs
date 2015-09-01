@@ -12,11 +12,13 @@ namespace Spreadsheet.Core
         private readonly Spreadsheet _spreadsheet;
 
         private readonly ExtendedLazy<Cell, object>[,] _memoryCache;
+        //private readonly Lazy<object>[,] _memoryCache;
 
         public SpreadsheetProcessor(Spreadsheet spreadsheet)
         {
             _spreadsheet = spreadsheet;
             _memoryCache = new ExtendedLazy<Cell, object>[spreadsheet.RowCount, spreadsheet.ColumnCount];
+            //_memoryCache = new Lazy<object>[spreadsheet.RowCount, spreadsheet.ColumnCount];
         }
 
         public SpreadsheetEvaluationResult Evaluate(IProcessingStrategy strategy)
@@ -37,6 +39,7 @@ namespace Spreadsheet.Core
             if (_memoryCache[cell.Address.Row, cell.Address.Column] == null)
             {
                 _memoryCache[cell.Address.Row, cell.Address.Column] = new ExtendedLazy<Cell,object>(cell, EvaluateCell);
+                //_memoryCache[cell.Address.Row, cell.Address.Column] = new Lazy<object>(() => EvaluateCell(cell), LazyThreadSafetyMode.ExecutionAndPublication);
             }
             return _memoryCache[cell.Address.Row, cell.Address.Column].Value;
         }

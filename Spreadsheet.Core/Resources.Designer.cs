@@ -70,11 +70,11 @@ namespace Spreadsheet.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Circular reference detected.
+        ///   Looks up a localized string similar to Circular reference.
         /// </summary>
-        public static string CircularReferenceDetected {
+        public static string CircularReference {
             get {
-                return ResourceManager.GetString("CircularReferenceDetected", resourceCulture);
+                return ResourceManager.GetString("CircularReference", resourceCulture);
             }
         }
         
@@ -201,15 +201,6 @@ namespace Spreadsheet.Core {
         public static string WrongTypeError {
             get {
                 return ResourceManager.GetString("WrongTypeError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Zero division.
-        /// </summary>
-        public static string ZeroDivision {
-            get {
-                return ResourceManager.GetString("ZeroDivision", resourceCulture);
             }
         }
     }
