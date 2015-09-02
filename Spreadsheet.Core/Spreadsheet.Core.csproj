@@ -53,10 +53,12 @@
     <Compile Include="Exceptions\InvalidCellAdressException.cs" />
     <Compile Include="Exceptions\SpreadsheatReadingException.cs" />
     <Compile Include="Exceptions\SpreadsheetException.cs" />
+    <Compile Include="Validators\ISpreadsheetValidator.cs" />
     <Compile Include="Parsers\ISpreadsheetParser.cs" />
     <Compile Include="Parsers\Operators\IOperator.cs" />
     <Compile Include="Parsers\Operators\Operator.cs" />
     <Compile Include="Parsers\Tokenizers\ISpreadsheetTokenizer.cs" />
+    <Compile Include="Validators\RecursionDetectionValidator.cs" />
     <Compile Include="Utils\CellAddressConverter.cs" />
     <Compile Include="Utils\ExtendedLazy.cs" />
     <Compile Include="ProcessingStrategies\IProcessingStrategy.cs" />

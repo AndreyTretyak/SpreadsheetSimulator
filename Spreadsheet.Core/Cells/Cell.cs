@@ -33,11 +33,11 @@ namespace Spreadsheet.Core.Cells
             }
             catch (SpreadsheetException exception)
             {
-                throw SpreadsheetException.SetCellAddressToStack(exception, Address);
+                throw SpreadsheetException.AddCellAddressToErrorStack(exception, Address);
             }
             catch (Exception exception)
             {
-                throw SpreadsheetException.SetCellAddressToStack(new ExpressionEvaluationException(exception.Message, exception), Address);
+                throw SpreadsheetException.AddCellAddressToErrorStack(new ExpressionEvaluationException(exception.Message, exception), Address);
             }
         }
 

@@ -23,7 +23,7 @@ namespace Spreadsheet.Core
 
         public string MessageWithCellCallStack => $"{Message} {(InnerException as SpreadsheetException)?._cellCallStack}";
 
-        public static T SetCellAddressToStack<T>(T exception, CellAddress address) where T : SpreadsheetException
+        public static T AddCellAddressToErrorStack<T>(T exception, CellAddress address) where T : SpreadsheetException
         {
             if (exception._cellCallStack.Length != 0)
             {
