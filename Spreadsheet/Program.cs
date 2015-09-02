@@ -17,6 +17,7 @@ namespace SpreadsheetSimulator
             {
                 var input = args.Length > 0 ? File.Open(args[0], FileMode.Open) : Console.OpenStandardInput();
                 var output = args.Length > 1 ? File.Create(args[1]) : Console.OpenStandardOutput();
+
                 using (var reader = new SpreadsheetReader(input))
                 {
                     var spreadsheet = reader.ReadSpreadsheet();
@@ -27,6 +28,7 @@ namespace SpreadsheetSimulator
                         write.WriteSpreedsheat(result);
                     }
                 }
+
             }
             catch (Exception exception)
             {
