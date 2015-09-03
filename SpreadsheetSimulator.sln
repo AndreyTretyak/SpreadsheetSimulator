@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spreadsheet.Tests", "Spread
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FBCB0462-1B65-49D6-94D6-220D89A564EB}"
 	ProjectSection(SolutionItems) = preProject
-		ProjectDesription.md = ProjectDesription.md
+		README.md = README.md
 		simple_scheme.svg = simple_scheme.svg
 	EndProjectSection
 EndProject
