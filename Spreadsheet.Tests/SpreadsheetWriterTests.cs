@@ -17,9 +17,9 @@ namespace Spreadsheet.Tests
         {
             using (var stream = new MemoryStream())
             {
-                using (var writer = new SpreadsheatWriter(stream))
+                using (var writer = new SpreadsheetWriter(stream))
                 {
-                    writer.WriteSpreedsheat(new SpreadsheetEvaluationResult(columnCount, values));
+                    writer.WriteSpreedsheat(new SpreadsheetProcessingResult(columnCount, values));
                     stream.Position = 0;
                     return Encoding.UTF8.GetString(stream.ToArray());
                 }
