@@ -71,7 +71,7 @@
     <Compile Include="Parsers\Tokenizers\Token.cs" />
     <Compile Include="Parsers\Tokenizers\TokenType.cs" />
     <Compile Include="ProcessingStrategies\SimpleProcessingStrategy.cs" />
-    <Compile Include="SpreadsheetEvaluationResult.cs" />
+    <Compile Include="SpreadsheetProcessingResult.cs" />
     <Compile Include="Spreadsheet.cs" />
     <Compile Include="SpreadsheetProcessor.cs" />
     <Compile Include="SpreadsheetReader.cs" />
@@ -82,7 +82,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SpreadsheatWriter.cs" />
+    <Compile Include="SpreadsheetWriter.cs" />
     <Compile Include="Utils\ObjectPool.cs" />
     <Compile Include="Utils\PooledHashSet.cs" />
   </ItemGroup>

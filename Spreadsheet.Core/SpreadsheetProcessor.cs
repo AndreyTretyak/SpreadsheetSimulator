@@ -25,14 +25,14 @@ namespace Spreadsheet.Core
             _validator = validator ?? new RecursionDetectionValidator();
         }
 
-        public SpreadsheetEvaluationResult Evaluate()
+        public SpreadsheetProcessingResult Evaluate()
         {
             return Evaluate(new SimpleProcessingStrategy());
         }
 
-        public SpreadsheetEvaluationResult Evaluate(IProcessingStrategy strategy)
+        public SpreadsheetProcessingResult Evaluate(IProcessingStrategy strategy)
         {
-            return new SpreadsheetEvaluationResult(_spreadsheet.ColumnCount, strategy.Evaluate(_spreadsheet, GetCellValue));
+            return new SpreadsheetProcessingResult(_spreadsheet.ColumnCount, strategy.Evaluate(_spreadsheet, GetCellValue));
         }
 
         public object GetCellValue(CellAddress address)

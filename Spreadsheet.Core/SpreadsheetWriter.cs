@@ -9,20 +9,20 @@ using Spreadsheet.Core.Parsers.Tokenizers;
 namespace Spreadsheet.Core
 {
 
-    public class SpreadsheatWriter : IDisposable
+    public class SpreadsheetWriter : IDisposable
     {
         private readonly TextWriter _streamWriter;
 
-        public SpreadsheatWriter(TextWriter streamWriter)
+        public SpreadsheetWriter(TextWriter streamWriter)
         {
             _streamWriter = streamWriter;
         }
 
-        public SpreadsheatWriter(Stream stream) : this(new StreamWriter(new BufferedStream(stream)))
+        public SpreadsheetWriter(Stream stream) : this(new StreamWriter(new BufferedStream(stream)))
         {
         }
 
-        public void WriteSpreedsheat(SpreadsheetEvaluationResult result)
+        public void WriteSpreedsheat(SpreadsheetProcessingResult result)
         {
             var index = 1;
             foreach (var value in result.Values)

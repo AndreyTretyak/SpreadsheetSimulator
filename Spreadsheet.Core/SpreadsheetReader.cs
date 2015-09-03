@@ -12,7 +12,6 @@ using static Spreadsheet.Core.Parsers.Tokenizers.SpesialCharactersSettings;
 
 namespace Spreadsheet.Core
 {
-
     public class SpreadsheetReader : IDisposable
     {
         private static readonly char[] SpreadsheetSizeSeparators = 
