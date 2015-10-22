@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 
@@ -13,11 +14,12 @@ namespace Spreadsheet.Core.Parsers.Operators
 
         public OperatorManager(IList<IOperator> operators)
         {
-            Operators = operators.ToDictionary(o => o.OperatorCharacter, o => o);
+            Operators = new ReadOnlyDictionary<char, IOperator>(operators.ToDictionary(o => o.OperatorCharacter, o => o));
             Priorities = operators.Select(o => o.Priority)
                                   .Distinct()
                                   .OrderBy(g => g)
-                                  .ToArray();
+                                  .ToList()
+                                  .AsReadOnly();
         }
 
         private readonly static Lazy<OperatorManager> _default;
