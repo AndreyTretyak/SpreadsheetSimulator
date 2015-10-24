@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Spreadsheet.Core.Cells;
@@ -20,7 +21,9 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
 
         private readonly TextReader _stream;
 
-        private Token? _currentToken = null;
+        private readonly ReaderWithPeekSupport<Token> _tokenReader;
+
+        private readonly ReaderWithPeekSupport<char> _charReader;
 
         private readonly StringBuilder _stringBuilder;
 
@@ -33,46 +36,21 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
             _stream = stream;
             _stringBuilder = new StringBuilder();
             OperatorManager = operatorManager ?? OperatorManager.Default;
+
+            _charReader = new ReaderWithPeekSupport<char>(GetCharacterFromStream);
+            _tokenReader = new ReaderWithPeekSupport<Token>(GetTokenFromStream);
         }
 
-        public Token Peek()
-        {
-            if (!_currentToken.HasValue)
-                _currentToken = NextToken();
-            return _currentToken.Value;
-        }
+        public Token Peek() => _tokenReader.Peek();
 
-        public Token Next()
-        {
-            if (!_currentToken.HasValue)
-                _currentToken = NextToken();
-            var value = _currentToken.Value;
-            _currentToken = NextToken();
-            return value;
-        }
+        public Token Next() => _tokenReader.Next();
 
-        private char PeekChar()
-        {
-            var result = _stream.Peek();
-            if (result == -1)
-                return StreamEnd;
-            return (char) result;
-        }
-
-        private char ReadChar()
-        {
-            var result = _stream.Read();
-            if (result == -1)
-                return StreamEnd;
-            return (char)result;
-        }
-
-        private Token NextToken()
+        private Token GetTokenFromStream()
         {
             var peek = PeekChar();
             while (char.IsWhiteSpace(peek) && !IsSeparationCharacter(peek))
             {
-                ReadChar();
+                NextChar();
                 peek = PeekChar();
             }
 
@@ -80,13 +58,12 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
             {
                 return new Token(TokenType.EndOfStream);
             }
-            
 
             if (IsSeparationCharacter(peek) && peek != StreamEnd)
             {
-                ReadChar();
+                NextChar();
                 if (peek == CarriageReturn && PeekChar() == RowSeparator)
-                    ReadChar();
+                    NextChar();
                 return new Token(TokenType.EndOfCell);
             }
 
@@ -101,13 +78,13 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
 
             if (TokenIdentifiers.ContainsKey(peek))
             {
-                ReadChar();
+                NextChar();
                 return new Token(TokenIdentifiers[peek]);
             }
 
             if (OperatorManager.Operators.ContainsKey(peek))
             {
-                ReadChar();
+                NextChar();
                 return new Token(OperatorManager.Operators[peek]);
             }
 
@@ -116,7 +93,7 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
 
         private Token ReadStringToken()
         {
-            ReadChar();
+            NextChar();
             return new Token(ReadRemainExpression());
         }
 
@@ -127,7 +104,7 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
 
         public Token ReadCellReferenceToken()
         {
-            var column = ReadColumn();
+            var column = ReadColumnNumber();
             var row = ReadInteger();
             //indexes is zero based, so we need to subtract 1 from current row and column values
             return new Token(new CellAddress(row - 1, column - 1));
@@ -138,7 +115,7 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
             _stringBuilder.Clear();
             while (!IsSeparationCharacter(PeekChar()))
             {
-                _stringBuilder.Append(ReadChar());
+                _stringBuilder.Append(NextChar());
             }
             return _stringBuilder.ToString();
         }
@@ -151,12 +128,12 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
                 //check that next iteration will not make it bigger that MaxInt
                 if ((uint)value > (int.MaxValue / 10))
                     throw new ExpressionParsingException(Resources.IntegerToBig);
-                value = value * 10 + (ReadChar() - '0');
+                value = value * 10 + (NextChar() - '0');
             }
             return value;
         }
 
-        private int ReadColumn()
+        private int ReadColumnNumber()
         {
             var value = 0;
             while (IsColumnLetter(PeekChar()))
@@ -164,10 +141,20 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
                 //check that next iteration will not make it bigger that MaxInt
                 if ((uint)value > (int.MaxValue / LettersUsedForColumnNumber))
                     throw new ExpressionParsingException(Resources.IntegerToBig);
-                value = value * LettersUsedForColumnNumber + (char.ToUpper(ReadChar()) - ColumnStartLetter + 1);
+                value = value * LettersUsedForColumnNumber + (char.ToUpper(NextChar()) - ColumnStartLetter + 1);
             }
             return value;
         }
+
+        private char GetCharacterFromStream()
+        {
+            var result = _stream.Read();
+            return (result == -1) ? StreamEnd : (char)result;
+        }
+
+        private char PeekChar() => _charReader.Peek();
+
+        private char NextChar() => _charReader.Next();
 
         private static bool IsColumnLetter(char character)
         {
@@ -182,6 +169,38 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
                 || character == CarriageReturn 
                 || character == RowSeparator
                 || character == StreamEnd;
+        }
+
+        private class ReaderWithPeekSupport<T> where T : struct
+        {
+            private T? _current;
+
+            private readonly Func<T> _getNextValue;
+
+            public ReaderWithPeekSupport(Func<T> getNextValue)
+            {
+                _getNextValue = getNextValue;
+            }
+
+            public T Peek()
+            {
+                if (_current.HasValue)
+                    return _current.Value;
+
+                var value = _getNextValue();
+                _current = value;
+                return value;
+            }
+
+            public T Next()
+            {
+                if (!_current.HasValue)
+                    return _getNextValue();
+
+                var value = _current.Value;
+                _current = null;
+                return value;
+            }
         }
     }
 }
