@@ -8,7 +8,7 @@ using static Spreadsheet.Core.Utils.SpesialCharactersSettings;
 
 namespace Spreadsheet.Core.Parsers.Tokenizers
 {
-    internal class SpreadsheetStreamTokenizer : AbstractReaderWithPeekSupport<StreamReaderWithPeekSupport, Token>, ISpreadsheetTokenizer
+    internal class SpreadsheetStreamTokenizer : AbstractReaderWithPeekSupport<Token>, ISpreadsheetTokenizer
     {
         private static readonly Dictionary<char, TokenType> TokenIdentifiers = new Dictionary<char, TokenType>
         {
@@ -19,22 +19,25 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
 
         public OperatorManager OperatorManager { get; }
 
+        private readonly StreamReaderWithPeekSupport _charReader;
+
         public SpreadsheetStreamTokenizer(Stream stream, OperatorManager operatorManager = null) : this(new StreamReader(stream), operatorManager)
         {
         }
 
-        public SpreadsheetStreamTokenizer(TextReader stream, OperatorManager operatorManager = null) : base(new StreamReaderWithPeekSupport(stream))
+        public SpreadsheetStreamTokenizer(TextReader stream, OperatorManager operatorManager = null)
         {
+            _charReader = new StreamReaderWithPeekSupport(stream);
             OperatorManager = operatorManager ?? OperatorManager.Default;
         }
 
-        protected override Token GetNextValue(StreamReaderWithPeekSupport source)
+        protected override Token GetNextValue()
         {
-            var peek = source.Peek();
+            var peek = _charReader.Peek();
             while (char.IsWhiteSpace(peek) && !IsSeparationCharacter(peek))
             {
-                source.Read();
-                peek = source.Peek();
+                _charReader.Read();
+                peek = _charReader.Peek();
             }
 
             if (peek == StreamEnd)
@@ -44,51 +47,51 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
 
             if (IsSeparationCharacter(peek) && peek != StreamEnd)
             {
-                source.Read();
-                if (peek == CarriageReturn && source.Peek() == RowSeparator)
-                    source.Read();
+                _charReader.Read();
+                if (peek == CarriageReturn && _charReader.Peek() == RowSeparator)
+                    _charReader.Read();
                 return new Token(TokenType.EndOfCell);
             }
 
             if (peek == StringStart)
-                return ReadStringToken(source);
+                return ReadStringToken();
 
             if (char.IsDigit(peek))
-                return ReadIntegerToken(source);
+                return ReadIntegerToken();
 
             if (IsColumnLetter(peek))
-                return ReadCellReferenceToken(source);
+                return ReadCellReferenceToken();
 
             if (TokenIdentifiers.ContainsKey(peek))
             {
-                source.Read();
+                _charReader.Read();
                 return new Token(TokenIdentifiers[peek]);
             }
 
             if (OperatorManager.Operators.ContainsKey(peek))
             {
-                source.Read();
+                _charReader.Read();
                 return new Token(OperatorManager.Operators[peek]);
             }
 
-            throw new ExpressionParsingException(source.ReadRemainExpression());
+            throw new ExpressionParsingException(_charReader.ReadRemainExpression());
         }
 
-        private Token ReadStringToken(StreamReaderWithPeekSupport source)
+        private Token ReadStringToken()
         {
-            source.Read();
-            return new Token(source.ReadRemainExpression());
+            _charReader.Read();
+            return new Token(_charReader.ReadRemainExpression());
         }
 
-        private Token ReadIntegerToken(StreamReaderWithPeekSupport source)
+        private Token ReadIntegerToken()
         {
-            return new Token(source.ReadInteger());
+            return new Token(_charReader.ReadInteger());
         }
 
-        private Token ReadCellReferenceToken(StreamReaderWithPeekSupport source)
+        private Token ReadCellReferenceToken()
         {
-            var column = source.ReadColumnNumber();
-            var row = source.ReadInteger();
+            var column = _charReader.ReadColumnNumber();
+            var row = _charReader.ReadInteger();
             //indexes is zero based, so we need to subtract 1 from current row and column values
             return new Token(new CellAddress(row - 1, column - 1));
         }
