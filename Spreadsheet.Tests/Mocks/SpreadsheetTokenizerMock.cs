@@ -25,7 +25,7 @@ namespace Spreadsheet.Tests.Mocks
             return _index < _tokens.Length ? _tokens[_index] : EndToken;
         }
 
-        public Token Next()
+        public Token Read()
         {
             return _index < _tokens.Length ? _tokens[_index++] : EndToken;
         }

@@ -10,7 +10,9 @@ using Spreadsheet.Core;
 using Spreadsheet.Core.Cells;
 using Spreadsheet.Core.Parsers.Operators;
 using Spreadsheet.Core.Parsers.Tokenizers;
+using Spreadsheet.Core.Parsers.Tokenizers.Readers;
 using Spreadsheet.Core.ProcessingStrategies;
+using Spreadsheet.Core.Utils;
 using Spreadsheet.Tests.Mocks;
 
 namespace Spreadsheet.Tests
@@ -166,7 +168,7 @@ namespace Spreadsheet.Tests
         [Test]
         public void ComplexTest1()
         {
-            var data = new ComplexTestGenerator(100,100).GenerateData();
+            var data = new ComplexTestGenerator(100, 100).GenerateData();
             var evaluated = Evaluate(data);
             //TODO need way to test result
         }

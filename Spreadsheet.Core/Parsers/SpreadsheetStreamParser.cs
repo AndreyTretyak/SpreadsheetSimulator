@@ -1,6 +1,7 @@
 using System.Linq;
 using Spreadsheet.Core.Cells.Expressions;
 using Spreadsheet.Core.Parsers.Tokenizers;
+using Spreadsheet.Core.Utils;
 
 namespace Spreadsheet.Core.Parsers
 {
@@ -13,7 +14,7 @@ namespace Spreadsheet.Core.Parsers
             _tokenizer = tokenizer;
         }
 
-        public IExpression NextExpression()
+        public IExpression ReadExpression()
         {
             if (Peek(TokenType.EndOfStream))
                 return null;
@@ -21,7 +22,7 @@ namespace Spreadsheet.Core.Parsers
             var result = ReadCellContent();
             if (Peek(TokenType.EndOfCell) || Peek(TokenType.EndOfStream))
             {
-                Next();
+                Read();
                 return result;
             }
             throw InvalidContent(Resources.WrongTokenType, Resources.EndOfExpression);
@@ -31,7 +32,7 @@ namespace Spreadsheet.Core.Parsers
 
         private bool Peek(TokenType type) => Peek().Type == type;
 
-        private Token Next() => _tokenizer.Next();
+        private Token Read() => _tokenizer.Read();
 
         private IExpression ReadCellContent()
         {
@@ -44,7 +45,7 @@ namespace Spreadsheet.Core.Parsers
                 case TokenType.String:
                     return ReadString();
                 case TokenType.ExpressionStart:
-                    return ReadExpression();
+                    return ReadComplexExpression();
                 default:
                     throw InvalidContent(Resources.UnknownCellStart);
             }
@@ -55,15 +56,15 @@ namespace Spreadsheet.Core.Parsers
             return new ConstantExpression(null);
         }
 
-        private IExpression ReadInteger() => new ConstantExpression(_tokenizer.Next().Integer);
+        private IExpression ReadInteger() => new ConstantExpression(_tokenizer.Read().Integer);
 
-        private IExpression ReadString() => new ConstantExpression(_tokenizer.Next().String);
+        private IExpression ReadString() => new ConstantExpression(_tokenizer.Read().String);
 
-        private IExpression ReadCellReference() => new CellRefereceExpression(_tokenizer.Next().Address);
+        private IExpression ReadCellReference() => new CellRefereceExpression(_tokenizer.Read().Address);
 
-        private IExpression ReadExpression()
+        private IExpression ReadComplexExpression()
         {
-            Next();
+            Read();
             return ReadOperation();
         }
         
@@ -76,7 +77,7 @@ namespace Spreadsheet.Core.Parsers
             while (Peek(TokenType.Operator)
                    && Peek().Operator.Priority == _tokenizer.OperatorManager.Priorities[priority])
             {
-                expression = new BinaryExpression(expression, Next().Operator, ReadOperation(priority + 1));
+                expression = new BinaryExpression(expression, Read().Operator, ReadOperation(priority + 1));
             }
             return expression;
         }
@@ -86,14 +87,14 @@ namespace Spreadsheet.Core.Parsers
             switch (Peek().Type)
             {
                 case TokenType.LeftParenthesis:
-                    Next();
+                    Read();
                     var expresion = ReadOperation();
                     if (!Peek(TokenType.RightParenthesis))
                         throw InvalidContent(Resources.WrongTokenType, SpesialCharactersSettings.RightParanthesis);
-                    Next();
+                    Read();
                     return expresion;
                 case TokenType.Operator:
-                    return new UnaryExpression(Next().Operator, ReadIdentifier());
+                    return new UnaryExpression(Read().Operator, ReadIdentifier());
                 case TokenType.Integer:
                     return ReadInteger();
                 case TokenType.CellReference:
@@ -105,7 +106,7 @@ namespace Spreadsheet.Core.Parsers
 
         private ExpressionParsingException InvalidContent(string message, object expected = null)
         {
-            return new ExpressionParsingException(string.Format(message, _tokenizer.Next(), expected));
+            return new ExpressionParsingException(string.Format(message, _tokenizer.Read(), expected));
         }
     }
 }

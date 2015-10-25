@@ -4,6 +4,6 @@ namespace Spreadsheet.Core.Parsers
 {
     internal interface ISpreadsheetParser
     {
-        IExpression NextExpression();
+        IExpression ReadExpression();
     }
 }

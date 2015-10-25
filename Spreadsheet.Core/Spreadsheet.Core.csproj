@@ -53,6 +53,8 @@
     <Compile Include="Exceptions\InvalidCellAdressException.cs" />
     <Compile Include="Exceptions\SpreadsheatReadingException.cs" />
     <Compile Include="Exceptions\SpreadsheetException.cs" />
+    <Compile Include="Parsers\Tokenizers\Readers\AbstractReaderWithPeekSupport.cs" />
+    <Compile Include="Parsers\Tokenizers\Readers\StreamReaderWithPeekSupport.cs" />
     <Compile Include="Validators\ISpreadsheetValidator.cs" />
     <Compile Include="Parsers\ISpreadsheetParser.cs" />
     <Compile Include="Parsers\Operators\IOperator.cs" />
@@ -67,7 +69,7 @@
     <Compile Include="Exceptions\ExpressionParsingException.cs" />
     <Compile Include="Parsers\Tokenizers\SpreadsheetStreamTokenizer.cs" />
     <Compile Include="Parsers\Operators\OperatorManager.cs" />
-    <Compile Include="Parsers\Tokenizers\SpesialCharactersSettings.cs" />
+    <Compile Include="Utils\SpesialCharactersSettings.cs" />
     <Compile Include="Parsers\Tokenizers\Token.cs" />
     <Compile Include="Parsers\Tokenizers\TokenType.cs" />
     <Compile Include="ProcessingStrategies\SimpleProcessingStrategy.cs" />

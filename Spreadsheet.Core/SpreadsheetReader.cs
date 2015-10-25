@@ -8,7 +8,7 @@ using Spreadsheet.Core.Cells;
 using Spreadsheet.Core.Cells.Expressions;
 using Spreadsheet.Core.Parsers;
 using Spreadsheet.Core.Parsers.Tokenizers;
-using static Spreadsheet.Core.Parsers.Tokenizers.SpesialCharactersSettings;
+using static Spreadsheet.Core.Utils.SpesialCharactersSettings;
 
 namespace Spreadsheet.Core
 {
@@ -69,7 +69,7 @@ namespace Spreadsheet.Core
                 IExpression expression;
                 try
                 {
-                    expression = parser.NextExpression();
+                    expression = parser.ReadExpression();
                 }
                 catch (SpreadsheetException exception)
                 {

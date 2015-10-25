@@ -9,6 +9,7 @@ using Spreadsheet.Core;
 using Spreadsheet.Core.Cells;
 using Spreadsheet.Core.Parsers.Operators;
 using Spreadsheet.Core.Parsers.Tokenizers;
+using Spreadsheet.Core.Parsers.Tokenizers.Readers;
 using Spreadsheet.Core.Utils;
 
 namespace Spreadsheet.Tests
@@ -27,7 +28,7 @@ namespace Spreadsheet.Tests
             Token token;
             do
             {
-                yield return token = tokenizer.Next();
+                yield return token = tokenizer.Read();
             } while (token.Type != TokenType.EndOfStream);
         }
 
@@ -128,7 +129,7 @@ namespace Spreadsheet.Tests
             for (var i = 0; i < 10; i++)
             {
                 Assert.AreEqual(TokenType.EndOfStream, tokenizer.Peek().Type);
-                Assert.AreEqual(TokenType.EndOfStream, tokenizer.Next().Type);
+                Assert.AreEqual(TokenType.EndOfStream, tokenizer.Read().Type);
             }
         }
 

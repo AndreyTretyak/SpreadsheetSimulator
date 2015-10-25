@@ -6,7 +6,7 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
     {
         Token Peek();
 
-        Token Next();
+        Token Read();
 
         OperatorManager OperatorManager { get; }
     }

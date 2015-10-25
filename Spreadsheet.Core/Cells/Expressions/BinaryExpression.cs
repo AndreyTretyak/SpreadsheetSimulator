@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Spreadsheet.Core.Parsers.Operators;
-using static Spreadsheet.Core.Parsers.Tokenizers.SpesialCharactersSettings;
+using static Spreadsheet.Core.Utils.SpesialCharactersSettings;
 
 namespace Spreadsheet.Core.Cells.Expressions
 {

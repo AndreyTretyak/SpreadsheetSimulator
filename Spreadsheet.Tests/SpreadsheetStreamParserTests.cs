@@ -26,7 +26,7 @@ namespace Spreadsheet.Tests
             IExpression expression;
             do
             {
-                expression = parser.NextExpression();
+                expression = parser.ReadExpression();
                 if (expression != null)
                     yield return expression;
             } while (expression != null);

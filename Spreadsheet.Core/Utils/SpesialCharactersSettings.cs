@@ -1,4 +1,4 @@
-namespace Spreadsheet.Core.Parsers.Tokenizers
+namespace Spreadsheet.Core.Utils
 {
     internal static class SpesialCharactersSettings
     {
@@ -25,5 +25,20 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
         public const char RightParanthesis = ')';
 
         public const string ErrorStartMarker = "#";
+
+        public static bool IsColumnLetter(char character)
+        {
+            character = char.ToUpper(character);
+            //We subtract letter because LettersUsedForColumnNumber means 1
+            return character >= ColumnStartLetter && character <= ColumnStartLetter + LettersUsedForColumnNumber - 1;
+        }
+
+        public static bool IsSeparationCharacter(char character)
+        {
+            return character == CellSeparator
+                || character == CarriageReturn
+                || character == RowSeparator
+                || character == StreamEnd;
+        }
     }
 }

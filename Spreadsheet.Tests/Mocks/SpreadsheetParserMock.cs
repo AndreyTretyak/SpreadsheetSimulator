@@ -16,7 +16,7 @@ namespace Spreadsheet.Tests.Mocks
             _expressions = expressions;
         }
 
-        public IExpression NextExpression()
+        public IExpression ReadExpression()
         {
             return _index < _expressions.Length 
                 ? _expressions[_index++] 
@@ -33,7 +33,7 @@ namespace Spreadsheet.Tests.Mocks
             _exception = exception;
         }
 
-        public IExpression NextExpression()
+        public IExpression ReadExpression()
         {
             throw _exception;
         }
