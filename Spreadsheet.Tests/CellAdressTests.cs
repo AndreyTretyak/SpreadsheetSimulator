@@ -19,10 +19,9 @@ namespace Spreadsheet.Tests
         [TestCase(5, 5)]
         [TestCase(-1, 1)]
         [TestCase(1, -1)]
-        [ExpectedException(typeof(InvalidCellAdressException))]
         public void ExceptionTests(int row, int column)
         {
-            new CellAddress(row, column).Validate(2, 2);
+			Assert.That(() => new CellAddress(row, column).Validate(2, 2), Throws.ArgumentNullException);
         }
 
         [Test]

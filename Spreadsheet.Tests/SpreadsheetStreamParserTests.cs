@@ -59,44 +59,39 @@ namespace Spreadsheet.Tests
         }
 
         [Test]
-        [ExpectedException(typeof(ExpressionParsingException))]
         public void WorngContentNotSeparatorErrorTest()
         {
-            Parse(new Token(1), new Token(2));
+			Assert.That(() => Parse(new Token(1), new Token(2)), Throws.ArgumentNullException);
         }
 
         [Test]
-        [ExpectedException(typeof(ExpressionParsingException))]
         public void WorngContentUnexpectedTokenErrorTest()
         {
-            Parse(new Token(TokenType.RightParenthesis));
+			Assert.That(() => Parse(new Token(TokenType.RightParenthesis)), Throws.ArgumentNullException);
         }
 
         [Test]
-        [ExpectedException(typeof(ExpressionParsingException))]
         public void WorngExpressionTest()
         {
-            Parse(new Token(TokenType.ExpressionStart),
-                  new Token(45),
-                  new Token(TokenType.LeftParenthesis));
+			Assert.That(() => Parse(new Token(TokenType.ExpressionStart),
+				  new Token(45),
+				  new Token(TokenType.LeftParenthesis)), Throws.ArgumentNullException);
         }
 
         [Test]
-        [ExpectedException(typeof(ExpressionParsingException))]
         public void WorngExpressionNoCloseParentsisTest()
         {
-            Parse(new Token(TokenType.ExpressionStart),
-                  new Token(TokenType.LeftParenthesis),
-                  new Token(63));
+			Assert.That(() => Parse(new Token(TokenType.ExpressionStart),
+				  new Token(TokenType.LeftParenthesis),
+				  new Token(63)), Throws.ArgumentNullException);
         }
 
         [Test]
-        [ExpectedException(typeof(ExpressionParsingException))]
         public void WorngExpressionUnknownTokenTest()
         {
-            Parse(new Token(TokenType.ExpressionStart),
-                  new Token(83),
-                  new Token(TokenType.ExpressionStart));
+			Assert.That(() => Parse(new Token(TokenType.ExpressionStart),
+				  new Token(83),
+				  new Token(TokenType.ExpressionStart)), Throws.ArgumentNullException);
         }
 
         [Test]

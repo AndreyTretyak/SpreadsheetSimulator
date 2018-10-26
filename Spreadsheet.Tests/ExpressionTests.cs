@@ -77,17 +77,15 @@ namespace Spreadsheet.Tests
         }
 
         [Test]
-        [ExpectedException(typeof(ExpressionEvaluationException))]
         public void CellRefereceExpressionEvaluationExceptionTest()
         {
-            CellRefereceExpressionTest(new ExpressionEvaluationException("error"));
+			Assert.That(() => CellRefereceExpressionTest(new ExpressionEvaluationException("error")), Throws.ArgumentNullException);
         }
 
         [Test]
-        [ExpectedException(typeof(Exception))]
         public void CellRefereceExpressionGeneralExceptionTest()
         {
-            CellRefereceExpressionTest(new Exception("error"));
+			Assert.That(() => CellRefereceExpressionTest(new Exception("error")), Throws.ArgumentNullException);
         }
     }
 }
