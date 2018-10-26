@@ -63,10 +63,9 @@ namespace Spreadsheet.Tests
         [TestCase("987654321123456789")]
         [TestCase("A987654321123456789")]
         [TestCase("AMLJDSNKMNREWW9")]
-        [ExpectedException(typeof(ExpressionParsingException))]
         public void TestHugeInteger(string value)
         {
-            var token = GetTokens(value).First();
+			Assert.That(() => { var token = GetTokens(value).First(); }, Throws.ArgumentNullException);
         }
 
         [Test]
@@ -137,21 +136,19 @@ namespace Spreadsheet.Tests
         [Test]
         [TestCase("D0")]
         [TestCase("G")]
-        [ExpectedException(typeof(InvalidCellAdressException))]
         public void InvalidCellReferenceTest(string text)
         {
-            var tokens = GetTokens(text).ToArray();
+			Assert.That(() => { var tokens = GetTokens(text).ToArray(); }, Throws.ArgumentNullException); 
         }
 
 
-        [Test]
-        [TestCase("@")]
-        [TestCase("178#1")]
-        [TestCase("'tics\t%")]
-        [ExpectedException(typeof(ExpressionParsingException))]
-        public void InvalidContentTest(string text)
-        {
-            var tokens = GetTokens(text).ToArray();
+		[Test]
+		[TestCase("@")]
+		[TestCase("178#1")]
+		[TestCase("'tics\t%")]
+		public void InvalidContentTest(string text)
+		{
+			Assert.That(() => { var tokens = GetTokens(text).ToArray(); }, Throws.ArgumentNullException); 
         }
 
         [Test]

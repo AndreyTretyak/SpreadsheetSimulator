@@ -34,10 +34,9 @@ namespace Spreadsheet.Tests
         [TestCase("A11231232135432543341324")]
         [TestCase("ABSDFDERWEDSASDSDW4")]
         [TestCase("F14@")]
-        [ExpectedException(typeof(InvalidCellAdressException))]
         public void ExceptionTests(string reference)
         {
-            CellAddressConverter.FromString(reference);
+			Assert.That(() => CellAddressConverter.FromString(reference), Throws.ArgumentNullException); 
         }
     }
 }

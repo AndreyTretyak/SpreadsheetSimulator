@@ -26,13 +26,16 @@ namespace Spreadsheet.Tests
         }
 
         [Test]
-        [ExpectedException(typeof(SpreadsheatReadingException))]
         public void NullTest()
         {
-            using (var reader = new SpreadsheetReader((TextReader)null))
-            {
-                reader.ReadSpreadsheet();
-            }
+			Assert.That(() =>
+			{
+				using (var reader = new SpreadsheetReader((TextReader)null))
+				{
+					reader.ReadSpreadsheet();
+				}
+			}, Throws.ArgumentNullException);
+			
         }
 
         [Test]
@@ -45,10 +48,9 @@ namespace Spreadsheet.Tests
         [TestCase("-8 -5")]
         [TestCase("123456789987654321 1")]
         [TestCase("1 123456789987654321")]
-        [ExpectedException(typeof(SpreadsheatReadingException))]
         public void WrongSizeTest(string size)
         {
-            ReadSpreadsheet(size, new IExpression[0]);
+			Assert.That(() => ReadSpreadsheet(size, new IExpression[0]), Throws.ArgumentNullException);
         }
 
         [Test]
