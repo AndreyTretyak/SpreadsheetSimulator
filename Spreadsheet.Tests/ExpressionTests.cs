@@ -79,13 +79,13 @@ namespace Spreadsheet.Tests
         [Test]
         public void CellRefereceExpressionEvaluationExceptionTest()
         {
-			Assert.That(() => CellRefereceExpressionTest(new ExpressionEvaluationException("error")), Throws.ArgumentNullException);
+			Assert.That(() => CellRefereceExpressionTest(new ExpressionEvaluationException("error")), Throws.InstanceOf<ExpressionEvaluationException>());
         }
 
         [Test]
         public void CellRefereceExpressionGeneralExceptionTest()
         {
-			Assert.That(() => CellRefereceExpressionTest(new Exception("error")), Throws.ArgumentNullException);
+			Assert.That(() => CellRefereceExpressionTest(new Exception("error")), Throws.Exception);
         }
     }
 }

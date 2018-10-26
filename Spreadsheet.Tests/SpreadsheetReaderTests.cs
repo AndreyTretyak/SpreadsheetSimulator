@@ -34,7 +34,7 @@ namespace Spreadsheet.Tests
 				{
 					reader.ReadSpreadsheet();
 				}
-			}, Throws.ArgumentNullException);
+			}, Throws.InstanceOf<SpreadsheatReadingException>());
 			
         }
 
@@ -50,7 +50,7 @@ namespace Spreadsheet.Tests
         [TestCase("1 123456789987654321")]
         public void WrongSizeTest(string size)
         {
-			Assert.That(() => ReadSpreadsheet(size, new IExpression[0]), Throws.ArgumentNullException);
+			Assert.That(() => ReadSpreadsheet(size, new IExpression[0]), Throws.InstanceOf<SpreadsheatReadingException>());
         }
 
         [Test]
