@@ -36,7 +36,7 @@ namespace Spreadsheet.Tests
         [TestCase("F14@")]
         public void ExceptionTests(string reference)
         {
-			Assert.That(() => CellAddressConverter.FromString(reference), Throws.ArgumentNullException); 
+			      Assert.That(() => CellAddressConverter.FromString(reference), Throws.InstanceOf<InvalidCellAdressException>()); 
         }
     }
 }

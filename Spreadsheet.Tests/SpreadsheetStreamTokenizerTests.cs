@@ -65,7 +65,7 @@ namespace Spreadsheet.Tests
         [TestCase("AMLJDSNKMNREWW9")]
         public void TestHugeInteger(string value)
         {
-			Assert.That(() => { var token = GetTokens(value).First(); }, Throws.ArgumentNullException);
+			Assert.That(() => { var token = GetTokens(value).First(); }, Throws.InstanceOf<ExpressionParsingException>());
         }
 
         [Test]
@@ -138,7 +138,7 @@ namespace Spreadsheet.Tests
         [TestCase("G")]
         public void InvalidCellReferenceTest(string text)
         {
-			Assert.That(() => { var tokens = GetTokens(text).ToArray(); }, Throws.ArgumentNullException); 
+			Assert.That(() => { var tokens = GetTokens(text).ToArray(); }, Throws.InstanceOf<InvalidCellAdressException>()); 
         }
 
 
@@ -148,7 +148,7 @@ namespace Spreadsheet.Tests
 		[TestCase("'tics\t%")]
 		public void InvalidContentTest(string text)
 		{
-			Assert.That(() => { var tokens = GetTokens(text).ToArray(); }, Throws.ArgumentNullException); 
+			Assert.That(() => { var tokens = GetTokens(text).ToArray(); }, Throws.InstanceOf<ExpressionParsingException>()); 
         }
 
         [Test]
