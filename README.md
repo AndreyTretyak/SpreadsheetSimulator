@@ -6,7 +6,7 @@ Simple OOP demo that simulates spreadsheets processing
 Spreadsheet processing consist of three stages:
 ### 1. Reading of spreadsheet
 Spreadsheet could be read from stream using `SpreadsheetStreamReader` which includes `SpreadsheetStreamTokenizer` for reading tokens from stream, and `SpreadsheetStreamParser` for combining tokens in cells expressions.
-By default reader configured to support expressions with:
+By default the reader is configured to support expressions with:
 * Multiletter cell address like `AA78` or `BVZ197`.  
 * Integer operators `+`, `-`, `*`, `/`, `^ `(exponentiation), according to its priority.
 * Parenthesis for changing operation priority.
@@ -18,7 +18,7 @@ Set of operators or it's priority could be changed by creating OperatorManager o
 Character responsible for them parenthesis, column separators and others could be changed in 'SpesialCharactersSettings'. 
 
 ### 2. Processing of spreadsheet
-Evaluation of every spreadsheet cells done in `SpreadsheetProcessor`, its created base on `Spreadsheet` and can accept `ISpreadsheetValidator` for spreadsheet checks before evaluation. For example `RecursionDetectionValidator` which checks cells for circular references. `SpreadsheetProcessor` also able to detect circular references during evaluation but in multithread environment it could cause deadlock. 
+Evaluation of every spreadsheet cells done in `SpreadsheetProcessor`, it's created based on `Spreadsheet` and can accept `ISpreadsheetValidator` for spreadsheet checks before evaluation. For example `RecursionDetectionValidator` which checks cells for circular references. `SpreadsheetProcessor` is also able to detect circular references during evaluation but in multithreaded environment it could cause deadlock. 
 Spreadsheet evaluation could be customizing by passing processing strategy to SpreadsheetProcessor, currently exists:
 * `SimpleProcessingStrategy` - processing done in one thread.
 * `ParallelProcessingStrategy` - parallel multithread processing using TPL.
