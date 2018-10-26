@@ -6,7 +6,7 @@ Simple OOP demo that simulates spreadsheets processing
 Spreadsheet processing consist of three stages:
 ### 1. Reading of spreadsheet
 Spreadsheet could be read from stream using `SpreadsheetStreamReader` which includes `SpreadsheetStreamTokenizer` for reading tokens from stream, and `SpreadsheetStreamParser` for combining tokens in cells expressions.
-By default reader configured to support expressions with:
+By default the reader is configured to support expressions with:
 * Multiletter cell address like `AA78` or `BVZ197`.  
 * Integer operators `+`, `-`, `*`, `/`, `^ `(exponentiation), according to its priority.
 * Parenthesis for changing operation priority.
