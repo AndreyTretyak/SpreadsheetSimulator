@@ -29,7 +29,7 @@ namespace Spreadsheet.Tests.Mocks
         {
             _result = result;
         }
-        
+
         public object BinaryOperation(object left, object right)
         {
             Left = left;

@@ -18,7 +18,7 @@ namespace Spreadsheet.Tests
     public class ExpressionTests
     {
         [Test]
-        [TestCase(1,2,3)]
+        [TestCase(1, 2, 3)]
         [TestCase("1", "2", "3")]
         [TestCase("1", 2, "3")]
         public void BinaryExpressionTest(object left, object right, object result)
@@ -79,13 +79,13 @@ namespace Spreadsheet.Tests
         [Test]
         public void CellReferenceExpressionEvaluationExceptionTest()
         {
-			Assert.That(() => CellReferenceExpressionTest(new ExpressionEvaluationException("error")), Throws.InstanceOf<ExpressionEvaluationException>());
+            Assert.That(() => CellReferenceExpressionTest(new ExpressionEvaluationException("error")), Throws.InstanceOf<ExpressionEvaluationException>());
         }
 
         [Test]
         public void CellReferenceExpressionGeneralExceptionTest()
         {
-			Assert.That(() => CellReferenceExpressionTest(new Exception("error")), Throws.Exception);
+            Assert.That(() => CellReferenceExpressionTest(new Exception("error")), Throws.Exception);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Spreadsheet.Tests.Mocks
 
         private readonly IExpression[] _expressions;
 
-        public SpreadsheetParserMock(IExpression[]  expressions)
+        public SpreadsheetParserMock(IExpression[] expressions)
         {
             _index = 0;
             _expressions = expressions;
@@ -18,8 +18,8 @@ namespace Spreadsheet.Tests.Mocks
 
         public IExpression ReadExpression()
         {
-            return _index < _expressions.Length 
-                ? _expressions[_index++] 
+            return _index < _expressions.Length
+                ? _expressions[_index++]
                 : null;
         }
     }

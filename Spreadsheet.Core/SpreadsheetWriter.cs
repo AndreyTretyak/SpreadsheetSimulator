@@ -44,7 +44,7 @@ namespace Spreadsheet.Core
                 if (index++ % result.ColumnCount == 0)
                     _streamWriter.WriteLine();
             }
-            _streamWriter.Flush();      
+            _streamWriter.Flush();
         }
 
         public void Dispose()

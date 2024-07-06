@@ -7,11 +7,11 @@ namespace Spreadsheet.Core.ProcessingStrategies
 {
     public class ParallelProcessingStrategy : IProcessingStrategy
     {
-        public IEnumerable<object> Evaluate(Spreadsheet spreadsheet, Func<Cell,object> evaluation)
+        public IEnumerable<object> Evaluate(Spreadsheet spreadsheet, Func<Cell, object> evaluation)
         {
-           return spreadsheet.AsParallel()
-                             .AsOrdered()
-                             .Select(evaluation);
+            return spreadsheet.AsParallel()
+                .AsOrdered()
+                .Select(evaluation);
         }
     }
 }

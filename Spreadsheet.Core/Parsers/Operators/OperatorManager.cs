@@ -24,7 +24,7 @@ namespace Spreadsheet.Core.Parsers.Operators
 
         private readonly static Lazy<OperatorManager> _default;
 
-        static OperatorManager() 
+        static OperatorManager()
         {
             _default = new Lazy<OperatorManager>(
                     () => new OperatorManager(new List<IOperator>

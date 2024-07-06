@@ -104,7 +104,7 @@ namespace Roslyn.Utilities
 #endif
 
         internal ObjectPool(Factory factory)
-            : this(factory, Environment.ProcessorCount*2)
+            : this(factory, Environment.ProcessorCount * 2)
         {
         }
 

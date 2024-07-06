@@ -24,7 +24,7 @@ namespace Spreadsheet.Core.Cells
             Expression = expression;
             IsCashingRequered = !(Expression is ConstantExpression);
         }
-        
+
         public object Evaluate(SpreadsheetProcessor processor)
         {
             try

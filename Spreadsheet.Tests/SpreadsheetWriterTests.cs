@@ -48,8 +48,8 @@ namespace Spreadsheet.Tests
         [TestCase(1, 3, "@", 123, "2")]
         [TestCase(2, 9, "\0", "", "91")]
         [TestCase(4, 9123465, "test + text", 0, "12")]
-        [TestCase(1, new object[] { 12312312312321312321})]
-        [TestCase(1, new object[] {""})]
+        [TestCase(1, new object[] { 12312312312321312321 })]
+        [TestCase(1, new object[] { "" })]
         public void ObjectValuesTest(int columnCount, params object[] values)
         {
             CollectionAssert.AreEqual(values.Select(e => e?.ToString()), GetValues(GetResult(columnCount, values)));

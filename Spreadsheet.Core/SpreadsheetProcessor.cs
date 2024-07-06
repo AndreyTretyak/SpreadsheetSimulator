@@ -47,7 +47,7 @@ namespace Spreadsheet.Core
 
             if (_memoryCache[cell.Address.Row, cell.Address.Column] == null)
             {
-                _memoryCache[cell.Address.Row, cell.Address.Column] = new ExtendedLazy<Cell,object>(cell, _evaluateCellFunct);
+                _memoryCache[cell.Address.Row, cell.Address.Column] = new ExtendedLazy<Cell, object>(cell, _evaluateCellFunct);
             }
             return _memoryCache[cell.Address.Row, cell.Address.Column].Value;
         }

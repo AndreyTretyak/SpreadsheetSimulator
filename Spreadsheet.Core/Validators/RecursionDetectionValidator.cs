@@ -8,7 +8,7 @@ namespace Spreadsheet.Core.Validators
 {
     public class RecursionDetectionValidator : ISpreadsheetValidator
     {
-        
+
         public void Validate(Spreadsheet spreadsheet, Cell cell)
         {
             var hashset = PooledHashSet<CellAddress>.GetInstance();

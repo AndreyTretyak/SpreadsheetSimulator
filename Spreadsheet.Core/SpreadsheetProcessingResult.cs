@@ -7,7 +7,7 @@ namespace Spreadsheet.Core
         public int ColumnCount { get; }
 
         public IEnumerable<object> Values { get; }
-        
+
         public SpreadsheetProcessingResult(int columnsCount, IEnumerable<object> values)
         {
             ColumnCount = columnsCount;

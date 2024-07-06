@@ -53,7 +53,7 @@ namespace Spreadsheet.Core.Parsers.Tokenizers
                     break;
                 case TokenType.Operator:
                     value = Operator;
-                    break;;
+                    break;
             }
             return value == null ? Type.ToString() : $"{Type}|{value}";
         }

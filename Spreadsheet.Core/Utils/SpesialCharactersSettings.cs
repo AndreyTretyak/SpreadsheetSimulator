@@ -15,7 +15,7 @@ namespace Spreadsheet.Core.Utils
         public const char CarriageReturn = '\r';
 
         public const char StreamEnd = '\0';
- 
+
         public const char ColumnStartLetter = 'A';
 
         public const int LettersUsedForColumnNumber = 26;

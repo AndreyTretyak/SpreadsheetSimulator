@@ -31,7 +31,7 @@ namespace Spreadsheet.Core
         {
             get
             {
-                address.Validate(RowCount,ColumnCount);
+                address.Validate(RowCount, ColumnCount);
                 return _content[address.Row, address.Column];
             }
         }

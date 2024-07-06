@@ -12,7 +12,7 @@ namespace Spreadsheet.Core.Cells.Expressions
         public IExpression Right { get; }
 
         public IOperator Operation { get; }
-        
+
         public BinaryExpression(IExpression left, IOperator operation, IExpression right)
         {
             Left = left;

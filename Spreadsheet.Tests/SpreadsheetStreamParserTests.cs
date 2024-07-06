@@ -61,37 +61,37 @@ namespace Spreadsheet.Tests
         [Test]
         public void WrongContentNotSeparatorErrorTest()
         {
-			Assert.That(() => Parse(new Token(1), new Token(2)), Throws.InstanceOf<ExpressionParsingException>());
+            Assert.That(() => Parse(new Token(1), new Token(2)), Throws.InstanceOf<ExpressionParsingException>());
         }
 
         [Test]
         public void WrongContentUnexpectedTokenErrorTest()
         {
-			Assert.That(() => Parse(new Token(TokenType.RightParenthesis)), Throws.InstanceOf<ExpressionParsingException>());
+            Assert.That(() => Parse(new Token(TokenType.RightParenthesis)), Throws.InstanceOf<ExpressionParsingException>());
         }
 
         [Test]
         public void WorngExpressionTest()
         {
-			Assert.That(() => Parse(new Token(TokenType.ExpressionStart),
-				  new Token(45),
-				  new Token(TokenType.LeftParenthesis)), Throws.InstanceOf<ExpressionParsingException>());
+            Assert.That(() => Parse(new Token(TokenType.ExpressionStart),
+                  new Token(45),
+                  new Token(TokenType.LeftParenthesis)), Throws.InstanceOf<ExpressionParsingException>());
         }
 
         [Test]
         public void WorngExpressionNoCloseParentsisTest()
         {
-			Assert.That(() => Parse(new Token(TokenType.ExpressionStart),
-				  new Token(TokenType.LeftParenthesis),
-				  new Token(63)), Throws.InstanceOf<ExpressionParsingException>());
+            Assert.That(() => Parse(new Token(TokenType.ExpressionStart),
+                  new Token(TokenType.LeftParenthesis),
+                  new Token(63)), Throws.InstanceOf<ExpressionParsingException>());
         }
 
         [Test]
         public void WorngExpressionUnknownTokenTest()
         {
-			Assert.That(() => Parse(new Token(TokenType.ExpressionStart),
-				  new Token(83),
-				  new Token(TokenType.ExpressionStart)), Throws.InstanceOf<ExpressionParsingException>());
+            Assert.That(() => Parse(new Token(TokenType.ExpressionStart),
+                  new Token(83),
+                  new Token(TokenType.ExpressionStart)), Throws.InstanceOf<ExpressionParsingException>());
         }
 
         [Test]
@@ -111,14 +111,14 @@ namespace Spreadsheet.Tests
         {
             Assert.AreEqual(expect, Parse<ConstantExpression>(new Token($"{expect}")).Value);
         }
-        
+
         [Test]
         [TestCase("A13")]
         [TestCase("BVC197")]
         public void TestExpressionReference(string expect)
         {
             var expression = Parse<CellRefereceExpression>(
-                                new Token(TokenType.ExpressionStart), 
+                                new Token(TokenType.ExpressionStart),
                                 new Token(CellAddressConverter.FromString(expect)));
             Assert.AreEqual(expect, expression.Address.ToString());
         }

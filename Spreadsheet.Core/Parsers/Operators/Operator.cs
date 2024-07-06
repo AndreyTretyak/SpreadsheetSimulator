@@ -12,7 +12,7 @@ namespace Spreadsheet.Core.Parsers.Operators
 
         private readonly Func<T, T> _unaryOperation;
 
-        public Operator(char operatorCharacter, int priority, Func<T,T,T> binaryOperation = null, Func<T,T> unaryOperator = null)
+        public Operator(char operatorCharacter, int priority, Func<T, T, T> binaryOperation = null, Func<T, T> unaryOperator = null)
         {
             Priority = priority;
             OperatorCharacter = operatorCharacter;
@@ -37,7 +37,7 @@ namespace Spreadsheet.Core.Parsers.Operators
                 return _unaryOperation(Cast(value));
             throw new ExpressionEvaluationException(string.Format(Resources.UnaryOperationNotSupported, OperatorCharacter));
         }
-        
+
         private T Cast(object value)
         {
             if (typeof(T) != value?.GetType())

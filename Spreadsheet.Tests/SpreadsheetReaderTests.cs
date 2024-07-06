@@ -18,8 +18,8 @@ namespace Spreadsheet.Tests
     {
         private Core.Spreadsheet ReadSpreadsheet(string size, IExpression[] expressions)
         {
-            using (var reader = new SpreadsheetReader(new StringReader(size), 
-                                                      s => new SpreadsheetParserMock(expressions)))
+            using (var reader = new SpreadsheetReader(new StringReader(size),
+                s => new SpreadsheetParserMock(expressions)))
             {
                 return reader.ReadSpreadsheet();
             }
@@ -28,14 +28,14 @@ namespace Spreadsheet.Tests
         [Test]
         public void NullTest()
         {
-			Assert.That(() =>
-			{
-				using (var reader = new SpreadsheetReader((TextReader)null))
-				{
-					reader.ReadSpreadsheet();
-				}
-			}, Throws.InstanceOf<SpreadsheatReadingException>());
-			
+            Assert.That(() =>
+            {
+                using (var reader = new SpreadsheetReader((TextReader)null))
+                {
+                    reader.ReadSpreadsheet();
+                }
+            }, Throws.InstanceOf<SpreadsheatReadingException>());
+
         }
 
         [Test]
@@ -50,7 +50,7 @@ namespace Spreadsheet.Tests
         [TestCase("1 123456789987654321")]
         public void WrongSizeTest(string size)
         {
-			Assert.That(() => ReadSpreadsheet(size, new IExpression[0]), Throws.InstanceOf<SpreadsheatReadingException>());
+            Assert.That(() => ReadSpreadsheet(size, new IExpression[0]), Throws.InstanceOf<SpreadsheatReadingException>());
         }
 
         [Test]
@@ -64,7 +64,7 @@ namespace Spreadsheet.Tests
             var spreadsheet = ReadSpreadsheet($"{row} {column}", new IExpression[0]);
             Assert.AreEqual(row, spreadsheet.RowCount, "Wrong row count");
             Assert.AreEqual(column, spreadsheet.ColumnCount, "Wrong column count");
-            
+
             Assert.AreEqual(spreadsheet.RowCount * spreadsheet.ColumnCount, spreadsheet.Count(), "Wrong container size");
         }
 
@@ -88,7 +88,7 @@ namespace Spreadsheet.Tests
                 new ConstantExpression("text"),
             };
             var cells = expressions.Select((e, i) => new Cell(new CellAddress(i / column, i % column), e)).ToArray();
-            
+
             var spreadsheet = ReadSpreadsheet($"{row} {column}", expressions);
 
             Assert.AreEqual(row, spreadsheet.RowCount, "Wrong row count");
@@ -97,9 +97,9 @@ namespace Spreadsheet.Tests
             var array = spreadsheet.ToArray();
             Assert.AreEqual(row * column, array.Length, "Wrong container size");
 
-            CollectionAssert.AreEqual(cells.Take(array.Length), 
-                                     array, 
-                                     new GenericComparer<Cell>((x,y) => string.Compare(x.ToString(), y.ToString(), StringComparison.Ordinal)));
+            CollectionAssert.AreEqual(cells.Take(array.Length),
+                                     array,
+                                     new GenericComparer<Cell>((x, y) => string.Compare(x.ToString(), y.ToString(), StringComparison.Ordinal)));
         }
 
 

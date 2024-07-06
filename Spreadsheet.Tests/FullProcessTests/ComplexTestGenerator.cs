@@ -30,7 +30,7 @@ namespace Spreadsheet.Tests
         private readonly Random _random;
         private readonly StringBuilder _builder;
         private readonly List<CellAddress> _calculatableCells;
-        private readonly IOperator[] _operators; 
+        private readonly IOperator[] _operators;
 
         public ComplexTestGenerator(int row, int column, int seed = 1)
         {
@@ -52,7 +52,7 @@ namespace Spreadsheet.Tests
             {
                 for (var j = 0; j < _column; j++)
                 {
-                    GenerateCell(i,j);
+                    GenerateCell(i, j);
                     _builder.Append(SpesialCharactersSettings.CellSeparator);
                 }
                 if (_random.NextDouble() < 0.5)

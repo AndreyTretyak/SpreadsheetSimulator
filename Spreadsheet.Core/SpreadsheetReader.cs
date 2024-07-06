@@ -14,7 +14,7 @@ namespace Spreadsheet.Core
 {
     public class SpreadsheetReader : IDisposable
     {
-        private static readonly char[] SpreadsheetSizeSeparators = 
+        private static readonly char[] SpreadsheetSizeSeparators =
             {
                 WhiteSpace,
                 CellSeparator,
@@ -26,7 +26,7 @@ namespace Spreadsheet.Core
 
         private readonly Func<TextReader, ISpreadsheetParser> _parserFactory;
 
-        public SpreadsheetReader(Stream stream) 
+        public SpreadsheetReader(Stream stream)
             : this(new StreamReader(stream))
         {
         }
@@ -36,7 +36,7 @@ namespace Spreadsheet.Core
         {
         }
 
-        internal SpreadsheetReader(TextReader textReader, Func<TextReader,ISpreadsheetParser> parserFactory)
+        internal SpreadsheetReader(TextReader textReader, Func<TextReader, ISpreadsheetParser> parserFactory)
         {
             _textReader = textReader;
             _parserFactory = parserFactory;
@@ -50,7 +50,7 @@ namespace Spreadsheet.Core
 
             int maxRow;
             int maxColumn;
-            if (size == null 
+            if (size == null
                 || size.Length != 2
                 || !int.TryParse(size[0], out maxRow)
                 || maxRow < 0
@@ -75,10 +75,10 @@ namespace Spreadsheet.Core
                 {
                     expression = new ConstantExpression(exception);
                 }
-                yield return new Cell(new CellAddress(i / maxColumn, i % maxColumn), 
+                yield return new Cell(new CellAddress(i / maxColumn, i % maxColumn),
                                       expression ?? new ConstantExpression(null));
             }
-            
+
         }
 
         public void Dispose()

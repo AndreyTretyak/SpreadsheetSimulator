@@ -20,9 +20,9 @@ namespace Spreadsheet.Tests
     {
         private static SpreadsheetProcessor CreateProcessor(params IExpression[] expressions)
         {
-            
-            return new SpreadsheetProcessor(new Core.Spreadsheet(1,expressions.Length, 
-                                            expressions.Select((e,i) => new Cell(new CellAddress(0,i), e))));
+
+            return new SpreadsheetProcessor(new Core.Spreadsheet(1, expressions.Length,
+                expressions.Select((e, i) => new Cell(new CellAddress(0, i), e))));
         }
 
         [Test]
@@ -38,7 +38,7 @@ namespace Spreadsheet.Tests
                 var result = processor.Evaluate(new SimpleProcessingStrategy());
                 Assert.AreEqual(value, result.Values.First());
                 Assert.AreEqual(processor, expression.Processor);
-                
+
                 //check that value cashed, and expression Evaluate method calls only once.
                 Assert.AreEqual(1, expression.EvaluateCallCount);
             }
@@ -70,7 +70,7 @@ namespace Spreadsheet.Tests
         {
             var exception = new ExpressionEvaluationException("error");
             var result = ExceptionTest(exception);
-            Assert.AreEqual(exception,result);
+            Assert.AreEqual(exception, result);
         }
 
 

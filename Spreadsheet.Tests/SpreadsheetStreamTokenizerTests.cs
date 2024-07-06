@@ -65,7 +65,7 @@ namespace Spreadsheet.Tests
         [TestCase("AMLJDSNKMNREWW9")]
         public void TestHugeInteger(string value)
         {
-			Assert.That(() => { var token = GetTokens(value).First(); }, Throws.InstanceOf<ExpressionParsingException>());
+            Assert.That(() => { var token = GetTokens(value).First(); }, Throws.InstanceOf<ExpressionParsingException>());
         }
 
         [Test]
@@ -82,7 +82,7 @@ namespace Spreadsheet.Tests
         }
 
         [Test]
-        [TestCase("\t\t",0)]
+        [TestCase("\t\t", 0)]
         [TestCase("1\t\t97", 1)]
         [TestCase("'test text\t\t13", 1)]
         [TestCase("'hello \t\t' world", 1)]
@@ -95,8 +95,8 @@ namespace Spreadsheet.Tests
         {
             var token = GetTokens(text).ToArray();
             Assert.AreEqual(TokenType.EndOfCell, token[checkIndex].Type);
-            Assert.IsTrue(token[checkIndex + 1].Type == TokenType.EndOfCell 
-                          || token[checkIndex + 1].Type == TokenType.EndOfStream, 
+            Assert.IsTrue(token[checkIndex + 1].Type == TokenType.EndOfCell
+                          || token[checkIndex + 1].Type == TokenType.EndOfStream,
                           "Wrong close token for empty cell");
         }
 
@@ -107,7 +107,7 @@ namespace Spreadsheet.Tests
         public void SpesialCharactersTest(char c, int tokenType)
         {
             var token = GetTokens(c.ToString()).First();
-            Assert.AreEqual((TokenType)tokenType,token.Type);
+            Assert.AreEqual((TokenType)tokenType, token.Type);
         }
 
         [Test]
@@ -138,23 +138,23 @@ namespace Spreadsheet.Tests
         [TestCase("G")]
         public void InvalidCellReferenceTest(string text)
         {
-			Assert.That(() => { var tokens = GetTokens(text).ToArray(); }, Throws.InstanceOf<InvalidCellAdressException>()); 
+            Assert.That(() => { var tokens = GetTokens(text).ToArray(); }, Throws.InstanceOf<InvalidCellAdressException>());
         }
 
 
-		[Test]
-		[TestCase("@")]
-		[TestCase("178#1")]
-		[TestCase("'tics\t%")]
-		public void InvalidContentTest(string text)
-		{
-			Assert.That(() => { var tokens = GetTokens(text).ToArray(); }, Throws.InstanceOf<ExpressionParsingException>()); 
+        [Test]
+        [TestCase("@")]
+        [TestCase("178#1")]
+        [TestCase("'tics\t%")]
+        public void InvalidContentTest(string text)
+        {
+            Assert.That(() => { var tokens = GetTokens(text).ToArray(); }, Throws.InstanceOf<ExpressionParsingException>());
         }
 
         [Test]
         public void TokenizerComplexTest()
         {
-            CollectionAssert.AreEqual(new []
+            CollectionAssert.AreEqual(new[]
             {
                 new Token("test"),
                 new Token(TokenType.EndOfCell),

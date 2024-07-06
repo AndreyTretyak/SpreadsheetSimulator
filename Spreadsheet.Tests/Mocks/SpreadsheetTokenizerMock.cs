@@ -10,9 +10,9 @@ namespace Spreadsheet.Tests.Mocks
         public OperatorManager OperatorManager { get; }
 
         private static readonly Token EndToken = new Token(TokenType.EndOfStream);
-        
+
         private int _index;
-        
+
         public SpreadsheetTokenizerMock(params Token[] tokens)
         {
             _tokens = tokens;

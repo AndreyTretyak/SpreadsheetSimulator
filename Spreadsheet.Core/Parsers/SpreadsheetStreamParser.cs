@@ -67,7 +67,7 @@ namespace Spreadsheet.Core.Parsers
             Read();
             return ReadOperation();
         }
-        
+
         private IExpression ReadOperation(int priority = 0)
         {
             if (_tokenizer.OperatorManager.Priorities.Count <= priority)

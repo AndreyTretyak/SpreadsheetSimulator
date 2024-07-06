@@ -8,7 +8,7 @@ namespace Spreadsheet.Tests
     {
         private readonly Func<T, T, int> _comparer;
 
-        public GenericComparer(Func<T,T,int> comparer)
+        public GenericComparer(Func<T, T, int> comparer)
         {
             _comparer = comparer;
         }
@@ -20,7 +20,7 @@ namespace Spreadsheet.Tests
 
         public int Compare(object x, object y)
         {
-            return _comparer((T) x, (T) y);
+            return _comparer((T)x, (T)y);
         }
     }
 }
