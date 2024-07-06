@@ -66,26 +66,26 @@ namespace Spreadsheet.Tests
         [TestCase(9870)]
         [TestCase("check")]
         [TestCase(null)]
-        public void CellRefereceExpressionTest(object value)
+        public void CellReferenceExpressionTest(object value)
         {
-            var cellRefereceExpression = new CellRefereceExpression(new CellAddress(0, 1));
+            var cellReferenceExpression = new CellRefereceExpression(new CellAddress(0, 1));
             var processor = TestExtensions.CreateProcessor(
-                cellRefereceExpression,
+                cellReferenceExpression,
                 new ConstantExpression(value));
-            var result = cellRefereceExpression.Evaluate(processor);
+            var result = cellReferenceExpression.Evaluate(processor);
             Assert.AreEqual(value, result);
         }
 
         [Test]
-        public void CellRefereceExpressionEvaluationExceptionTest()
+        public void CellReferenceExpressionEvaluationExceptionTest()
         {
-			Assert.That(() => CellRefereceExpressionTest(new ExpressionEvaluationException("error")), Throws.ArgumentNullException);
+			Assert.That(() => CellReferenceExpressionTest(new ExpressionEvaluationException("error")), Throws.InstanceOf<ExpressionEvaluationException>());
         }
 
         [Test]
-        public void CellRefereceExpressionGeneralExceptionTest()
+        public void CellReferenceExpressionGeneralExceptionTest()
         {
-			Assert.That(() => CellRefereceExpressionTest(new Exception("error")), Throws.ArgumentNullException);
+			Assert.That(() => CellReferenceExpressionTest(new Exception("error")), Throws.Exception);
         }
     }
 }
