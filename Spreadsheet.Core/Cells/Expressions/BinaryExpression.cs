@@ -1,30 +1,21 @@
-using System.Collections.Generic;
-using System.Linq;
 using Spreadsheet.Core.Parsers.Operators;
+
 using static Spreadsheet.Core.Utils.SpesialCharactersSettings;
 
-namespace Spreadsheet.Core.Cells.Expressions
+namespace Spreadsheet.Core.Cells.Expressions;
+
+internal class BinaryExpression(IExpression left, IOperator operation, IExpression right) : IExpression
 {
-    internal class BinaryExpression : IExpression
+    public IExpression Left { get; } = left;
+
+    public IExpression Right { get; } = right;
+
+    public IOperator Operation { get; } = operation;
+
+    public object Evaluate(SpreadsheetProcessor processor)
     {
-        public IExpression Left { get; }
-
-        public IExpression Right { get; }
-
-        public IOperator Operation { get; }
-        
-        public BinaryExpression(IExpression left, IOperator operation, IExpression right)
-        {
-            Left = left;
-            Operation = operation;
-            Right = right;
-        }
-
-        public object Evaluate(SpreadsheetProcessor processor)
-        {
-            return Operation.BinaryOperation(Left.Evaluate(processor), Right.Evaluate(processor));
-        }
-
-        public override string ToString() => $"{LeftParanthesis}{Left}{Operation}{Right}{RightParanthesis}";
+        return Operation.BinaryOperation(Left.Evaluate(processor), Right.Evaluate(processor));
     }
+
+    public override string ToString() => $"{LeftParenthesis}{Left}{Operation}{Right}{RightParathesis}";
 }

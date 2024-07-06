@@ -1,13 +1,12 @@
 using Spreadsheet.Core.Parsers.Operators;
 
-namespace Spreadsheet.Core.Parsers.Tokenizers
+namespace Spreadsheet.Core.Parsers.Tokenizers;
+
+internal interface ISpreadsheetTokenizer
 {
-    internal interface ISpreadsheetTokenizer
-    {
-        Token Peek();
+    Token Peek();
 
-        Token Read();
+    Token Read();
 
-        OperatorManager OperatorManager { get; }
-    }
+    OperatorManager OperatorManager { get; }
 }

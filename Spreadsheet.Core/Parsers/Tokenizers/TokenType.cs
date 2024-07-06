@@ -1,15 +1,14 @@
-namespace Spreadsheet.Core.Parsers.Tokenizers
+namespace Spreadsheet.Core.Parsers.Tokenizers;
+
+internal enum TokenType
 {
-    internal enum TokenType
-    {
-        ExpressionStart,
-        CellReference,
-        Integer,
-        String,
-        Operator,
-        LeftParenthesis,
-        RightParenthesis,
-        EndOfCell,
-        EndOfStream
-    }
+    ExpressionStart,
+    CellReference,
+    Integer,
+    String,
+    Operator,
+    LeftParenthesis,
+    RightParenthesis,
+    EndOfCell,
+    EndOfStream
 }

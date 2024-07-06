@@ -1,9 +1,6 @@
-using System.Collections.Generic;
+namespace Spreadsheet.Core.Cells.Expressions;
 
-namespace Spreadsheet.Core.Cells.Expressions
+internal interface IExpression
 {
-    internal interface IExpression
-    {
-        object Evaluate(SpreadsheetProcessor processor);
-    }
+    object Evaluate(SpreadsheetProcessor processor);
 }

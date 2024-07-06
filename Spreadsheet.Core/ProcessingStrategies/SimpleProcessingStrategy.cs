@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Spreadsheet.Core.Cells;
 
-namespace Spreadsheet.Core.ProcessingStrategies
+namespace Spreadsheet.Core.ProcessingStrategies;
+
+public class SimpleProcessingStrategy : IProcessingStrategy
 {
-    public class SimpleProcessingStrategy : IProcessingStrategy
+    public IEnumerable<object> Evaluate(Spreadsheet spreadsheet, Func<Cell, object> evaluation)
     {
-        public IEnumerable<object> Evaluate(Spreadsheet spreadsheet, Func<Cell, object> evaluation)
-        {
-            return spreadsheet.Select(evaluation);
-        }
+        return spreadsheet.Select(evaluation);
     }
 }

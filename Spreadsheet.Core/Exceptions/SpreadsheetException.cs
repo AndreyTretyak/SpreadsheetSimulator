@@ -1,43 +1,39 @@
 using System;
-using System.CodeDom;
-using System.Runtime.InteropServices;
 using System.Text;
+
 using Spreadsheet.Core.Cells;
 using Spreadsheet.Core.Utils;
 
-namespace Spreadsheet.Core
+namespace Spreadsheet.Core;
+
+public class SpreadsheetException : Exception
 {
-    public class SpreadsheetException : Exception
+
+    protected SpreadsheetException(string message) : base(message) { }
+
+    protected SpreadsheetException(string message, Exception innerException) : base(message, innerException) { }
+
+
+    protected SpreadsheetException() { }
+
+    protected StringBuilder _cellCallStack = new();
+
+    public string MessageWithCellCallStack => $"{Message} {(InnerException as SpreadsheetException)?._cellCallStack}";
+
+    public static T AddCellAddressToErrorStack<T>(T exception, CellAddress address) where T : SpreadsheetException
     {
-
-        protected SpreadsheetException(string message) : base(message) { }
-
-        protected SpreadsheetException(string message, Exception innerException) : base(message, innerException) { }
-
-
-        protected SpreadsheetException()
+        if (exception._cellCallStack.Length != 0)
         {
+            var result = (T)Activator.CreateInstance(exception.GetType(), args: [exception.Message, exception]);
+            result._cellCallStack.Append(CellAddressConverter.GetString(address));
+            result._cellCallStack.Append('<');
+            result._cellCallStack.Append(exception._cellCallStack);
+            return result;
         }
-
-        protected StringBuilder _cellCallStack = new StringBuilder();
-
-        public string MessageWithCellCallStack => $"{Message} {(InnerException as SpreadsheetException)?._cellCallStack}";
-
-        public static T AddCellAddressToErrorStack<T>(T exception, CellAddress address) where T : SpreadsheetException
+        else
         {
-            if (exception._cellCallStack.Length != 0)
-            {
-                var result = (T)Activator.CreateInstance(exception.GetType(), args: new object[] { exception.Message, exception });
-                result._cellCallStack.Append(CellAddressConverter.GetString(address));
-                result._cellCallStack.Append("<");
-                result._cellCallStack.Append(exception._cellCallStack);
-                return result;
-            }
-            else
-            {
-                exception._cellCallStack.Append(CellAddressConverter.GetString(address));
-                return exception;
-            }
+            exception._cellCallStack.Append(CellAddressConverter.GetString(address));
+            return exception;
         }
     }
 }
