@@ -30,15 +30,15 @@ public class CellTests
         var address = default(CellAddress);
 
         var cell = new Cell(address, new ConstantExpression(null));
-        Assert.IsFalse(cell.IsCashingRequered, nameof(ConstantExpression));
+        Assert.IsFalse(cell.IsCashingRequired, nameof(ConstantExpression));
 
         cell = new Cell(address, new BinaryExpression(null, null, null));
-        Assert.IsTrue(cell.IsCashingRequered, nameof(BinaryExpression));
+        Assert.IsTrue(cell.IsCashingRequired, nameof(BinaryExpression));
 
         cell = new Cell(address, new UnaryExpression(null, null));
-        Assert.IsTrue(cell.IsCashingRequered, nameof(UnaryExpression));
+        Assert.IsTrue(cell.IsCashingRequired, nameof(UnaryExpression));
 
-        cell = new Cell(address, new CellRefereceExpression(address));
-        Assert.IsTrue(cell.IsCashingRequered, nameof(CellRefereceExpression));
+        cell = new Cell(address, new CellReferenceExpression(address));
+        Assert.IsTrue(cell.IsCashingRequired, nameof(CellReferenceExpression));
     }
 }

@@ -12,33 +12,26 @@ public struct CellAddress
     {
         Row = row;
         if (row < 0)
-            throw new InvalidCellAdressException(Resources.NegetiveCellRow);
+            throw new InvalidCellAddressException(Resources.NegetiveCellRow);
 
         Column = column;
         if (column < 0)
-            throw new InvalidCellAdressException(Resources.NegativeCellColumn);
+            throw new InvalidCellAddressException(Resources.NegativeCellColumn);
     }
 
-    public void Validate(int maxRow, int maxColumn)
+    public readonly void Validate(int maxRow, int maxColumn)
     {
         if (maxRow <= Row)
-            throw new InvalidCellAdressException(Resources.WrongCellRow);
+            throw new InvalidCellAddressException(Resources.WrongCellRow);
         if (maxColumn <= Column)
-            throw new InvalidCellAdressException(Resources.WrongCellColumn);
+            throw new InvalidCellAddressException(Resources.WrongCellColumn);
     }
 
-    public bool Equals(CellAddress other)
-    {
-        return Row == other.Row && Column == other.Column;
-    }
+    public bool Equals(CellAddress other) => Row == other.Row && Column == other.Column;
 
-    public override bool Equals(object obj)
-    {
-        if (ReferenceEquals(null, obj)) return false;
-        return obj is CellAddress && Equals((CellAddress)obj);
-    }
+    public override bool Equals(object obj) => obj is not null && obj is CellAddress address && Equals(address);
 
-    public override int GetHashCode()
+    public override readonly int GetHashCode()
     {
         unchecked
         {

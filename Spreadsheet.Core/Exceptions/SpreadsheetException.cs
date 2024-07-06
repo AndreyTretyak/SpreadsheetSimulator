@@ -14,11 +14,9 @@ public class SpreadsheetException : Exception
     protected SpreadsheetException(string message, Exception innerException) : base(message, innerException) { }
 
 
-    protected SpreadsheetException()
-    {
-    }
+    protected SpreadsheetException() { }
 
-    protected StringBuilder _cellCallStack = new StringBuilder();
+    protected StringBuilder _cellCallStack = new();
 
     public string MessageWithCellCallStack => $"{Message} {(InnerException as SpreadsheetException)?._cellCallStack}";
 
@@ -26,9 +24,9 @@ public class SpreadsheetException : Exception
     {
         if (exception._cellCallStack.Length != 0)
         {
-            var result = (T)Activator.CreateInstance(exception.GetType(), args: new object[] { exception.Message, exception });
+            var result = (T)Activator.CreateInstance(exception.GetType(), args: [exception.Message, exception]);
             result._cellCallStack.Append(CellAddressConverter.GetString(address));
-            result._cellCallStack.Append("<");
+            result._cellCallStack.Append('<');
             result._cellCallStack.Append(exception._cellCallStack);
             return result;
         }

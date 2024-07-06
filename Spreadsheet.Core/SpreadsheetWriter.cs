@@ -10,16 +10,11 @@ public class SpreadsheetWriter : IDisposable
 {
     private readonly TextWriter _streamWriter;
 
-    public SpreadsheetWriter(TextWriter streamWriter)
-    {
-        _streamWriter = streamWriter;
-    }
+    public SpreadsheetWriter(TextWriter streamWriter) => _streamWriter = streamWriter;
 
-    public SpreadsheetWriter(Stream stream) : this(new StreamWriter(new BufferedStream(stream)))
-    {
-    }
+    public SpreadsheetWriter(Stream stream) : this(new StreamWriter(new BufferedStream(stream))) { }
 
-    public void WriteSpreedsheat(SpreadsheetProcessingResult result)
+    public void WriteSpreadsheet(SpreadsheetProcessingResult result)
     {
         var index = 1;
         foreach (var value in result.Values)

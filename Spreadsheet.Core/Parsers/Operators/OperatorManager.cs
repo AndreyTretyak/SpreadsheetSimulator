@@ -27,14 +27,14 @@ internal class OperatorManager
     static OperatorManager()
     {
         _default = new Lazy<OperatorManager>(
-                () => new OperatorManager(new List<IOperator>
-                {
-                    new Operator<int>('+', 0, (l, r) => l + r, v => v),
-                    new Operator<int>('-', 0, (l, r) => l - r, v => -v),
-                    new Operator<int>('*', 1, (l, r) => l * r),
-                    new Operator<int>('/', 1, (l, r) => l / r),
-                    new Operator<int>('^', 2, (l, r) => (int) Math.Pow(l, r))
-                }), LazyThreadSafetyMode.ExecutionAndPublication);
+            () => new OperatorManager(new List<IOperator>
+            {
+                new Operator<int>('+', 0, (l, r) => l + r, v => v),
+                new Operator<int>('-', 0, (l, r) => l - r, v => -v),
+                new Operator<int>('*', 1, (l, r) => l * r),
+                new Operator<int>('/', 1, (l, r) => l / r),
+                new Operator<int>('^', 2, (l, r) => (int) Math.Pow(l, r))
+            }), LazyThreadSafetyMode.ExecutionAndPublication);
     }
 
     public static OperatorManager Default => _default.Value;

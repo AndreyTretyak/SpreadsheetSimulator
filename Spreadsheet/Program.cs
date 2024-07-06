@@ -28,7 +28,7 @@ class Program
                 Console.WriteLine(isConsoleOutput ? Resources.ResultTable : Resources.WritingResult);
                 using (var write = new SpreadsheetWriter(output))
                 {
-                    write.WriteSpreedsheat(result);
+                    write.WriteSpreadsheet(result);
                 }
             }
         }

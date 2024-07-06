@@ -31,7 +31,7 @@ public class RecursionDetectionValidator : ISpreadsheetValidator
             {
                 GetDependencies(current.Expression, dependencies);
                 if (dependencies.Overlaps(stack))
-                    throw new CircularCellRefereceException(Resources.CircularReference);
+                    throw new CircularCellReferenceException(Resources.CircularReference);
 
                 stack.Add(current.Address);
                 foreach (var address in dependencies)
@@ -45,7 +45,7 @@ public class RecursionDetectionValidator : ISpreadsheetValidator
                 dependencies.Free();
             }
         }
-        catch (CircularCellRefereceException ex)
+        catch (CircularCellReferenceException ex)
         {
             throw SpreadsheetException.AddCellAddressToErrorStack(ex, current.Address);
         }
@@ -66,7 +66,7 @@ public class RecursionDetectionValidator : ISpreadsheetValidator
             GetDependencies(unaryExpression.Value, addresses);
         }
 
-        var refereceExpression = expression as CellRefereceExpression;
+        var refereceExpression = expression as CellReferenceExpression;
         if (refereceExpression != null)
         {
             addresses.Add(refereceExpression.Address);

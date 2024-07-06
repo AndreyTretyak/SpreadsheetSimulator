@@ -3,7 +3,7 @@ using Spreadsheet.Core.Parsers.Operators;
 
 namespace Spreadsheet.Core.Parsers.Tokenizers;
 
-internal struct Token
+internal readonly struct Token
 {
     public TokenType Type { get; }
 

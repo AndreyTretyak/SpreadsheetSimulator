@@ -18,7 +18,7 @@ public class SpreadsheetWriterTests
         {
             using (var writer = new SpreadsheetWriter(stream))
             {
-                writer.WriteSpreedsheat(new SpreadsheetProcessingResult(columnCount, values));
+                writer.WriteSpreadsheet(new SpreadsheetProcessingResult(columnCount, values));
                 stream.Position = 0;
                 return Encoding.UTF8.GetString(stream.ToArray());
             }

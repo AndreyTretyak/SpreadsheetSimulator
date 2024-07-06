@@ -63,7 +63,7 @@ public class ExpressionTests
     [TestCase(null)]
     public void CellReferenceExpressionTest(object value)
     {
-        var cellReferenceExpression = new CellRefereceExpression(new CellAddress(0, 1));
+        var cellReferenceExpression = new CellReferenceExpression(new CellAddress(0, 1));
         var processor = TestExtensions.CreateProcessor(
             cellReferenceExpression,
             new ConstantExpression(value));

@@ -2,22 +2,14 @@ using System;
 
 namespace Spreadsheet.Core.Cells.Expressions;
 
-internal class CellRefereceExpression : IExpression
+internal class CellReferenceExpression(CellAddress address) : IExpression
 {
-    public CellAddress Address { get; }
-
-    public CellRefereceExpression(CellAddress address)
-    {
-        Address = address;
-    }
+    public CellAddress Address { get; } = address;
 
     public object Evaluate(SpreadsheetProcessor processor)
     {
         var result = processor.GetCellValue(Address);
-        var exception = result as Exception;
-        if (exception != null)
-            throw exception;
-        return result;
+        return result is Exception exception ? throw exception : result;
     }
 
     public override string ToString() => Address.ToString();

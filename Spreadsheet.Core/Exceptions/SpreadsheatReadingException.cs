@@ -2,13 +2,9 @@ using System;
 
 namespace Spreadsheet.Core;
 
-public class SpreadsheatReadingException : SpreadsheetException
+public class SpreadsheetReadingException : SpreadsheetException
 {
-    public SpreadsheatReadingException(string message) : base(message)
-    {
-    }
+    public SpreadsheetReadingException(string message) : base(message) { }
 
-    public SpreadsheatReadingException(string message, Exception innerException) : base(message, innerException)
-    {
-    }
+    public SpreadsheetReadingException(string message, Exception innerException) : base(message, innerException) { }
 }

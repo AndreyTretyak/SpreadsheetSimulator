@@ -178,7 +178,7 @@ public class ComplexTest
             {
                 using (var writer = new SpreadsheetWriter(ms))
                 {
-                    writer.WriteSpreedsheat(new SpreadsheetProcessor(reader.ReadSpreadsheet()).Evaluate(new ParallelProcessingStrategy()));
+                    writer.WriteSpreadsheet(new SpreadsheetProcessor(reader.ReadSpreadsheet()).Evaluate(new ParallelProcessingStrategy()));
                     return Encoding.UTF8.GetString(ms.ToArray());
                 }
             }

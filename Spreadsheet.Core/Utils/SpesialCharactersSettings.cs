@@ -20,9 +20,9 @@ internal static class SpesialCharactersSettings
 
     public const int LettersUsedForColumnNumber = 26;
 
-    public const char LeftParanthesis = '(';
+    public const char LeftParenthesis = '(';
 
-    public const char RightParanthesis = ')';
+    public const char RightParathesis = ')';
 
     public const string ErrorStartMarker = "#";
 

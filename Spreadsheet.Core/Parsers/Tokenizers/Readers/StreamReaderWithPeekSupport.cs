@@ -4,16 +4,10 @@ using Spreadsheet.Core.Utils;
 
 namespace Spreadsheet.Core.Parsers.Tokenizers.Readers;
 
-internal class StreamReaderWithPeekSupport : AbstractReaderWithPeekSupport<char>
+internal class StreamReaderWithPeekSupport(TextReader stream) : AbstractReaderWithPeekSupport<char>
 {
-    private readonly StringBuilder _stringBuilder;
-    private readonly TextReader _stream;
-
-    public StreamReaderWithPeekSupport(TextReader stream)
-    {
-        _stream = stream;
-        _stringBuilder = new StringBuilder();
-    }
+    private readonly StringBuilder _stringBuilder = new();
+    private readonly TextReader _stream = stream;
 
     protected override char GetNextValue()
     {

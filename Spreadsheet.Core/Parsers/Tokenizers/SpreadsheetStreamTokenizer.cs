@@ -14,8 +14,8 @@ internal class SpreadsheetStreamTokenizer : AbstractReaderWithPeekSupport<Token>
     private static readonly Dictionary<char, TokenType> TokenIdentifiers = new Dictionary<char, TokenType>
     {
         {ExpressionStart, TokenType.ExpressionStart},
-        {LeftParanthesis, TokenType.LeftParenthesis},
-        {RightParanthesis, TokenType.RightParenthesis}
+        {LeftParenthesis, TokenType.LeftParenthesis},
+        {RightParathesis, TokenType.RightParenthesis}
     };
 
     public OperatorManager OperatorManager { get; }

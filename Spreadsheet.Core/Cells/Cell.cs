@@ -8,7 +8,7 @@ public class Cell
 {
     public CellAddress Address { get; }
 
-    public bool IsCashingRequered { get; }
+    public bool IsCashingRequired { get; }
 
     internal IExpression Expression { get; }
 
@@ -16,7 +16,7 @@ public class Cell
     {
         Address = address;
         Expression = expression;
-        IsCashingRequered = !(Expression is ConstantExpression);
+        IsCashingRequired = Expression is not ConstantExpression;
     }
 
     public object Evaluate(SpreadsheetProcessor processor)

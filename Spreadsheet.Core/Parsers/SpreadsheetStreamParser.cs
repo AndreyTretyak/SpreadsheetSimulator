@@ -8,10 +8,7 @@ internal class SpreadsheetStreamParser : ISpreadsheetParser
 {
     private readonly ISpreadsheetTokenizer _tokenizer;
 
-    public SpreadsheetStreamParser(ISpreadsheetTokenizer tokenizer)
-    {
-        _tokenizer = tokenizer;
-    }
+    public SpreadsheetStreamParser(ISpreadsheetTokenizer tokenizer) => _tokenizer = tokenizer;
 
     public IExpression ReadExpression()
     {
@@ -35,31 +32,23 @@ internal class SpreadsheetStreamParser : ISpreadsheetParser
 
     private IExpression ReadCellContent()
     {
-        switch (_tokenizer.Peek().Type)
+        return _tokenizer.Peek().Type switch
         {
-            case TokenType.EndOfCell:
-                return ReadNothing();
-            case TokenType.Integer:
-                return ReadInteger();
-            case TokenType.String:
-                return ReadString();
-            case TokenType.ExpressionStart:
-                return ReadComplexExpression();
-            default:
-                throw InvalidContent(Resources.UnknownCellStart);
-        }
+            TokenType.EndOfCell => ReadNothing(),
+            TokenType.Integer => ReadInteger(),
+            TokenType.String => ReadString(),
+            TokenType.ExpressionStart => ReadComplexExpression(),
+            _ => throw InvalidContent(Resources.UnknownCellStart),
+        };
     }
 
-    private IExpression ReadNothing()
-    {
-        return new ConstantExpression(null);
-    }
+    private IExpression ReadNothing() => new ConstantExpression(null);
 
     private IExpression ReadInteger() => new ConstantExpression(_tokenizer.Read().Integer);
 
     private IExpression ReadString() => new ConstantExpression(_tokenizer.Read().String);
 
-    private IExpression ReadCellReference() => new CellRefereceExpression(_tokenizer.Read().Address);
+    private IExpression ReadCellReference() => new CellReferenceExpression(_tokenizer.Read().Address);
 
     private IExpression ReadComplexExpression()
     {
@@ -89,7 +78,7 @@ internal class SpreadsheetStreamParser : ISpreadsheetParser
                 Read();
                 var expresion = ReadOperation();
                 if (!Peek(TokenType.RightParenthesis))
-                    throw InvalidContent(Resources.WrongTokenType, SpesialCharactersSettings.RightParanthesis);
+                    throw InvalidContent(Resources.WrongTokenType, SpesialCharactersSettings.RightParathesis);
                 Read();
                 return expresion;
             case TokenType.Operator:

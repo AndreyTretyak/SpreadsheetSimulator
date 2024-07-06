@@ -99,8 +99,8 @@ public class SpreadsheetStreamTokenizerTests
 
     [Test]
     [TestCase(SpesialCharactersSettings.ExpressionStart, TokenType.ExpressionStart)]
-    [TestCase(SpesialCharactersSettings.LeftParanthesis, TokenType.LeftParenthesis)]
-    [TestCase(SpesialCharactersSettings.RightParanthesis, TokenType.RightParenthesis)]
+    [TestCase(SpesialCharactersSettings.LeftParenthesis, TokenType.LeftParenthesis)]
+    [TestCase(SpesialCharactersSettings.RightParathesis, TokenType.RightParenthesis)]
     public void SpesialCharactersTest(char c, int tokenType)
     {
         var token = GetTokens(c.ToString()).First();
@@ -135,7 +135,7 @@ public class SpreadsheetStreamTokenizerTests
     [TestCase("G")]
     public void InvalidCellReferenceTest(string text)
     {
-        Assert.That(() => { var tokens = GetTokens(text).ToArray(); }, Throws.InstanceOf<InvalidCellAdressException>());
+        Assert.That(() => { var tokens = GetTokens(text).ToArray(); }, Throws.InstanceOf<InvalidCellAddressException>());
     }
 
 

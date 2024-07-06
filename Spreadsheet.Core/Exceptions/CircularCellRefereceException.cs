@@ -2,13 +2,9 @@
 
 namespace Spreadsheet.Core.Exceptions;
 
-public class CircularCellRefereceException : SpreadsheetException
+public class CircularCellReferenceException : SpreadsheetException
 {
-    public CircularCellRefereceException(string message) : base(message)
-    {
-    }
+    public CircularCellReferenceException(string message) : base(message) { }
 
-    public CircularCellRefereceException(string message, Exception innerException) : base(message, innerException)
-    {
-    }
+    public CircularCellReferenceException(string message, Exception innerException) : base(message, innerException) { }
 }

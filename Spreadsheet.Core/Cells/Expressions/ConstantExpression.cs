@@ -1,13 +1,8 @@
 namespace Spreadsheet.Core.Cells.Expressions;
 
-internal class ConstantExpression : IExpression
+internal class ConstantExpression(object value) : IExpression
 {
-    internal object Value { get; }
-
-    public ConstantExpression(object value)
-    {
-        Value = value;
-    }
+    internal object Value { get; } = value;
 
     public object Evaluate(SpreadsheetProcessor processor) => Value;
 

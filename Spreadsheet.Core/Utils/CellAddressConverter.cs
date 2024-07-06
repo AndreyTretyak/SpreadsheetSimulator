@@ -15,7 +15,7 @@ internal static class CellAddressConverter
         {
             if ((uint)column > (int.MaxValue / SpesialCharactersSettings.LettersUsedForColumnNumber)) //check if next iteration make it bigger that MaxInt
             {
-                throw new InvalidCellAdressException(Resources.IntegerToBig);
+                throw new InvalidCellAddressException(Resources.IntegerToBig);
             }
             column = column * SpesialCharactersSettings.LettersUsedForColumnNumber + (char.ToUpper(address[index]) - SpesialCharactersSettings.ColumnStartLetter + 1);
             index++;
@@ -28,7 +28,7 @@ internal static class CellAddressConverter
         {
             if ((uint)row > (int.MaxValue / 10)) //check if next iteration make it bigger that MaxInt
             {
-                throw new InvalidCellAdressException((Resources.IntegerToBig));
+                throw new InvalidCellAddressException(Resources.IntegerToBig);
             }
             row = row * 10 + (address[index] - '0');
             index++;
@@ -36,7 +36,7 @@ internal static class CellAddressConverter
         row = row - 1;
 
         if (index < address.Length)
-            throw new InvalidCellAdressException(string.Format(Resources.WrongCellAddress, address));
+            throw new InvalidCellAddressException(string.Format(Resources.WrongCellAddress, address));
 
         return new CellAddress(row, column);
     }

@@ -115,7 +115,7 @@ public class SpreadsheetStreamParserTests
     [TestCase("BVC197")]
     public void TestExpressionReference(string expect)
     {
-        var expression = Parse<CellRefereceExpression>(
+        var expression = Parse<CellReferenceExpression>(
                             new Token(TokenType.ExpressionStart),
                             new Token(CellAddressConverter.FromString(expect)));
         Assert.AreEqual(expect, expression.Address.ToString());

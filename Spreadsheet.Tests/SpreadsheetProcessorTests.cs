@@ -85,17 +85,17 @@ public class SpreadsheetProcessorTests
     [Test]
     public void CircularReferenceTest()
     {
-        var processor = CreateProcessor(new CellRefereceExpression(new CellAddress(0, 0)));
-        Cast<CircularCellRefereceException>(processor.Evaluate(new SimpleProcessingStrategy()).Values.First());
+        var processor = CreateProcessor(new CellReferenceExpression(new CellAddress(0, 0)));
+        Cast<CircularCellReferenceException>(processor.Evaluate(new SimpleProcessingStrategy()).Values.First());
     }
 
     [Test]
     public void CrossReferenceTest()
     {
-        var processor = CreateProcessor(new CellRefereceExpression(new CellAddress(0, 1)),
-                                        new CellRefereceExpression(new CellAddress(0, 0)));
+        var processor = CreateProcessor(new CellReferenceExpression(new CellAddress(0, 1)),
+                                        new CellReferenceExpression(new CellAddress(0, 0)));
         var array = processor.Evaluate(new SimpleProcessingStrategy()).Values.ToArray();
-        Cast<CircularCellRefereceException>(array[0]);
-        Cast<CircularCellRefereceException>(array[1]);
+        Cast<CircularCellReferenceException>(array[0]);
+        Cast<CircularCellReferenceException>(array[1]);
     }
 }

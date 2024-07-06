@@ -36,6 +36,6 @@ public class CellAddressConverterTests
     [TestCase("F14@")]
     public void ExceptionTests(string reference)
     {
-        Assert.That(() => CellAddressConverter.FromString(reference), Throws.InstanceOf<InvalidCellAdressException>());
+        Assert.That(() => CellAddressConverter.FromString(reference), Throws.InstanceOf<InvalidCellAddressException>());
     }
 }

@@ -2,15 +2,9 @@ using System.Collections.Generic;
 
 namespace Spreadsheet.Core;
 
-public class SpreadsheetProcessingResult
+public class SpreadsheetProcessingResult(int columnsCount, IEnumerable<object> values)
 {
-    public int ColumnCount { get; }
+    public int ColumnCount { get; } = columnsCount;
 
-    public IEnumerable<object> Values { get; }
-
-    public SpreadsheetProcessingResult(int columnsCount, IEnumerable<object> values)
-    {
-        ColumnCount = columnsCount;
-        Values = values;
-    }
+    public IEnumerable<object> Values { get; } = values;
 }

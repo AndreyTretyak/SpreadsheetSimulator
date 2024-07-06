@@ -42,7 +42,7 @@ public class SpreadsheetProcessor
 
     private object GetCellValue(Cell cell)
     {
-        if (!cell.IsCashingRequered)
+        if (!cell.IsCashingRequired)
             return EvaluateCell(cell);
 
         if (_memoryCache[cell.Address.Row, cell.Address.Column] == null)

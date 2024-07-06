@@ -16,7 +16,7 @@ public class CellAdressTests
     [TestCase(1, -1)]
     public void ExceptionTests(int row, int column)
     {
-        Assert.That(() => new CellAddress(row, column).Validate(2, 2), Throws.InstanceOf<InvalidCellAdressException>());
+        Assert.That(() => new CellAddress(row, column).Validate(2, 2), Throws.InstanceOf<InvalidCellAddressException>());
     }
 
     [Test]

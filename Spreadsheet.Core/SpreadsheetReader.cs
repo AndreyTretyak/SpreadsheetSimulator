@@ -56,7 +56,7 @@ public class SpreadsheetReader : IDisposable
             || maxRow < 0
             || !int.TryParse(size[1], out maxColumn)
             || maxColumn < 0)
-            throw new SpreadsheatReadingException(string.Format(Resources.FailedToReadSpreadsheetSize, line));
+            throw new SpreadsheetReadingException(string.Format(Resources.FailedToReadSpreadsheetSize, line));
 
         return new Spreadsheet(maxRow, maxColumn, GetCells(maxColumn, maxColumn * maxRow));
     }

@@ -32,7 +32,7 @@ public class SpreadsheetReaderTests
             {
                 reader.ReadSpreadsheet();
             }
-        }, Throws.InstanceOf<SpreadsheatReadingException>());
+        }, Throws.InstanceOf<SpreadsheetReadingException>());
 
     }
 
@@ -48,7 +48,7 @@ public class SpreadsheetReaderTests
     [TestCase("1 123456789987654321")]
     public void WrongSizeTest(string size)
     {
-        Assert.That(() => ReadSpreadsheet(size, new IExpression[0]), Throws.InstanceOf<SpreadsheatReadingException>());
+        Assert.That(() => ReadSpreadsheet(size, new IExpression[0]), Throws.InstanceOf<SpreadsheetReadingException>());
     }
 
     [Test]
@@ -78,7 +78,7 @@ public class SpreadsheetReaderTests
         var expressions = new IExpression[]
         {
             new ConstantExpression(0),
-            new CellRefereceExpression(new CellAddress(1, 1)),
+            new CellReferenceExpression(new CellAddress(1, 1)),
             new BinaryExpression(new ConstantExpression(1), OperatorManager.Default.Operators['*'],
             new ConstantExpression(2)),
             new UnaryExpression(OperatorManager.Default.Operators['-'], new ConstantExpression(9)),
