@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spreadsheet", "Spreadsheet\Spreadsheet.csproj", "{B487F4D8-E42E-4DDD-A33B-CCF03AAE9480}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spreadsheet", "Spreadsheet\SpreadsheetSimulator.csproj", "{B487F4D8-E42E-4DDD-A33B-CCF03AAE9480}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spreadsheet.Core", "Spreadsheet.Core\Spreadsheet.Core.csproj", "{F3F7714D-497F-4F82-BF5F-96AA21B0266F}"
 EndProject
