@@ -1,9 +1,8 @@
 using Spreadsheet.Core.Cells.Expressions;
 
-namespace Spreadsheet.Core.Parsers
+namespace Spreadsheet.Core.Parsers;
+
+internal interface ISpreadsheetParser
 {
-    internal interface ISpreadsheetParser
-    {
-        IExpression ReadExpression();
-    }
+    IExpression ReadExpression();
 }

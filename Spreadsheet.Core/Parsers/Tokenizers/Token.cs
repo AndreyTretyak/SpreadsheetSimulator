@@ -1,61 +1,60 @@
 using Spreadsheet.Core.Cells;
 using Spreadsheet.Core.Parsers.Operators;
 
-namespace Spreadsheet.Core.Parsers.Tokenizers
+namespace Spreadsheet.Core.Parsers.Tokenizers;
+
+internal struct Token
 {
-    internal struct Token
+    public TokenType Type { get; }
+
+    public string String { get; }
+
+    public int Integer { get; }
+
+    public CellAddress Address { get; }
+
+    public IOperator Operator { get; }
+
+    public Token(TokenType type) : this()
     {
-        public TokenType Type { get; }
+        Type = type;
+    }
 
-        public string String { get; }
+    public Token(string value) : this(TokenType.String)
+    {
+        String = value;
+    }
 
-        public int Integer { get; }
+    public Token(int value) : this(TokenType.Integer)
+    {
+        Integer = value;
+    }
 
-        public CellAddress Address { get; }
+    public Token(CellAddress value) : this(TokenType.CellReference)
+    {
+        Address = value;
+    }
 
-        public IOperator Operator { get; }
+    public Token(IOperator value) : this(TokenType.Operator)
+    {
+        Operator = value;
+    }
 
-        public Token(TokenType type) : this()
+    public override string ToString()
+    {
+        object value = String;
+        switch (Type)
         {
-            Type = type;
+            case TokenType.Integer:
+                value = Integer;
+                break;
+            case TokenType.CellReference:
+                value = Address;
+                break;
+            case TokenType.Operator:
+                value = Operator;
+                break;
         }
-
-        public Token(string value) : this(TokenType.String)
-        {
-            String = value;
-        }
-
-        public Token(int value) : this(TokenType.Integer)
-        {
-            Integer = value;
-        }
-
-        public Token(CellAddress value) : this(TokenType.CellReference)
-        {
-            Address = value;
-        }
-
-        public Token(IOperator value) : this(TokenType.Operator)
-        {
-            Operator = value;
-        }
-
-        public override string ToString()
-        {
-            object value = String;
-            switch (Type)
-            {
-                case TokenType.Integer:
-                    value = Integer;
-                    break;
-                case TokenType.CellReference:
-                    value = Address;
-                    break;
-                case TokenType.Operator:
-                    value = Operator;
-                    break;
-            }
-            return value == null ? Type.ToString() : $"{Type}|{value}";
-        }
+        return value == null ? Type.ToString() : $"{Type}|{value}";
     }
 }

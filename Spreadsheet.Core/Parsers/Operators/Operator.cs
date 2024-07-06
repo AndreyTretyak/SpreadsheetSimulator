@@ -1,53 +1,52 @@
 using System;
 
-namespace Spreadsheet.Core.Parsers.Operators
+namespace Spreadsheet.Core.Parsers.Operators;
+
+internal class Operator<T> : IOperator
 {
-    internal class Operator<T> : IOperator
+    public int Priority { get; }
+
+    public char OperatorCharacter { get; }
+
+    private readonly Func<T, T, T> _binaryOperation;
+
+    private readonly Func<T, T> _unaryOperation;
+
+    public Operator(char operatorCharacter, int priority, Func<T, T, T> binaryOperation = null, Func<T, T> unaryOperator = null)
     {
-        public int Priority { get; }
+        Priority = priority;
+        OperatorCharacter = operatorCharacter;
+        _binaryOperation = binaryOperation;
+        _unaryOperation = unaryOperator;
+    }
 
-        public char OperatorCharacter { get; }
+    public bool IsBinaryOperationSupported => _binaryOperation != null;
 
-        private readonly Func<T, T, T> _binaryOperation;
+    public bool IsUnaryOperationSupported => _unaryOperation != null;
 
-        private readonly Func<T, T> _unaryOperation;
+    public object BinaryOperation(object left, object right)
+    {
+        if (IsBinaryOperationSupported)
+            return _binaryOperation(Cast(left), Cast(right));
+        throw new ExpressionEvaluationException(string.Format(Resources.BinaryOperationNotSupported, OperatorCharacter));
+    }
 
-        public Operator(char operatorCharacter, int priority, Func<T, T, T> binaryOperation = null, Func<T, T> unaryOperator = null)
-        {
-            Priority = priority;
-            OperatorCharacter = operatorCharacter;
-            _binaryOperation = binaryOperation;
-            _unaryOperation = unaryOperator;
-        }
+    public object UnaryOperation(object value)
+    {
+        if (IsUnaryOperationSupported)
+            return _unaryOperation(Cast(value));
+        throw new ExpressionEvaluationException(string.Format(Resources.UnaryOperationNotSupported, OperatorCharacter));
+    }
 
-        public bool IsBinaryOperationSupported => _binaryOperation != null;
+    private T Cast(object value)
+    {
+        if (typeof(T) != value?.GetType())
+            throw new ExpressionEvaluationException(string.Format(Resources.WrongTypeError, typeof(T), value?.GetType()));
+        return (T)value;
+    }
 
-        public bool IsUnaryOperationSupported => _unaryOperation != null;
-
-        public object BinaryOperation(object left, object right)
-        {
-            if (IsBinaryOperationSupported)
-                return _binaryOperation(Cast(left), Cast(right));
-            throw new ExpressionEvaluationException(string.Format(Resources.BinaryOperationNotSupported, OperatorCharacter));
-        }
-
-        public object UnaryOperation(object value)
-        {
-            if (IsUnaryOperationSupported)
-                return _unaryOperation(Cast(value));
-            throw new ExpressionEvaluationException(string.Format(Resources.UnaryOperationNotSupported, OperatorCharacter));
-        }
-
-        private T Cast(object value)
-        {
-            if (typeof(T) != value?.GetType())
-                throw new ExpressionEvaluationException(string.Format(Resources.WrongTypeError, typeof(T), value?.GetType()));
-            return (T)value;
-        }
-
-        public override string ToString()
-        {
-            return OperatorCharacter.ToString();
-        }
+    public override string ToString()
+    {
+        return OperatorCharacter.ToString();
     }
 }

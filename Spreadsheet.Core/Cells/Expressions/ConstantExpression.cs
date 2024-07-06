@@ -1,19 +1,15 @@
-using System.Collections.Generic;
-using System.Linq;
+namespace Spreadsheet.Core.Cells.Expressions;
 
-namespace Spreadsheet.Core.Cells.Expressions
+internal class ConstantExpression : IExpression
 {
-    internal class ConstantExpression : IExpression
+    internal object Value { get; }
+
+    public ConstantExpression(object value)
     {
-        internal object Value { get; }
-
-        public ConstantExpression(object value)
-        {
-            Value = value;
-        }
-
-        public object Evaluate(SpreadsheetProcessor processor) => Value;
-
-        public override string ToString() => Value?.ToString() ?? Resources.Nothing;
+        Value = value;
     }
+
+    public object Evaluate(SpreadsheetProcessor processor) => Value;
+
+    public override string ToString() => Value?.ToString() ?? Resources.Nothing;
 }

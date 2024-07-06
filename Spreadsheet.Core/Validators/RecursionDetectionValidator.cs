@@ -4,73 +4,72 @@ using Spreadsheet.Core.Cells;
 using Spreadsheet.Core.Cells.Expressions;
 using Spreadsheet.Core.Exceptions;
 
-namespace Spreadsheet.Core.Validators
-{
-    public class RecursionDetectionValidator : ISpreadsheetValidator
-    {
+namespace Spreadsheet.Core.Validators;
 
-        public void Validate(Spreadsheet spreadsheet, Cell cell)
+public class RecursionDetectionValidator : ISpreadsheetValidator
+{
+
+    public void Validate(Spreadsheet spreadsheet, Cell cell)
+    {
+        var hashset = PooledHashSet<CellAddress>.GetInstance();
+        try
         {
-            var hashset = PooledHashSet<CellAddress>.GetInstance();
+            CheckRecursion(spreadsheet, cell, hashset);
+        }
+        finally
+        {
+            hashset.Free();
+        }
+    }
+
+    private void CheckRecursion(Spreadsheet spreadsheet, Cell current, ISet<CellAddress> stack)
+    {
+        try
+        {
+            var dependencies = PooledHashSet<CellAddress>.GetInstance();
             try
             {
-                CheckRecursion(spreadsheet, cell, hashset);
+                GetDependencies(current.Expression, dependencies);
+                if (dependencies.Overlaps(stack))
+                    throw new CircularCellRefereceException(Resources.CircularReference);
+
+                stack.Add(current.Address);
+                foreach (var address in dependencies)
+                {
+                    CheckRecursion(spreadsheet, spreadsheet[address], stack);
+                }
+                stack.Remove(current.Address);
             }
             finally
             {
-                hashset.Free();
+                dependencies.Free();
             }
         }
-
-        private void CheckRecursion(Spreadsheet spreadsheet, Cell current, ISet<CellAddress> stack)
+        catch (CircularCellRefereceException ex)
         {
-            try
-            {
-                var dependencies = PooledHashSet<CellAddress>.GetInstance();
-                try
-                {
-                    GetDependencies(current.Expression, dependencies);
-                    if (dependencies.Overlaps(stack))
-                        throw new CircularCellRefereceException(Resources.CircularReference);
+            throw SpreadsheetException.AddCellAddressToErrorStack(ex, current.Address);
+        }
+    }
 
-                    stack.Add(current.Address);
-                    foreach (var address in dependencies)
-                    {
-                        CheckRecursion(spreadsheet, spreadsheet[address], stack);
-                    }
-                    stack.Remove(current.Address);
-                }
-                finally
-                {
-                    dependencies.Free();
-                }
-            }
-            catch (CircularCellRefereceException ex)
-            {
-                throw SpreadsheetException.AddCellAddressToErrorStack(ex, current.Address);
-            }
+    private void GetDependencies(IExpression expression, ISet<CellAddress> addresses)
+    {
+        var binaryExpression = expression as BinaryExpression;
+        if (binaryExpression != null)
+        {
+            GetDependencies(binaryExpression.Left, addresses);
+            GetDependencies(binaryExpression.Right, addresses);
         }
 
-        private void GetDependencies(IExpression expression, ISet<CellAddress> addresses)
+        var unaryExpression = expression as UnaryExpression;
+        if (unaryExpression != null)
         {
-            var binaryExpression = expression as BinaryExpression;
-            if (binaryExpression != null)
-            {
-                GetDependencies(binaryExpression.Left, addresses);
-                GetDependencies(binaryExpression.Right, addresses);
-            }
+            GetDependencies(unaryExpression.Value, addresses);
+        }
 
-            var unaryExpression = expression as UnaryExpression;
-            if (unaryExpression != null)
-            {
-                GetDependencies(unaryExpression.Value, addresses);
-            }
-
-            var refereceExpression = expression as CellRefereceExpression;
-            if (refereceExpression != null)
-            {
-                addresses.Add(refereceExpression.Address);
-            }
+        var refereceExpression = expression as CellRefereceExpression;
+        if (refereceExpression != null)
+        {
+            addresses.Add(refereceExpression.Address);
         }
     }
 }

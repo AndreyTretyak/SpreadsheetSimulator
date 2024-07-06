@@ -1,17 +1,16 @@
-namespace Spreadsheet.Core.Parsers.Operators
+namespace Spreadsheet.Core.Parsers.Operators;
+
+internal interface IOperator
 {
-    internal interface IOperator
-    {
-        int Priority { get; }
+    int Priority { get; }
 
-        char OperatorCharacter { get; }
+    char OperatorCharacter { get; }
 
-        bool IsBinaryOperationSupported { get; }
+    bool IsBinaryOperationSupported { get; }
 
-        bool IsUnaryOperationSupported { get; }
+    bool IsUnaryOperationSupported { get; }
 
-        object BinaryOperation(object left, object right);
+    object BinaryOperation(object left, object right);
 
-        object UnaryOperation(object value);
-    }
+    object UnaryOperation(object value);
 }

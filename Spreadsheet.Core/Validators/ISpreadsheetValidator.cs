@@ -1,9 +1,8 @@
 using Spreadsheet.Core.Cells;
 
-namespace Spreadsheet.Core.Validators
+namespace Spreadsheet.Core.Validators;
+
+public interface ISpreadsheetValidator
 {
-    public interface ISpreadsheetValidator
-    {
-        void Validate(Spreadsheet spreadsheet, Cell cell);
-    }
+    void Validate(Spreadsheet spreadsheet, Cell cell);
 }

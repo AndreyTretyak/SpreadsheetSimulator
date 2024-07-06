@@ -1,25 +1,23 @@
-using System.Collections.Generic;
 using Spreadsheet.Core.Parsers.Operators;
 
-namespace Spreadsheet.Core.Cells.Expressions
+namespace Spreadsheet.Core.Cells.Expressions;
+
+internal class UnaryExpression : IExpression
 {
-    internal class UnaryExpression : IExpression
+    public IExpression Value { get; }
+
+    public IOperator Operation { get; }
+
+    public UnaryExpression(IOperator operation, IExpression value)
     {
-        public IExpression Value { get; }
-
-        public IOperator Operation { get; }
-
-        public UnaryExpression(IOperator operation, IExpression value)
-        {
-            Value = value;
-            Operation = operation;
-        }
-
-        public object Evaluate(SpreadsheetProcessor processor)
-        {
-            return Operation.UnaryOperation(Value.Evaluate(processor));
-        }
-
-        public override string ToString() => $"{Operation}{Value}";
+        Value = value;
+        Operation = operation;
     }
+
+    public object Evaluate(SpreadsheetProcessor processor)
+    {
+        return Operation.UnaryOperation(Value.Evaluate(processor));
+    }
+
+    public override string ToString() => $"{Operation}{Value}";
 }

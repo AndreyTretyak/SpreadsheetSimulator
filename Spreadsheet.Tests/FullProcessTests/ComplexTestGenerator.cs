@@ -3,187 +3,183 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
+
 using NUnit.Framework;
+
 using Spreadsheet.Core;
 using Spreadsheet.Core.Cells;
 using Spreadsheet.Core.Parsers.Operators;
-using Spreadsheet.Core.Parsers.Tokenizers;
-using Spreadsheet.Core.Parsers.Tokenizers.Readers;
 using Spreadsheet.Core.ProcessingStrategies;
 using Spreadsheet.Core.Utils;
-using Spreadsheet.Tests.Mocks;
 
-namespace Spreadsheet.Tests
+namespace Spreadsheet.Tests;
+
+
+public class TestGenerator
 {
 
-    public class TestGenerator
-    {
+}
 
+public class ComplexTestGenerator
+{
+    private readonly int _row;
+    private readonly int _column;
+    private readonly Random _random;
+    private readonly StringBuilder _builder;
+    private readonly List<CellAddress> _calculatableCells;
+    private readonly IOperator[] _operators;
+
+    public ComplexTestGenerator(int row, int column, int seed = 1)
+    {
+        _row = row;
+        _column = column;
+        _random = new Random(seed);
+        _builder = new StringBuilder(row * column * 3);
+        _calculatableCells = new List<CellAddress>();
+        _operators = OperatorManager.Default.Operators.Values.ToArray();
     }
 
-    public class ComplexTestGenerator
+    public string GenerateData()
     {
-        private readonly int _row;
-        private readonly int _column;
-        private readonly Random _random;
-        private readonly StringBuilder _builder;
-        private readonly List<CellAddress> _calculatableCells;
-        private readonly IOperator[] _operators;
-
-        public ComplexTestGenerator(int row, int column, int seed = 1)
+        _builder.Append(_row);
+        _builder.Append(SpesialCharactersSettings.WhiteSpace);
+        _builder.Append(_column);
+        _builder.AppendLine();
+        for (var i = 0; i < _row; i++)
         {
-            _row = row;
-            _column = column;
-            _random = new Random(seed);
-            _builder = new StringBuilder(row * column * 3);
-            _calculatableCells = new List<CellAddress>();
-            _operators = OperatorManager.Default.Operators.Values.ToArray();
+            for (var j = 0; j < _column; j++)
+            {
+                GenerateCell(i, j);
+                _builder.Append(SpesialCharactersSettings.CellSeparator);
+            }
+            if (_random.NextDouble() < 0.5)
+                _builder.Append(SpesialCharactersSettings.CarriageReturn);
+            _builder.Append(SpesialCharactersSettings.RowSeparator);
         }
+        return _builder.ToString();
+    }
 
-        public string GenerateData()
+    private void GenerateCell(int currentRow, int currentColumn)
+    {
+        var cellType = _random.NextDouble();
+        //string
+        if (cellType < 0.25)
         {
-            _builder.Append(_row);
-            _builder.Append(SpesialCharactersSettings.WhiteSpace);
-            _builder.Append(_column);
-            _builder.AppendLine();
-            for (var i = 0; i < _row; i++)
-            {
-                for (var j = 0; j < _column; j++)
-                {
-                    GenerateCell(i, j);
-                    _builder.Append(SpesialCharactersSettings.CellSeparator);
-                }
-                if (_random.NextDouble() < 0.5)
-                    _builder.Append(SpesialCharactersSettings.CarriageReturn);
-                _builder.Append(SpesialCharactersSettings.RowSeparator);
-            }
-            return _builder.ToString();
+            GenerateString();
         }
-
-        private void GenerateCell(int currentRow, int currentColumn)
-        {
-            var cellType = _random.NextDouble();
-            //string
-            if (cellType < 0.25)
-            {
-                GenerateString();
-            }
-            //integer
-            else if (cellType < 0.5)
-            {
-                _calculatableCells.Add(new CellAddress(currentRow, currentColumn));
-                GenerateNumber();
-            }
-            //expression
-            else if (cellType < 0.75)
-            {
-                GenerateExpression(currentRow, currentColumn);
-            }
-            //nothing
-        }
-
-        private void GenerateExpression(int currentRow, int currentColumn)
+        //integer
+        else if (cellType < 0.5)
         {
             _calculatableCells.Add(new CellAddress(currentRow, currentColumn));
-            _builder.Append(SpesialCharactersSettings.ExpressionStart);
-            GenerateIdentifier();
-            while (_random.NextDouble() < 0.5)
-            {
-                var @operator = _operators[_random.Next(_operators.Length)];
-                _builder.Append(@operator.OperatorCharacter);
-                GenerateIdentifier();
-            }
+            GenerateNumber();
         }
-
-        private void GenerateIdentifier()
+        //expression
+        else if (cellType < 0.75)
         {
-            var type = _random.NextDouble();
-            if (type < 0.5)
-            {
-                _builder.Append(_random.Next());
-            }
-            else
-            {
-                GenerateCellReference();
-            }
+            GenerateExpression(currentRow, currentColumn);
         }
+        //nothing
+    }
 
-        private void GenerateNumber()
+    private void GenerateExpression(int currentRow, int currentColumn)
+    {
+        _calculatableCells.Add(new CellAddress(currentRow, currentColumn));
+        _builder.Append(SpesialCharactersSettings.ExpressionStart);
+        GenerateIdentifier();
+        while (_random.NextDouble() < 0.5)
+        {
+            var @operator = _operators[_random.Next(_operators.Length)];
+            _builder.Append(@operator.OperatorCharacter);
+            GenerateIdentifier();
+        }
+    }
+
+    private void GenerateIdentifier()
+    {
+        var type = _random.NextDouble();
+        if (type < 0.5)
         {
             _builder.Append(_random.Next());
         }
-
-        private void GenerateCellReference()
+        else
         {
-            var refType = _random.NextDouble();
-            //valid ref
-            if (_calculatableCells.Any() && refType < 0.74)
-            {
-                _builder.Append(_calculatableCells[_random.Next(_calculatableCells.Count)]);
-            }
-            //possible valid
-            else if (refType < 0.34)
-            {
-                _builder.Append(new CellAddress(_random.Next(_row), _random.Next(_column)));
-            }
-            //invalid ref
-            else
-            {
-                _builder.Append(new CellAddress(_random.Next() + _row, _random.Next() + _column));
-            }
-        }
-
-        private void GenerateString()
-        {
-            _builder.Append(SpesialCharactersSettings.StringStart);
-            var stringSize = _random.Next(25);
-            for (var i = 0; i < stringSize; i++)
-            {
-                var charType = _random.NextDouble();
-                if (charType < 0.3)
-                {
-                    _builder.Append((char)('A' + _random.Next(26)));
-                }
-                else if (charType < 0.9)
-                {
-                    _builder.Append((char)('a' + _random.Next(26)));
-                }
-                else if (charType < 0.9)
-                {
-                    _builder.Append((char)('0' + _random.Next(10)));
-                }
-                else
-                {
-                    _builder.Append(SpesialCharactersSettings.WhiteSpace);
-                }
-            }
+            GenerateCellReference();
         }
     }
 
-    [TestFixture]
-    public class ComplexTest
+    private void GenerateNumber()
     {
-        [Test]
-        public void ComplexTest1()
-        {
-            var data = new ComplexTestGenerator(100, 100).GenerateData();
-            var evaluated = Evaluate(data);
-            //TODO need way to test result
-        }
+        _builder.Append(_random.Next());
+    }
 
-        private static string Evaluate(string data)
+    private void GenerateCellReference()
+    {
+        var refType = _random.NextDouble();
+        //valid ref
+        if (_calculatableCells.Any() && refType < 0.74)
         {
-            using (var reader = new SpreadsheetReader(new StringReader(data)))
+            _builder.Append(_calculatableCells[_random.Next(_calculatableCells.Count)]);
+        }
+        //possible valid
+        else if (refType < 0.34)
+        {
+            _builder.Append(new CellAddress(_random.Next(_row), _random.Next(_column)));
+        }
+        //invalid ref
+        else
+        {
+            _builder.Append(new CellAddress(_random.Next() + _row, _random.Next() + _column));
+        }
+    }
+
+    private void GenerateString()
+    {
+        _builder.Append(SpesialCharactersSettings.StringStart);
+        var stringSize = _random.Next(25);
+        for (var i = 0; i < stringSize; i++)
+        {
+            var charType = _random.NextDouble();
+            if (charType < 0.3)
             {
-                using (var ms = new MemoryStream())
+                _builder.Append((char)('A' + _random.Next(26)));
+            }
+            else if (charType < 0.9)
+            {
+                _builder.Append((char)('a' + _random.Next(26)));
+            }
+            else if (charType < 0.9)
+            {
+                _builder.Append((char)('0' + _random.Next(10)));
+            }
+            else
+            {
+                _builder.Append(SpesialCharactersSettings.WhiteSpace);
+            }
+        }
+    }
+}
+
+[TestFixture]
+public class ComplexTest
+{
+    [Test]
+    public void ComplexTest1()
+    {
+        var data = new ComplexTestGenerator(100, 100).GenerateData();
+        var evaluated = Evaluate(data);
+        //TODO need way to test result
+    }
+
+    private static string Evaluate(string data)
+    {
+        using (var reader = new SpreadsheetReader(new StringReader(data)))
+        {
+            using (var ms = new MemoryStream())
+            {
+                using (var writer = new SpreadsheetWriter(ms))
                 {
-                    using (var writer = new SpreadsheetWriter(ms))
-                    {
-                        writer.WriteSpreedsheat(new SpreadsheetProcessor(reader.ReadSpreadsheet()).Evaluate(new ParallelProcessingStrategy()));
-                        return Encoding.UTF8.GetString(ms.ToArray());
-                    }
+                    writer.WriteSpreedsheat(new SpreadsheetProcessor(reader.ReadSpreadsheet()).Evaluate(new ParallelProcessingStrategy()));
+                    return Encoding.UTF8.GetString(ms.ToArray());
                 }
             }
         }

@@ -1,29 +1,28 @@
-namespace Spreadsheet.Core.Parsers.Tokenizers.Readers
+namespace Spreadsheet.Core.Parsers.Tokenizers.Readers;
+
+internal abstract class AbstractReaderWithPeekSupport<TResult> where TResult : struct
 {
-    internal abstract class AbstractReaderWithPeekSupport<TResult> where TResult : struct
+    private TResult? _current;
+
+    protected abstract TResult GetNextValue();
+
+    public TResult Peek()
     {
-        private TResult? _current;
+        if (_current.HasValue)
+            return _current.Value;
 
-        protected abstract TResult GetNextValue();
+        var value = GetNextValue();
+        _current = value;
+        return value;
+    }
 
-        public TResult Peek()
-        {
-            if (_current.HasValue)
-                return _current.Value;
+    public TResult Read()
+    {
+        if (!_current.HasValue)
+            return GetNextValue();
 
-            var value = GetNextValue();
-            _current = value;
-            return value;
-        }
-
-        public TResult Read()
-        {
-            if (!_current.HasValue)
-                return GetNextValue();
-
-            var value = _current.Value;
-            _current = null;
-            return value;
-        }
+        var value = _current.Value;
+        _current = null;
+        return value;
     }
 }
