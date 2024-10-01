@@ -14,7 +14,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.Runtime.Caching" Version="8.0.0" />
+    <PackageReference Include="System.Runtime.Caching"/>
   </ItemGroup>
   <ItemGroup Label="Make internals visible for the corresponding unit test assemblies and for Moq">
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
